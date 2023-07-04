@@ -8,12 +8,29 @@ this readme sucks
 <!--- DESCRIPTION --->
 <div align="center">
    <p>
-   <strong>A (configurable) helper bot for Discord.</strong>
+   <strong>A configurable helper bot for Discord.</strong>
    </p>
    <br>
 </div>
 
 ---
+
+<!--- SETUP --->
+## :wrench: <samp>SETUP</samp>
+
+   > **WIP.**
+
+<!--- LINKS --->
+## :satellite: <samp>LINKS</samp>
+   - [Invite Akari](https://discord.com/oauth2/authorize?client_id=1125402976845049937&permissions=1237423877622&scope=bot%20applications.commands)
+   - [Support Server](https://discord.gg/fPdqz4f8wf)
+
+<!--- CONTRIBUTORS --->
+## :sparkles: <samp>CONTRIBUTORS</samp>
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 <!--- LICENSE --->
 ## :scroll: <samp>LICENSE</samp>

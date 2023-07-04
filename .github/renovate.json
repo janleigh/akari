@@ -4,5 +4,8 @@
 	],
 	"ignorePresets": [ ":dependencyDashboard" ],
 	"labels": [ "Type: Dependencies" ],
-	"schedule": [ "every weekend" ]
+	"schedule": [ "before 12pm on Sunday" ],
+	"github-actions": {
+		"enabled": false
+	}
 }

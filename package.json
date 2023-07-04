@@ -1,10 +1,10 @@
 {
 	"name": "akari",
-	"description": "A (configurable) helper bot for Discord.",
+	"description": "A configurable helper bot for Discord.",
 	"version": "1.0.0",
 	"author": {
 		"name": "janleigh",
-		"url": "https://github.com/janleigh/servant"
+		"url": "https://github.com/janleigh/akari"
 	},
 	"license": "MIT",
 	"main": "build/index.js",

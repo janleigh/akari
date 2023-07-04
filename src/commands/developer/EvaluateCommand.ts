@@ -2,6 +2,7 @@ import { ChatInputCommand, Command } from "@sapphire/framework";
 import { BaseEmbedBuilder } from "../../libraries/structures/components/BaseEmbedBuilder";
 import { ComponentType } from "discord.js";
 import { deleteBtn } from "../../libraries/structures/components/Buttons";
+import { clean } from "../../libraries/utils/common/text";
 
 export class EvalCommand extends Command {
 	public constructor(context: Command.Context, options: Command.Options) {
@@ -29,8 +30,9 @@ export class EvalCommand extends Command {
 		let content = "";
 
 		try {
-			const evaled = eval(input as string);
+			let evaled = eval(input as string);
 			const timeTaken = ((Date.now() - interaction.createdTimestamp) / 1000).toFixed(3);
+			evaled = clean(evaled);
 
 			content = `:bricks: **EVAL COMPLETE** (${timeTaken}s) :bricks:\n\`\`\`xl\n${evaled}\`\`\``;
 		} catch (err) {

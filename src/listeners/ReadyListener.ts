@@ -17,13 +17,13 @@ export class ReadyListener extends Listener {
 			activities: [
 				{
 					name:
-						this.container.client.user?.id === "1091917720641081374"
+						process.env.NODE_ENV === "development"
 							? "my devs test in production"
 							: `${CLIENT_OPTIONS.defaultPrefix}help`,
-					type: ActivityType.Watching
+					type: ActivityType.Listening
 				}
 			],
-			status: "dnd"
+			status: "idle"
 		});
 	}
 }

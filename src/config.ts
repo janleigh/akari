@@ -4,7 +4,7 @@ import { ClientOptions, GatewayIntentsString } from "discord.js";
  * @description The dev server IDs. The only places where developer commands will be registered.
  * @type {string[]}
  */
-export const DEV_SERVER_IDS: string[] = ["853812920919261235"];
+export const DEV_SERVER_IDS: string[] = ["853812920919261235", "1125589968694280273"];
 
 /**
  * @description The dev user IDs. The only users who can use developer commands.

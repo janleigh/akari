@@ -4,9 +4,18 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 	/**
 	 * @description Whether the embed is an error embed.
 	 * @type {boolean}
+	 * @default false
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-inferrable-types
 	public errorEmbed: boolean = false;
+
+	/**
+	 * @description Whether the embed has a checkmark.
+	 * @type {boolean}
+	 * @default false
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-inferrable-types
+	public hasCheckmark: boolean = false;
 
 	/**
 	 * @description The embed constructor.
@@ -16,9 +25,20 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 		super();
 	}
 
+	/**
+	 * @override
+	 * @description Sets the embed description.
+	 * @returns {this}
+	 */
 	public override setDescription(description: string | null): this {
 		if (description === null) return this;
-		if (this.errorEmbed === true) return super.setDescription(`<:kekpoint:917360277647925268> **${description}**`);
+		if (this.errorEmbed === true) {
+			return super.setDescription(`<:crossmark:1125590268419244042> **${description}**`);
+		}
+		if (this.hasCheckmark === true) {
+			return super.setDescription(`<:checkmark:1125590254313811998> **${description}**`);
+		}
+
 		return super.setDescription(description);
 	}
 
@@ -34,10 +54,12 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 
 	/**
 	 * @description Sets the embed color to green.
+	 * @param {boolean} emoji Whether to add the checkmark emoji to the embed description.
 	 * @returns {this}
 	 */
-	public isSuccessEmbed(): this {
+	public isSuccessEmbed(emoji?: boolean): this {
 		this.setColor("#1ED760");
+		emoji === true ? (this.hasCheckmark = true) : (this.hasCheckmark = false);
 		return this;
 	}
 }

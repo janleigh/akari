@@ -4,13 +4,13 @@
 	"version": "1.0.0",
 	"author": {
 		"name": "janleigh",
-		"url": "https://github.com/janleigh/"
+		"url": "https://github.com/janleigh/servant"
 	},
 	"license": "MIT",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "yarn build:clean && yarn format:check && yarn compile",
-		"build:production": "yarn build:clean && yarn format:check && yarn:lint yarn compile",
+		"build": "yarn build:clean && yarn compile",
+		"build:production": "yarn build:clean && yarn format:check && yarn lint && yarn compile",
 		"build:clean": "rm -rvf ./build/",
 		"compile": "npx sucrase src -d build --transforms typescript,imports",
 		"format": "prettier --write src",

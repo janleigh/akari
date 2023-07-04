@@ -31,6 +31,7 @@
 	"packageManager": "yarn@3.6.1",
 	"dependencies": {
 		"@sapphire/framework": "^4.2.0",
+		"@sapphire/pieces": "^3.6.3",
 		"@sapphire/plugin-logger": "^3.0.1",
 		"@typescript-eslint/eslint-plugin": "latest",
 		"@typescript-eslint/parser": "latest",

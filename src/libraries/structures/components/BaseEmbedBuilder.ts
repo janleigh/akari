@@ -1,4 +1,5 @@
 import { EmbedBuilder } from "discord.js";
+import { parseEmojiByID } from "../../utils/common/parsers";
 
 export class BaseEmbedBuilder extends EmbedBuilder {
 	/**
@@ -33,10 +34,10 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 	public override setDescription(description: string | null): this {
 		if (description === null) return this;
 		if (this.errorEmbed === true) {
-			return super.setDescription(`<:crossmark:1125590268419244042> **${description}**`);
+			return super.setDescription(`${parseEmojiByID("1125590268419244042")} **${description}**`);
 		}
 		if (this.hasCheckmark === true) {
-			return super.setDescription(`<:checkmark:1125590254313811998> **${description}**`);
+			return super.setDescription(`${parseEmojiByID("1125590254313811998")} **${description}**`);
 		}
 
 		return super.setDescription(description);
@@ -59,6 +60,7 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 	 */
 	public isSuccessEmbed(emoji?: boolean): this {
 		this.setColor("#1ED760");
+		this.errorEmbed = false;
 		emoji === true ? (this.hasCheckmark = true) : (this.hasCheckmark = false);
 		return this;
 	}

@@ -1,4 +1,4 @@
-import { ChatInputCommand, Command } from "@sapphire/framework";
+import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
 import { BaseEmbedBuilder } from "../../libraries/structures/components/BaseEmbedBuilder";
 import { ComponentType } from "discord.js";
 import { deleteBtn } from "../../libraries/structures/components/Buttons";
@@ -14,13 +14,21 @@ export class EvalCommand extends Command {
 	}
 
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
-		registry.registerChatInputCommand((builder) =>
-			builder
-				.setName("eval")
-				.setDescription("Execute some raw JavaScript code.")
-				.addStringOption((option) =>
-					option.setName("input").setDescription("The code to execute.").setRequired(true)
-				)
+		registry.registerChatInputCommand(
+			(builder) =>
+				builder
+					.setName("eval")
+					.setDescription("Execute some raw JavaScript code.")
+					.addStringOption((option) =>
+						option.setName("input").setDescription("The code to execute.").setRequired(true)
+					)
+					.addBooleanOption((option) =>
+						option
+							.setName("silent")
+							.setDescription("Whether to send the reply public or not.")
+							.setRequired(false)
+					),
+			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite }
 		);
 	}
 
@@ -43,6 +51,7 @@ export class EvalCommand extends Command {
 		return interaction.reply({
 			content: content,
 			embeds: embed.data.description ? [embed] : [],
+			ephemeral: interaction.options.getBoolean("silent") ?? false,
 			components: [
 				{
 					type: ComponentType.ActionRow,

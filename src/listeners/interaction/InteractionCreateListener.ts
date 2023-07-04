@@ -14,7 +14,7 @@ export class InteractionCreateListener extends Listener {
 	public run(interaction: BaseInteraction) {
 		if (!interaction.isChatInputCommand()) return;
 
-		const barredUsers = parsers.parseBarredUsersByFile(`${process.cwd()}/public/barredUsers.txt`);
+		const barredUsers = parsers.parseBarredUserIDByFile(`${process.cwd()}/public/barredUsers.txt`);
 		if (barredUsers.includes(interaction.user.id)) {
 			const embed = new BaseEmbedBuilder()
 				.isErrorEmbed()

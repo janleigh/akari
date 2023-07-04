@@ -1,3 +1,4 @@
+import { InternationalizationContext } from "@sapphire/plugin-i18next";
 import { ClientOptions, GatewayIntentsString } from "discord.js";
 
 /**
@@ -36,5 +37,11 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	defaultCooldown: { delay: 3000 },
 	defaultPrefix: "/",
 	loadMessageCommandListeners: false,
-	enableLoaderTraceLoggings: false
+	enableLoaderTraceLoggings: false,
+	i18n: {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		fetchLanguage(context: InternationalizationContext) {
+			return "en-US";
+		}
+	}
 };

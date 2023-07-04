@@ -1,8 +1,7 @@
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
-import { BaseEmbedBuilder } from "../../libraries/structures/components/BaseEmbedBuilder";
 import { ComponentType } from "discord.js";
-import { deleteBtn } from "../../libraries/structures/components/Buttons";
 import { clean } from "../../libraries/utils/common/text";
+import { BaseEmbedBuilder, deleteBtn } from "../../libraries/structures/components";
 
 export class EvalCommand extends Command {
 	public constructor(context: Command.Context, options: Command.Options) {

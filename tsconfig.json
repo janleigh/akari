@@ -20,7 +20,9 @@
 		".git/",
 		".github/",
 		".vscode/",
-		"dist/"
+		"build/"
 	],
-	"include": [ "src/**/*" ]
+	"include": [
+		"src/**/*"
+	]
 }  

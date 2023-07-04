@@ -568,6 +568,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"akari@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "akari@workspace:."
+  dependencies:
+    "@sapphire/framework": ^4.2.0
+    "@sapphire/plugin-logger": ^3.0.1
+    "@typescript-eslint/eslint-plugin": latest
+    "@typescript-eslint/parser": latest
+    discord.js: ^14.7.1
+    dotenv: ^16.0.3
+    eslint: latest
+    eslint-plugin-prettier: ^4.2.1
+    husky: ^8.0.3
+    lint-staged: ^13.2.0
+    prettier: ^2.8.2
+    sucrase: ^3.29.0
+    typescript: ^5.0.0
+  languageName: unknown
+  linkType: soft
+
 "ansi-escapes@npm:^4.3.0":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
@@ -1914,26 +1934,6 @@ __metadata:
   checksum: 9d58db16525e9f749ad0a696a1f27deabaa51f66e91d2fa2b0db3de3e9644e8677de3b7d7a03f4c15bc81521e0c3916d7369e0572dbde250d9bedf5194e2a8a7
   languageName: node
   linkType: hard
-
-"servant@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "servant@workspace:."
-  dependencies:
-    "@sapphire/framework": ^4.2.0
-    "@sapphire/plugin-logger": ^3.0.1
-    "@typescript-eslint/eslint-plugin": latest
-    "@typescript-eslint/parser": latest
-    discord.js: ^14.7.1
-    dotenv: ^16.0.3
-    eslint: latest
-    eslint-plugin-prettier: ^4.2.1
-    husky: ^8.0.3
-    lint-staged: ^13.2.0
-    prettier: ^2.8.2
-    sucrase: ^3.29.0
-    typescript: ^5.0.0
-  languageName: unknown
-  linkType: soft
 
 "shebang-command@npm:^2.0.0":
   version: 2.0.0

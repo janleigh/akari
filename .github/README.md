@@ -3,7 +3,7 @@ this readme sucks
 --->
 
 <!--- TITLE --->
-<h1 align="center"> servant </h1>
+<h1 align="center"> akari </h1>
 
 <!--- DESCRIPTION --->
 <div align="center">

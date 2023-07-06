@@ -24,6 +24,8 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 	 */
 	public constructor() {
 		super();
+
+		this.setColor("#fdd59a");
 	}
 
 	/**

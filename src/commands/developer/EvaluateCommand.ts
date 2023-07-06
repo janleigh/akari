@@ -47,16 +47,39 @@ export class EvalCommand extends Command {
 			embed.isErrorEmbed().setDescription("An error occurred. Check the console for more details.");
 		}
 
-		return interaction.reply({
-			content: content,
-			embeds: embed.data.description ? [embed] : [],
-			ephemeral: interaction.options.getBoolean("silent") ?? false,
-			components: [
-				{
-					type: ComponentType.ActionRow,
-					components: [deleteBtn]
-				}
-			]
-		});
+		if (content.length < 2000) {
+			return interaction.reply({
+				content: content,
+				embeds: embed.data.description ? [embed] : [],
+				ephemeral: interaction.options.getBoolean("silent") ?? false,
+				components: [
+					{
+						type: ComponentType.ActionRow,
+						components: [deleteBtn]
+					}
+				]
+			});
+		} else {
+			this.container.logger.info("!! EVAL COMPLETE !!");
+			console.log(content.replaceAll("```xl", "").replaceAll("```", ""));
+
+			embed
+				.isErrorEmbed()
+				.setDescription(
+					"The output was too long to be sent as a message. Output has been logged to the console."
+				);
+
+			return interaction.reply({
+				content: "",
+				embeds: embed.data.description ? [embed] : [],
+				ephemeral: interaction.options.getBoolean("silent") ?? false,
+				components: [
+					{
+						type: ComponentType.ActionRow,
+						components: [deleteBtn]
+					}
+				]
+			});
+		}
 	}
 }

@@ -8,6 +8,7 @@ export class PingCommand extends Command {
 	public constructor(context: Command.Context, options: Command.Options) {
 		super(context, {
 			...options,
+			name: "ping",
 			fullCategory: ["Core"]
 		});
 	}

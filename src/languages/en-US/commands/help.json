@@ -1,0 +1,5 @@
+{
+	"HELP_HELPCMD_DESCRIPTION": "Display the help menu or help for a specific command.",
+	"HELP_PINGCMD_DESCRIPTION": "Check if the bot is alive.",
+	"HELP_CHATCMD_DESCRIPTION": "Chat to Akari."
+}

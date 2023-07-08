@@ -1,20 +1,16 @@
-/* eslint-disable indent */
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
+import { resolveKey } from "@sapphire/plugin-i18next";
+import { ComponentType } from "discord.js";
 import { BaseEmbedBuilder, githubBtn, inviteBtn } from "../../libraries/structures/components";
 import { parseEmojiByID } from "../../libraries/utils/common/parsers";
-import { ComponentType } from "discord.js";
-import { resolveKey } from "@sapphire/plugin-i18next";
 import { LanguageKeys } from "../../libraries/language";
 
+@ApplyOptions<Command.Options>({
+	name: "help",
+	fullCategory: ["Core"]
+})
 export class HelpCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-			name: "help",
-			fullCategory: ["Core"]
-		});
-	}
-
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) =>
@@ -39,11 +35,11 @@ export class HelpCommand extends Command {
 				value: `
 				${transparent} </help:1126303427203448938> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Help.HELP_HELPCMD_DESCRIPTION
+					LanguageKeys.Commands.Core.HelpCommand.HELP_HELPCMD_DESCRIPTION
 				)}
 				${transparent} </ping:1125599325431533578> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Help.HELP_PINGCMD_DESCRIPTION
+					LanguageKeys.Commands.Core.HelpCommand.HELP_PINGCMD_DESCRIPTION
 				)}
 				`
 			},
@@ -52,7 +48,16 @@ export class HelpCommand extends Command {
 				value: `
 				${transparent} </chat:1126124768576417892> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Help.HELP_CHATCMD_DESCRIPTION
+					LanguageKeys.Commands.Core.HelpCommand.HELP_CHATCMD_DESCRIPTION
+				)}
+				`
+			},
+			{
+				name: "—  **CONFIGURATION	**",
+				value: `
+				${transparent} </language:1126383838688444527> - ${await resolveKey(
+					interaction,
+					LanguageKeys.Commands.Core.HelpCommand.HELP_LANGCMD_DESCRIPTION
 				)}
 				`
 			}

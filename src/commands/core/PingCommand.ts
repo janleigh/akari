@@ -1,18 +1,15 @@
-import { isMessageInstance } from "@sapphire/discord.js-utilities";
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
-import { BaseEmbedBuilder } from "../../libraries/structures/components";
+import { isMessageInstance } from "@sapphire/discord.js-utilities";
+import { ApplyOptions } from "@sapphire/decorators";
 import { resolveKey } from "@sapphire/plugin-i18next";
+import { BaseEmbedBuilder } from "../../libraries/structures/components";
 import { LanguageKeys } from "../../libraries/language";
 
+@ApplyOptions<Command.Options>({
+	name: "ping",
+	fullCategory: ["Core"]
+})
 export class PingCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-			name: "ping",
-			fullCategory: ["Core"]
-		});
-	}
-
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) => builder.setName("ping").setDescription("Check if the bot is alive."),
@@ -22,13 +19,13 @@ export class PingCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const msg = await interaction.reply({
-			content: `> ${await resolveKey(interaction, LanguageKeys.Commands.Ping.PING_WAITING)}`,
+			content: `> ${await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_WAITING)}`,
 			ephemeral: false,
 			fetchReply: true
 		});
 		const embed = new BaseEmbedBuilder()
 			.isErrorEmbed()
-			.setDescription(await resolveKey(interaction, LanguageKeys.Commands.Ping.PING_FAILED));
+			.setDescription(await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_FAILED));
 
 		if (isMessageInstance(msg)) {
 			const diff = msg.createdTimestamp - interaction.createdTimestamp;
@@ -36,11 +33,14 @@ export class PingCommand extends Command {
 
 			embed.isSuccessEmbed(false);
 			embed.setDescription(
-				await resolveKey(interaction, LanguageKeys.Commands.Ping.PING_SUCCESS_DESCRIPTION, { ping, diff })
+				await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_SUCCESS_DESCRIPTION, {
+					ping,
+					diff
+				})
 			);
 
 			return interaction.editReply({
-				content: `${await resolveKey(interaction, LanguageKeys.Commands.Ping.PING_SUCCESS)}`,
+				content: `${await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_SUCCESS)}`,
 				embeds: [embed]
 			});
 		}

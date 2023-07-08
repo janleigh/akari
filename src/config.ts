@@ -1,3 +1,5 @@
+import { BucketScope, LogLevel } from "@sapphire/framework";
+import { container } from "@sapphire/pieces";
 import { InternationalizationContext } from "@sapphire/plugin-i18next";
 import { ClientOptions, GatewayIntentsString } from "discord.js";
 
@@ -34,14 +36,36 @@ const INTENTS: GatewayIntentsString[] = [
 export const CLIENT_OPTIONS: ClientOptions = {
 	intents: INTENTS,
 	allowedMentions: { parse: ["users", "roles"], repliedUser: true },
-	defaultCooldown: { delay: 3000 },
+	defaultCooldown: {
+		delay: 10_000,
+		filteredUsers: DEV_USER_IDS,
+		limit: 2,
+		scope: BucketScope.User
+	},
 	defaultPrefix: "/",
 	loadMessageCommandListeners: false,
 	enableLoaderTraceLoggings: false,
 	i18n: {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		fetchLanguage(context: InternationalizationContext) {
-			return "en-US";
+		fetchLanguage: async (context: InternationalizationContext) => {
+			if (!context.guild) return "en-US";
+
+			const dbLang = await container.database.guildConfig.findUnique({
+				where: { guildId: context.guild.id }
+			});
+
+			if (!dbLang) {
+				await container.database.guildConfig.create({
+					data: {
+						guildId: context.guild.id,
+						language: "en-US"
+					}
+				});
+			}
+
+			return dbLang?.language as string;
 		}
+	},
+	logger: {
+		level: process.env.NODE_ENV === "production" ? LogLevel.Info : LogLevel.Debug
 	}
 };

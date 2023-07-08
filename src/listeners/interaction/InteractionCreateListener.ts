@@ -1,18 +1,13 @@
 import { Listener } from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
+import { resolveKey } from "@sapphire/plugin-i18next";
 import { BaseInteraction, Events } from "discord.js";
 import { parsers } from "../../libraries/utils";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
-import { resolveKey } from "@sapphire/plugin-i18next";
 import { LanguageKeys } from "../../libraries/language";
 
-export class InteractionCreateListener extends Listener {
-	public constructor(ctx: Listener.Context) {
-		super(ctx, {
-			event: Events.InteractionCreate,
-			name: Events.InteractionCreate
-		});
-	}
-
+@ApplyOptions<Listener.Options>({ event: Events.InteractionCreate, name: "interactionCreate" })
+export class InteractionCreateListener extends Listener<typeof Events.InteractionCreate> {
 	public async run(interaction: BaseInteraction) {
 		if (!interaction.isChatInputCommand()) return;
 

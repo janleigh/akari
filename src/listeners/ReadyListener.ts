@@ -1,15 +1,10 @@
 import { Listener } from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
 import { ActivityType, Events } from "discord.js";
 import { CLIENT_OPTIONS } from "../config";
 
-export class ReadyListener extends Listener {
-	public constructor(ctx: Listener.Context) {
-		super(ctx, {
-			event: Events.ClientReady,
-			name: Events.ClientReady
-		});
-	}
-
+@ApplyOptions<Listener.Options>({ event: Events.ClientReady, name: "ready" })
+export class ReadyListener extends Listener<typeof Events.ClientReady> {
 	public run(): void {
 		this.container.logger.info(`Logged in as ${this.container.client.user?.tag}`);
 

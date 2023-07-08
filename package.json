@@ -9,10 +9,8 @@
 	"license": "MIT",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "yarn build:clean && yarn compile",
-		"build:production": "yarn build:clean && yarn format:check && yarn lint && yarn compile",
-		"build:clean": "rm -rvf ./build/",
-		"compile": "npx sucrase src -d build --transforms typescript,imports && cp -rvf src/languages/ build/",
+		"build": "npx tsup && cp -rvf src/languages/ build/",
+		"build:production": "yarn format:check && yarn lint && yarn build",
 		"format": "prettier --write src",
 		"format:check": "prettier --check src",
 		"lint": "eslint src --ext .ts",
@@ -26,11 +24,14 @@
 		"husky": "^8.0.3",
 		"lint-staged": "^13.2.0",
 		"prettier": "^2.8.2",
-		"sucrase": "^3.29.0",
+		"prisma": "^4.16.2",
+		"tsup": "^7.1.0",
 		"typescript": "^5.0.0"
 	},
 	"packageManager": "yarn@3.6.1",
 	"dependencies": {
+		"@prisma/client": "4.16.2",
+		"@sapphire/decorators": "^6.0.1",
 		"@sapphire/framework": "^4.2.0",
 		"@sapphire/pieces": "^3.6.3",
 		"@sapphire/plugin-i18next": "^5.0.3",

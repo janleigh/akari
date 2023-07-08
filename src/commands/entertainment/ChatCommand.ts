@@ -1,18 +1,16 @@
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
-import { fetchResponseFromAI } from "../../libraries/utils/common/fetch";
-import { BaseEmbedBuilder } from "../../libraries/structures/components";
+import { ApplyOptions } from "@sapphire/decorators";
 import { resolveKey } from "@sapphire/plugin-i18next";
+import { fetchResponseFromAI, pingServer } from "../../libraries/utils/common/fetch";
+import { BaseEmbedBuilder } from "../../libraries/structures/components";
 import { LanguageKeys } from "../../libraries/language";
+import { removeSymbols } from "../../libraries/utils/common/text";
 
+@ApplyOptions<Command.Options>({
+	name: "chat",
+	fullCategory: ["Entertainment"]
+})
 export class ChatCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-			name: "chat",
-			fullCategory: ["Entertainment"]
-		});
-	}
-
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) =>
@@ -35,22 +33,37 @@ export class ChatCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const message = interaction.options.getString("message");
 		const silent = interaction.options.getBoolean("silent") ?? false;
+		const serverStatus = await pingServer();
 		const embed = new BaseEmbedBuilder();
-		const response: { role: string; content: string } = await fetchResponseFromAI(
-			String(message),
-			interaction.user.id
-		);
 
 		await interaction.deferReply({ ephemeral: silent });
 
-		if (response.content) {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-			return interaction.editReply({ content: response.content });
+		if (serverStatus === true) {
+			await fetchResponseFromAI(String(message), removeSymbols(interaction.user.username))
+				.then((res) => {
+					return interaction.editReply({
+						content: res.content
+					});
+				})
+				.catch(async () => {
+					embed
+						.isErrorEmbed()
+						.setDescription(
+							await resolveKey(interaction, LanguageKeys.Commands.Entertainment.ChatCommand.CHAT_FAILED)
+						);
+					return interaction.editReply({
+						embeds: [embed]
+					});
+				});
+		} else {
+			embed
+				.isErrorEmbed()
+				.setDescription(
+					await resolveKey(interaction, LanguageKeys.Commands.Entertainment.ChatCommand.CHAT_SERVER_DOWN)
+				);
+			return interaction.editReply({
+				embeds: [embed]
+			});
 		}
-
-		embed.isErrorEmbed().setDescription(await resolveKey(interaction, LanguageKeys.Commands.Chat.CHAT_FAILED));
-		return interaction.editReply({
-			embeds: [embed]
-		});
 	}
 }

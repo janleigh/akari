@@ -1,17 +1,15 @@
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
 import { ComponentType } from "discord.js";
 import { clean } from "../../libraries/utils/common/text";
 import { BaseEmbedBuilder, deleteBtn } from "../../libraries/structures/components";
 
+@ApplyOptions<Command.Options>({
+	name: "eval",
+	fullCategory: ["Developer"],
+	preconditions: ["DeveloperOnlyPrecondition"]
+})
 export class EvalCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-			fullCategory: ["Developer"],
-			preconditions: ["DeveloperOnlyPrecondition"]
-		});
-	}
-
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) =>

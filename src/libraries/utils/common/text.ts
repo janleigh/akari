@@ -11,3 +11,7 @@ export const clean = (text: string) => {
 		.replace(process.env.DISCORD_TOKEN, "<TOKEN>");
 	return text;
 };
+
+export const removeSymbols = (text: string) => {
+	return text.replace(/[^a-zA-Z0-9 ]/g, "");
+};

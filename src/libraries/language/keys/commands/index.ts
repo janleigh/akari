@@ -1,3 +1,2 @@
-export * as Chat from "./chat";
-export * as Help from "./help";
-export * as Ping from "./ping";
+export * as Core from "./core";
+export * as Entertainment from "./entertainment";

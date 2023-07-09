@@ -2,6 +2,8 @@ import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework
 import { ApplyOptions } from "@sapphire/decorators";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
 import { parseEmojiByID } from "../../libraries/utils/common/parsers";
+import { resolveKey } from "@sapphire/plugin-i18next";
+import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
 	name: "language",
@@ -19,7 +21,11 @@ export class LanguageCommand extends Command {
 							.setName("lang")
 							.setDescription("The language you want to set for the server.")
 							.setRequired(false)
-							.addChoices({ name: "English", value: "en-US" })
+							.addChoices(
+								{ name: "English | English", value: "en-US" },
+								{ name: "Filipino | Pilipino", value: "fil-PH" },
+								{ name: "Reset", value: "en-US" }
+							)
 					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite }
 		);
@@ -32,9 +38,26 @@ export class LanguageCommand extends Command {
 		const embed = new BaseEmbedBuilder();
 
 		if (!lang) {
-			embed.setDescription(`${infoEmoji}  The current language for this server is: **\`${dbLang}\`**`);
+			embed.setDescription(
+				`${infoEmoji}  ${await resolveKey(
+					interaction,
+					LanguageKeys.Commands.Configuration.LanguageCommand.CURRENT_LANG,
+					{ dbLang }
+				)}`
+			);
 		} else {
-			embed.isErrorEmbed().setDescription("To be implemented.");
+			await this.container.database.guildConfig.update({
+				where: { guildId: interaction.guildId as string },
+				data: { language: lang }
+			});
+
+			embed.setDescription(
+				`${infoEmoji}  ${await resolveKey(
+					interaction,
+					LanguageKeys.Commands.Configuration.LanguageCommand.CHANGED_TO_LANG,
+					{ lang }
+				)}`
+			);
 		}
 		return interaction.reply({ embeds: [embed] });
 	}
@@ -48,4 +71,4 @@ export class LanguageCommand extends Command {
 	}
 }
 
-type Language = "en-US";
+type Language = "en-US" | "fil-PH";

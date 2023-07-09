@@ -12,3 +12,10 @@ model GuildConfig {
   guildId  String @unique
   language String
 }
+
+model UserTelemetry {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  lastCommandUsed   String
+  totalCommandsUsed BigInt
+  userId            String @unique
+}

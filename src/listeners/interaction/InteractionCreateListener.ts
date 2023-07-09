@@ -15,7 +15,9 @@ export class InteractionCreateListener extends Listener<typeof Events.Interactio
 		if (barredUsers.includes(interaction.user.id)) {
 			const embed = new BaseEmbedBuilder()
 				.isErrorEmbed()
-				.setDescription(await resolveKey(interaction, LanguageKeys.Listeners.InteractionCreate.USER_BARRED));
+				.setDescription(
+					await resolveKey(interaction, LanguageKeys.Listeners.Interaction.InteractionCreate.USER_BARRED)
+				);
 
 			return interaction.reply({ content: "", embeds: [embed] });
 		}

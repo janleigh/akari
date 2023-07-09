@@ -13,7 +13,7 @@ export const pingServer = async () => {
 };
 
 export const fetchResponseFromAI = async (message: string, uid: string) => {
-	const response = await fetch(`http://localhost:8080/response?msg=${message}&uid=${encodeURIComponent(uid)}`);
+	const response = await fetch(`http://localhost:8080/response?message=${message}&userId=${encodeURIComponent(uid)}`);
 	if (response instanceof Error) {
 		return response;
 	}

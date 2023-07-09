@@ -1,0 +1,4 @@
+{
+	"CURRENT_LANG": "The current language for this server is: **`{lang}`**",
+	"CHANGED_TO_LANG": "Successfully changed the language to **`${lang}`**"
+}

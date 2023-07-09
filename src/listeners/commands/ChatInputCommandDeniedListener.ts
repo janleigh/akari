@@ -2,6 +2,8 @@ import { Listener, Events, ChatInputCommandDeniedPayload, UserError, Identifiers
 import { ApplyOptions } from "@sapphire/decorators";
 import { InteractionResponse } from "discord.js";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
+import { resolveKey } from "@sapphire/plugin-i18next";
+import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Listener.Options>({ event: Events.ChatInputCommandDenied, once: false, name: "chatInputCommandDenied" })
 export class ChatInputCommandDeniedListener extends Listener<typeof Events.ChatInputCommandDenied> {
@@ -17,7 +19,11 @@ export class ChatInputCommandDeniedListener extends Listener<typeof Events.ChatI
 				remaining = Reflect.get(Object(context), "remaining");
 				remaining = Math.round(remaining / 1000);
 
-				embed.setDescription(`You are on cooldown. Please wait \`${remaining}\`s.`);
+				embed.setDescription(
+					await resolveKey(interaction, LanguageKeys.Listeners.Commands.ChatInputCommandDenied.ON_COOLDOWN, {
+						remaining
+					})
+				);
 				break;
 
 			default:

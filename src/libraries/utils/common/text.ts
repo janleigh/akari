@@ -13,5 +13,5 @@ export const clean = (text: string) => {
 };
 
 export const removeSymbols = (text: string) => {
-	return text.replace(/[^a-zA-Z0-9 ]/g, "");
+	return text.replace(/[^a-zA-Z0-9+\-*/= ]/g, "");
 };

@@ -1,0 +1,6 @@
+{
+	"HELP_HELPCMD_DESCRIPTION": "I-display ang listahan ng mga command o ang detalye ng isang command.",
+	"HELP_PINGCMD_DESCRIPTION": "Suriin ang koneksyon ng bot sa Discord.",
+	"HELP_CHATCMD_DESCRIPTION": "Magchat kay Akari.",
+	"HELP_LANGCMD_DESCRIPTION": "Baguhin ang wika ng bot para sa server."
+}

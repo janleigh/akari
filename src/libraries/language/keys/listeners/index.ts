@@ -1,1 +1,2 @@
-export * as InteractionCreate from "./interactionCreate";
+export * as Commands from "./commands";
+export * as Interaction from "./interaction";

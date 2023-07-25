@@ -3,9 +3,9 @@
 		"outDir": "dist/",
 		"module": "ESNext",
 		"moduleResolution": "Node",
-		"target": "ES2021",
+		"target": "ESNext",
 		"lib": [ "ESNext", "DOM" ],
-		
+	
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,

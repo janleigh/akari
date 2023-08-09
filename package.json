@@ -43,7 +43,7 @@
 		"discord.js": "^14.7.1",
 		"dotenv": "^16.0.3",
 		"eslint": "latest",
-		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-prettier": "^5.0.0",
 		"libsodium": "^0.7.11",
 		"libsodium-wrappers": "^0.7.11",
 		"node-fetch": "2"

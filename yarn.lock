@@ -542,15 +542,15 @@ __metadata:
   linkType: hard
 
 "@sapphire/plugin-i18next@npm:^5.0.3":
-  version: 5.0.3
-  resolution: "@sapphire/plugin-i18next@npm:5.0.3"
+  version: 5.0.4
+  resolution: "@sapphire/plugin-i18next@npm:5.0.4"
   dependencies:
-    "@sapphire/utilities": ^3.11.1
-    "@skyra/i18next-backend": ^2.0.2
+    "@sapphire/utilities": ^3.13.0
+    "@skyra/i18next-backend": ^2.0.3
     chokidar: ^3.5.3
-    i18next: ^22.4.14
-    tslib: ^2.5.0
-  checksum: 621c3da7d768b14cc760dd68704ae7d5881f35fede157614e86d7d20923044d23b45d5e93c80b6161d432f5c9c29c594e28e3c5e59eeb7a7217bde566975f8dd
+    i18next: ^22.5.1
+    tslib: ^2.6.0
+  checksum: 7b9d7686aebc17dd5a7516bb6f76fdbe0fada8573f1eee014cae1f23adf97f667cde2e9f34faa3d93e94311b45563d113541aa153099fa53cd725bb4fb9e84bd
   languageName: node
   linkType: hard
 
@@ -619,6 +619,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sapphire/utilities@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "@sapphire/utilities@npm:3.13.0"
+  checksum: c2f901c104459e01a24af71871294b700ff188925cf050558880486de6564792df2b7549796dd9fd6f309c12af7d4e2b2d2f4069ec9d4c27d9c3998eca3ac9a9
+  languageName: node
+  linkType: hard
+
 "@sindresorhus/is@npm:^4.0.0":
   version: 4.6.0
   resolution: "@sindresorhus/is@npm:4.6.0"
@@ -626,7 +633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/i18next-backend@npm:^2.0.2":
+"@skyra/i18next-backend@npm:^2.0.3":
   version: 2.0.3
   resolution: "@skyra/i18next-backend@npm:2.0.3"
   dependencies:
@@ -2196,7 +2203,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^22.4.14":
+"i18next@npm:^22.5.1":
   version: 22.5.1
   resolution: "i18next@npm:22.5.1"
   dependencies:
@@ -3739,6 +3746,13 @@ __metadata:
   version: 2.6.0
   resolution: "tslib@npm:2.6.0"
   checksum: c01066038f950016a18106ddeca4649b4d76caa76ec5a31e2a26e10586a59fceb4ee45e96719bf6c715648e7c14085a81fee5c62f7e9ebee68e77a5396e5538f
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.6.0":
+  version: 2.6.1
+  resolution: "tslib@npm:2.6.1"
+  checksum: b0d176d176487905b66ae4d5856647df50e37beea7571c53b8d10ba9222c074b81f1410fb91da13debaf2cbc970663609068bdebafa844ea9d69b146527c38fe
   languageName: node
   linkType: hard
 

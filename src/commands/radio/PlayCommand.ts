@@ -38,8 +38,8 @@ export class PingCommand extends Command {
 		if (member.voice.channelId) {
 			const voiceChannel = guild?.channels.cache.get(member.voice.channelId);
 			if (botMember?.voice.channelId) {
-				embed.setDescription("I'm already playing on another voice channel.");
 				embed.isErrorEmbed();
+				embed.setDescription("I'm already playing on another voice channel.");
 			}
 
 			if (voiceChannel instanceof VoiceChannel) {
@@ -50,7 +50,7 @@ export class PingCommand extends Command {
 				});
 
 				const player = createAudioPlayer();
-				const stream = type === "jpop" ? "https://listen.moe/opus" : "https://listen.moe/kpop/opus";
+				const stream = type === "jpop" ? "https://listen.moe/stream" : "https://listen.moe/kpop/stream";
 
 				connection.subscribe(player);
 
@@ -72,8 +72,8 @@ export class PingCommand extends Command {
 				);
 			}
 		} else {
-			embed.setDescription("You must be connected to a voice channel to use this command.");
 			embed.isErrorEmbed();
+			embed.setDescription("You must be connected to a voice channel to use this command.");
 		}
 
 		return interaction.reply({ embeds: [embed] });

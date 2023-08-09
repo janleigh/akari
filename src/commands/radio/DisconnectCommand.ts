@@ -32,12 +32,12 @@ export class PingCommand extends Command {
 				connection.destroy();
 				this.container.players.delete(guild?.id as string);
 			} else {
-				embed.setDescription("I'm not connected to any voice channel.");
 				embed.isErrorEmbed();
+				embed.setDescription("I'm not connected to any voice channel.");
 			}
 		} else {
-			embed.setDescription("You're not connected to any voice channel.");
 			embed.isErrorEmbed();
+			embed.setDescription("You're not connected to any voice channel.");
 		}
 
 		return interaction.reply({ content: "", embeds: [embed] });

@@ -17,3 +17,13 @@ export const parseBarredUserIDByFile = (inputFile: string): string[] => {
 export const parseEmojiByID = (emojiID: string): GuildEmoji | undefined => {
 	return container.client.emojis.cache.get(emojiID);
 };
+
+export const parseLanguageCode = (languageCode: string | undefined): string => {
+	switch (languageCode) {
+		case "fil-PH":
+			return "Filipino (Philippines)";
+		case "en-US":
+		default:
+			return "English (United States)";
+	}
+};

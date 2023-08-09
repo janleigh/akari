@@ -1,7 +1,7 @@
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
-import { parseLanguageCode } from "../../libraries/utils/common/parsers";
+import { parseEmojiByID, parseLanguageCode } from "../../libraries/utils/common/parsers";
 
 @ApplyOptions<Command.Options>({
 	name: "config",
@@ -17,6 +17,7 @@ export class ConfigCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const embed = new BaseEmbedBuilder();
+		const transparent = parseEmojiByID("1126301870210695239");
 		const dbConf = await this.container.database.guildConfig.findUnique({
 			where: { guildId: interaction.guildId as string }
 		});
@@ -30,8 +31,8 @@ export class ConfigCommand extends Command {
 		embed.addFields({
 			name: "—  **GENERAL**",
 			value: `
-					Is Premium: **\`To be developed.\`**
-					Language: ${this.getFlag(dbConf?.language)} **\`${parseLanguageCode(dbConf?.language)}\`**
+					${transparent} Is Premium: **\`To be developed.\`**
+					${transparent} Language: ${this.getFlag(dbConf?.language)} **\`${parseLanguageCode(dbConf?.language)}\`**
 					`
 		});
 

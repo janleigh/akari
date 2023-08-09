@@ -1,4 +1,5 @@
 export const HELP_HELPCMD_DESCRIPTION = "commands/core/help:HELP_HELPCMD_DESCRIPTION";
 export const HELP_PINGCMD_DESCRIPTION = "commands/core/help:HELP_PINGCMD_DESCRIPTION";
 export const HELP_CHATCMD_DESCRIPTION = "commands/core/help:HELP_CHATCMD_DESCRIPTION";
+export const HELP_CONFIGCMD_DESCRIPTION = "commands/core/help:HELP_CONFIGCMD_DESCRIPTION";
 export const HELP_LANGCMD_DESCRIPTION = "commands/core/help:HELP_LANGCMD_DESCRIPTION";

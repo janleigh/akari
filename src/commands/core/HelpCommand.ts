@@ -28,16 +28,15 @@ export class HelpCommand extends Command {
 			iconURL: this.container.client.user?.displayAvatarURL({ size: 1024 })
 		});
 
-		// TODO: Make this configurable.
 		embed.addFields(
 			{
 				name: "—  **CORE**",
 				value: `
-				${transparent} </help:1126303427203448938> - ${await resolveKey(
+				${transparent} </help:${this.getCommandID("help")}> - ${await resolveKey(
 					interaction,
 					LanguageKeys.Commands.Core.HelpCommand.HELP_HELPCMD_DESCRIPTION
 				)}
-				${transparent} </ping:1125599325431533578> - ${await resolveKey(
+				${transparent} </ping:${this.getCommandID("ping")}> - ${await resolveKey(
 					interaction,
 					LanguageKeys.Commands.Core.HelpCommand.HELP_PINGCMD_DESCRIPTION
 				)}
@@ -46,7 +45,7 @@ export class HelpCommand extends Command {
 			{
 				name: "—  **ENTERTAINMENT**",
 				value: `
-				${transparent} </chat:1126124768576417892> - ${await resolveKey(
+				${transparent} </chat:${this.getCommandID("chat")}> - ${await resolveKey(
 					interaction,
 					LanguageKeys.Commands.Core.HelpCommand.HELP_CHATCMD_DESCRIPTION
 				)}
@@ -55,7 +54,11 @@ export class HelpCommand extends Command {
 			{
 				name: "—  **CONFIGURATION	**",
 				value: `
-				${transparent} </language:1126383838688444527> - ${await resolveKey(
+				${transparent} </config:${this.getCommandID("config")}> - ${await resolveKey(
+					interaction,
+					LanguageKeys.Commands.Core.HelpCommand.HELP_CONFIGCMD_DESCRIPTION
+				)}
+				${transparent} </language:${this.getCommandID("language")}> - ${await resolveKey(
 					interaction,
 					LanguageKeys.Commands.Core.HelpCommand.HELP_LANGCMD_DESCRIPTION
 				)}
@@ -72,5 +75,9 @@ export class HelpCommand extends Command {
 				}
 			]
 		});
+	}
+
+	private getCommandID(name: string) {
+		return this.container.client.application?.commands.cache.find((cmd) => cmd.name === name)?.id;
 	}
 }

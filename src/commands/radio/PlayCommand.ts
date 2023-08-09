@@ -2,9 +2,8 @@ import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMember, VoiceChannel } from "discord.js";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
-import { createAudioPlayer, createAudioResource, joinVoiceChannel } from "@discordjs/voice";
+import { StreamType, createAudioPlayer, createAudioResource, joinVoiceChannel } from "@discordjs/voice";
 import { parseEmojiByID } from "../../libraries/utils/common/parsers";
-import got from "got";
 
 @ApplyOptions<Command.Options>({
 	name: "play",
@@ -51,11 +50,15 @@ export class PingCommand extends Command {
 				});
 
 				const player = createAudioPlayer();
-				const stream = type === "jpop" ? "https://listen.moe/fallback" : "https://listen.moe/kpop/fallback";
-				const resource = createAudioResource(got.stream(stream));
+				const stream = type === "jpop" ? "https://listen.moe/stream" : "https://listen.moe/kpop/stream";
+
+				connection.subscribe(player);
+
+				const resource = createAudioResource(stream, {
+					inputType: StreamType.OggOpus
+				});
 
 				player.play(resource);
-				connection.subscribe(player);
 
 				this.container.players.set(guild?.id as string, type);
 

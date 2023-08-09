@@ -25,7 +25,7 @@ export class BaseClient extends SapphireClient {
 	public async initialize(token?: string): Promise<void> {
 		await super.login(token ?? process.env.DISCORD_TOKEN);
 		await container.database.$connect().then(() => {
-			container.logger.info("Connected to Prisma");
+			container.logger.info("Connected to Prisma!");
 		});
 	}
 }

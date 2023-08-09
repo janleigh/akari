@@ -21,6 +21,7 @@
 	},
 	"devDependencies": {
 		"@types/node-fetch": "^2.6.4",
+		"@types/ws": "^8.5.5",
 		"husky": "^8.0.3",
 		"lint-staged": "^13.2.0",
 		"prettier": "^2.8.2",
@@ -30,6 +31,7 @@
 	},
 	"packageManager": "yarn@3.6.1",
 	"dependencies": {
+		"@discordjs/voice": "^0.16.0",
 		"@prisma/client": "4.16.2",
 		"@sapphire/decorators": "^6.0.1",
 		"@sapphire/framework": "^4.2.0",
@@ -42,7 +44,12 @@
 		"dotenv": "^16.0.3",
 		"eslint": "latest",
 		"eslint-plugin-prettier": "^4.2.1",
-		"node-fetch": "2"
+		"got": "11.8.3",
+		"libsodium": "^0.7.11",
+		"libsodium-wrappers": "^0.7.11",
+		"node-fetch": "2",
+		"sodium": "^3.0.2",
+		"sodium-native": "^4.0.4"
 	},
 	"lint-staged": {
 		"src/**/*.ts": [

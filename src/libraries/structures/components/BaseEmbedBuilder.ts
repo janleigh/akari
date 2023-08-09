@@ -63,7 +63,7 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 	public isSuccessEmbed(emoji?: boolean): this {
 		this.setColor("#1ED760");
 		this.errorEmbed = false;
-		emoji === true ? (this.hasCheckmark = true) : (this.hasCheckmark = false);
+		this.hasCheckmark = emoji ?? false;
 		return this;
 	}
 }

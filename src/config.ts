@@ -25,6 +25,7 @@ const INTENTS: GatewayIntentsString[] = [
 	"GuildMessages",
 	"GuildMessageReactions",
 	"GuildEmojisAndStickers",
+	"GuildVoiceStates",
 	"DirectMessages",
 	"DirectMessageReactions"
 ];

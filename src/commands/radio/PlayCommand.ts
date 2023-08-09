@@ -50,7 +50,7 @@ export class PingCommand extends Command {
 				});
 
 				const player = createAudioPlayer();
-				const stream = type === "jpop" ? "https://listen.moe/stream" : "https://listen.moe/kpop/stream";
+				const stream = type === "jpop" ? "https://listen.moe/opus" : "https://listen.moe/kpop/opus";
 
 				connection.subscribe(player);
 
@@ -59,6 +59,9 @@ export class PingCommand extends Command {
 				});
 
 				player.play(resource);
+				player.on("error", (error) => {
+					this.container.logger.error("Player error:" + error);
+				});
 
 				this.container.players.set(guild?.id as string, type);
 

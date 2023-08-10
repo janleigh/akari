@@ -1,0 +1,5 @@
+{
+	"SUCCESSFULLY_DISCONNECTED": "Disconnected from <#{{channelId}}>",
+	"BOT_NOT_CONNECTED": "I'm not connected to any voice channel.",
+	"USER_NOT_CONNECTED": "You're not connected to any voice channel."
+}

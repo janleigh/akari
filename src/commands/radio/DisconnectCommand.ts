@@ -3,6 +3,8 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
 import { GuildMember } from "discord.js";
 import { getVoiceConnection } from "@discordjs/voice";
+import { resolveKey } from "@sapphire/plugin-i18next";
+import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
 	name: "disconnect",
@@ -26,18 +28,29 @@ export class DisconnectCommand extends Command {
 		if (member.voice.channelId) {
 			const connection = getVoiceConnection(guild?.id as string);
 			if (connection) {
+				const channelId = botMember?.voice.channelId;
 				embed.isSuccessEmbed(true);
-				embed.setDescription(`Disconnected from <#${botMember?.voice.channelId}>.`);
+				embed.setDescription(
+					await resolveKey(
+						interaction,
+						LanguageKeys.Commands.Radio.DisconnectCommand.SUCCESSFULLY_DISCONNECTED,
+						{ channelId }
+					)
+				);
 
 				connection.destroy();
 				this.container.players.delete(guild?.id as string);
 			} else {
 				embed.isErrorEmbed();
-				embed.setDescription("I'm not connected to any voice channel.");
+				embed.setDescription(
+					await resolveKey(interaction, LanguageKeys.Commands.Radio.DisconnectCommand.BOT_NOT_CONNECTED)
+				);
 			}
 		} else {
 			embed.isErrorEmbed();
-			embed.setDescription("You're not connected to any voice channel.");
+			embed.setDescription(
+				await resolveKey(interaction, LanguageKeys.Commands.Radio.DisconnectCommand.USER_NOT_CONNECTED)
+			);
 		}
 
 		return interaction.reply({ content: "", embeds: [embed] });

@@ -31,7 +31,7 @@ export class SongCommand extends Command {
 
 		embed.setAuthor({
 			name: `Now Playing on ${ty} Radio`,
-			iconURL: this.container.client.user?.displayAvatarURL({ size: 1024 })
+			iconURL: "https://github.com/LISTEN-moe.png"
 		});
 
 		embed.setThumbnail(`https://cdn.listen.moe/covers/${np.albums[0].image}`);

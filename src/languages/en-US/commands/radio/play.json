@@ -1,0 +1,5 @@
+{
+	"SUCCESSFULLY_JOINED": "Joined <#{{channelId}}> and started playing {{radio}} radio.",
+	"ALREADY_PLAYING": "I'm already playing on another voice channel.",
+	"USER_NOT_CONNECTED": "You're not connected to any voice channel."
+}

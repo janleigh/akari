@@ -42,7 +42,7 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 			return super.setDescription(`${parseEmojiByID("1125590254313811998")} **${description}**`);
 		}
 
-		return super.setDescription(description);
+		return super.setDescription(`**${description}**`);
 	}
 
 	/**

@@ -42,7 +42,7 @@ export class LanguageCommand extends Command {
 				`${infoEmoji}  ${await resolveKey(
 					interaction,
 					LanguageKeys.Commands.Configuration.LanguageCommand.CURRENT_LANG,
-					{ dbLang }
+					{ lang: dbLang }
 				)}`
 			);
 		} else {
@@ -55,7 +55,7 @@ export class LanguageCommand extends Command {
 				`${infoEmoji}  ${await resolveKey(
 					interaction,
 					LanguageKeys.Commands.Configuration.LanguageCommand.CHANGED_TO_LANG,
-					{ lang }
+					{ lang: lang }
 				)}`
 			);
 		}

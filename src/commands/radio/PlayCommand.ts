@@ -2,8 +2,16 @@ import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMember, VoiceChannel } from "discord.js";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
-import { StreamType, createAudioPlayer, createAudioResource, joinVoiceChannel } from "@discordjs/voice";
+import {
+	AudioPlayerStatus,
+	StreamType,
+	createAudioPlayer,
+	createAudioResource,
+	joinVoiceChannel
+} from "@discordjs/voice";
 import { parseEmojiByID } from "../../libraries/utils/common/parsers";
+import { resolveKey } from "@sapphire/plugin-i18next";
+import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
 	name: "play",
@@ -39,7 +47,9 @@ export class PlayCommand extends Command {
 			const voiceChannel = guild?.channels.cache.get(member.voice.channelId);
 			if (botMember?.voice.channelId) {
 				embed.isErrorEmbed();
-				embed.setDescription("I'm already playing on another voice channel.");
+				embed.setDescription(
+					await resolveKey(interaction, LanguageKeys.Commands.Radio.PlayCommand.ALREADY_PLAYING)
+				);
 			}
 
 			if (voiceChannel instanceof VoiceChannel) {
@@ -54,26 +64,39 @@ export class PlayCommand extends Command {
 
 				connection.subscribe(player);
 
-				const resource = createAudioResource(stream, {
+				let resource = createAudioResource(stream, {
 					inputType: StreamType.OggOpus
 				});
 
 				player.play(resource);
+				player.on(AudioPlayerStatus.Idle, () => {
+					// Hehe memory leak go brrrr. Fixes #13
+					resource = createAudioResource(stream, {
+						inputType: StreamType.OggOpus
+					});
+					player.play(resource);
+				});
 				player.on("error", (error) => {
 					this.container.logger.error("Player error:" + error);
 				});
-
 				this.container.players.set(guild?.id as string, type);
 
 				embed.setDescription(
-					`${infoEmoji}  Joined <#${voiceChannel.id}> and started playing ${
-						type === "jpop" ? "J-Pop" : "K-Pop"
-					} radio.`
+					`${infoEmoji}  ${await resolveKey(
+						interaction,
+						LanguageKeys.Commands.Radio.PlayCommand.SUCCESSFULLY_JOINED,
+						{
+							channelId: voiceChannel.id,
+							type: type === "jpop" ? "J-Pop" : "K-Pop"
+						}
+					)}`
 				);
 			}
 		} else {
 			embed.isErrorEmbed();
-			embed.setDescription("You must be connected to a voice channel to use this command.");
+			embed.setDescription(
+				await resolveKey(interaction, LanguageKeys.Commands.Radio.PlayCommand.USER_NOT_CONNECTED)
+			);
 		}
 
 		return interaction.reply({ embeds: [embed] });

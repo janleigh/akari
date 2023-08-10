@@ -34,8 +34,8 @@ export class PingCommand extends Command {
 			embed.isSuccessEmbed(false);
 			embed.setDescription(
 				await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_SUCCESS_DESCRIPTION, {
-					ping,
-					diff
+					ping: ping,
+					diff: diff
 				})
 			);
 

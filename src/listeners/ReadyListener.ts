@@ -15,7 +15,7 @@ export class ReadyListener extends Listener<typeof Events.ClientReady> {
 						process.env.NODE_ENV === "development"
 							? "my devs test in production"
 							: `${CLIENT_OPTIONS.defaultPrefix}help`,
-					type: ActivityType.Listening
+					type: process.env.NODE_ENV === "development" ? ActivityType.Watching : ActivityType.Listening
 				}
 			],
 			status: "idle"

@@ -33,7 +33,7 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 	 * @description Sets the embed description.
 	 * @returns {this}
 	 */
-	public override setDescription(description: string | null): this {
+	public override setDescription(description: string | null, boldDescription = false): this {
 		if (description === null) return this;
 		if (this.errorEmbed === true) {
 			return super.setDescription(`${parseEmojiByID("1125590268419244042")} **${description}**`);
@@ -42,7 +42,7 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 			return super.setDescription(`${parseEmojiByID("1125590254313811998")} **${description}**`);
 		}
 
-		return super.setDescription(`**${description}**`);
+		return super.setDescription(`${boldDescription ? "**" : ""}${description}${boldDescription ? "**" : ""}`);
 	}
 
 	/**

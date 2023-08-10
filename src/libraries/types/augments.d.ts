@@ -55,6 +55,11 @@ declare namespace ListenMoe {
 			albums: array;
 			duration: number;
 		};
+		requester: Requester | null;
+	};
+
+	type Requester = {
+		name: string;
 	};
 
 	type ListenerResponse = {

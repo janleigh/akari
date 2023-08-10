@@ -32,7 +32,7 @@ export class ChatCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const message = interaction.options.getString("message");
-		const silent = interaction.options.getBoolean("silent") ?? false;
+		const silent = interaction.options.getBoolean("ephemeral") ?? false;
 		const serverStatus = await pingServer();
 		const embed = new BaseEmbedBuilder();
 

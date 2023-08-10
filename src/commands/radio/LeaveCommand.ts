@@ -7,14 +7,13 @@ import { resolveKey } from "@sapphire/plugin-i18next";
 import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
-	name: "disconnect",
+	name: "leave",
 	fullCategory: ["Radio"]
 })
-export class DisconnectCommand extends Command {
+export class LeaveCommand extends Command {
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
-			(builder) =>
-				builder.setName("disconnect").setDescription("Disconnects the bot from the active voice channel."),
+			(builder) => builder.setName("leave").setDescription("Disconnects the bot from the active voice channel."),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite }
 		);
 	}

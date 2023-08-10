@@ -2,6 +2,7 @@ import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework
 import { ApplyOptions } from "@sapphire/decorators";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
 import { parseEmojiByID } from "../../libraries/utils/common/parsers";
+import { RadioType } from "./PlayCommand";
 
 @ApplyOptions<Command.Options>({
 	name: "song",
@@ -10,7 +11,17 @@ import { parseEmojiByID } from "../../libraries/utils/common/parsers";
 export class SongCommand extends Command {
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
-			(builder) => builder.setName("song").setDescription("Shows the currently playing song on listen.moe."),
+			(builder) =>
+				builder
+					.setName("song")
+					.setDescription("Shows the currently playing song on listen.moe.")
+					.addStringOption((option) =>
+						option
+							.setName("type")
+							.setDescription("Which radio type you want to check what's playing.")
+							.setRequired(false)
+							.addChoices({ name: "J-Pop", value: "jpop" }, { name: "K-Pop", value: "kpop" })
+					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite }
 		);
 	}
@@ -19,7 +30,10 @@ export class SongCommand extends Command {
 		const embed = new BaseEmbedBuilder();
 		const transparent = parseEmojiByID("1126301870210695239");
 		const guild = interaction.guild;
-		const type = this.container.players.get(guild?.id as string);
+		const type =
+			this.container.players.get(guild?.id as string) ??
+			(interaction.options.getString("type") as RadioType) ??
+			"jpop";
 
 		let ws = this.container.listenmoeJPOP;
 		if (type === "kpop") {
@@ -46,14 +60,15 @@ export class SongCommand extends Command {
 				name: "—  **SONG INFO**",
 				value: `
 						${transparent} Title: **\`${np.title}\`**
-						${transparent} Duration: **\`${this.toMMSS(np.duration)}\`**
 						${transparent} Artist: **\`${np.artists
 					.map((artist) => (artist.nameRomaji ? artist.nameRomaji : artist.name))
 					.join(", ")}\`**
+						${transparent} Duration: **\`${this.toMMSS(np.duration)}\`**
+						${transparent} Requested by: **\`${ws.nowPlaying.requester !== null ? ws.nowPlaying.requester : "None"}\`**
 							`
 			},
 			{
-				name: "—  **RADIO STATION**",
+				name: "—  **RADIO**",
 				value: `
 						${transparent} Name: **[Listen.moe](https://listen.moe/)**
 						${transparent} Listeners: **\`${ws.listeners}\`**
@@ -61,7 +76,7 @@ export class SongCommand extends Command {
 			}
 		);
 
-		return interaction.reply({ content: "", embeds: [embed] });
+		return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
 	}
 
 	toMMSS(duration: number) {

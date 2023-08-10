@@ -71,10 +71,12 @@ export class PlayCommand extends Command {
 				player.play(resource);
 				player.on(AudioPlayerStatus.Idle, () => {
 					// Hehe memory leak go brrrr. Fixes #13
-					resource = createAudioResource(stream, {
-						inputType: StreamType.OggOpus
-					});
-					player.play(resource);
+					if (this.container.players.has(guild?.id as string)) {
+						resource = createAudioResource(stream, {
+							inputType: StreamType.OggOpus
+						});
+						player.play(resource);
+					}
 				});
 				player.on("error", (error) => {
 					this.container.logger.error("Player error:" + error);
@@ -103,4 +105,4 @@ export class PlayCommand extends Command {
 	}
 }
 
-type RadioType = "jpop" | "kpop";
+export type RadioType = "jpop" | "kpop";

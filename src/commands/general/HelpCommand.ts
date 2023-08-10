@@ -8,13 +8,12 @@ import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
 	name: "help",
-	fullCategory: ["Core"]
+	fullCategory: ["General"]
 })
 export class HelpCommand extends Command {
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
-			(builder) =>
-				builder.setName("help").setDescription("Display the help menu or help for a specific command."),
+			(builder) => builder.setName("help").setDescription("Display the help menu."),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite }
 		);
 	}
@@ -30,15 +29,15 @@ export class HelpCommand extends Command {
 
 		embed.addFields(
 			{
-				name: "—  **CORE**",
+				name: "—  **GENERAL**",
 				value: `
 				${transparent} </help:${this.getCommandID("help")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_HELPCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_HELPCMD_DESCRIPTION
 				)}
 				${transparent} </ping:${this.getCommandID("ping")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_PINGCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_PINGCMD_DESCRIPTION
 				)}
 				`
 			},
@@ -47,7 +46,7 @@ export class HelpCommand extends Command {
 				value: `
 				${transparent} </chat:${this.getCommandID("chat")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_CHATCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_CHATCMD_DESCRIPTION
 				)}
 				`
 			},
@@ -56,28 +55,28 @@ export class HelpCommand extends Command {
 				value: `
 				${transparent} </config:${this.getCommandID("config")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_CONFIGCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_CONFIGCMD_DESCRIPTION
 				)}
 				${transparent} </language:${this.getCommandID("language")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_LANGCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_LANGCMD_DESCRIPTION
 				)}
 				`
 			},
 			{
 				name: "—  **RADIO	**",
 				value: `
-				${transparent} </disconnect:${this.getCommandID("disconnect")}> - ${await resolveKey(
+				${transparent} </leave:${this.getCommandID("leave")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_DISCONNECTCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_DISCONNECTCMD_DESCRIPTION
 				)}
 				${transparent} </play:${this.getCommandID("play")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_PLAYCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_PLAYCMD_DESCRIPTION
 				)}
 				${transparent} </song:${this.getCommandID("song")}> - ${await resolveKey(
 					interaction,
-					LanguageKeys.Commands.Core.HelpCommand.HELP_SONGCMD_DESCRIPTION
+					LanguageKeys.Commands.General.HelpCommand.HELP_SONGCMD_DESCRIPTION
 				)}
 				`
 			}

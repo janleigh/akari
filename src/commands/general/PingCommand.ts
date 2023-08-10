@@ -7,25 +7,25 @@ import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
 	name: "ping",
-	fullCategory: ["Core"]
+	fullCategory: ["General"]
 })
 export class PingCommand extends Command {
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
-			(builder) => builder.setName("ping").setDescription("Check if the bot is alive."),
+			(builder) => builder.setName("ping").setDescription("Check the bot's latency."),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite }
 		);
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const msg = await interaction.reply({
-			content: `> ${await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_WAITING)}`,
+			content: `> ${await resolveKey(interaction, LanguageKeys.Commands.General.PingCommand.PING_WAITING)}`,
 			ephemeral: false,
 			fetchReply: true
 		});
 		const embed = new BaseEmbedBuilder()
 			.isErrorEmbed()
-			.setDescription(await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_FAILED));
+			.setDescription(await resolveKey(interaction, LanguageKeys.Commands.General.PingCommand.PING_FAILED));
 
 		if (isMessageInstance(msg)) {
 			const diff = msg.createdTimestamp - interaction.createdTimestamp;
@@ -33,14 +33,14 @@ export class PingCommand extends Command {
 
 			embed.isSuccessEmbed(false);
 			embed.setDescription(
-				await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_SUCCESS_DESCRIPTION, {
+				await resolveKey(interaction, LanguageKeys.Commands.General.PingCommand.PING_SUCCESS_DESCRIPTION, {
 					ping: ping,
 					diff: diff
 				})
 			);
 
 			return interaction.editReply({
-				content: `${await resolveKey(interaction, LanguageKeys.Commands.Core.PingCommand.PING_SUCCESS)}`,
+				content: `${await resolveKey(interaction, LanguageKeys.Commands.General.PingCommand.PING_SUCCESS)}`,
 				embeds: [embed]
 			});
 		}

@@ -7,7 +7,8 @@ import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
 	name: "language",
-	fullCategory: ["Configuration"]
+	fullCategory: ["Configuration"],
+	preconditions: ["DeveloperOnlyPrecondition"]
 })
 export class LanguageCommand extends Command {
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {

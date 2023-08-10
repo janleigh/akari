@@ -9,7 +9,7 @@ import { parseEmojiByID } from "../../libraries/utils/common/parsers";
 	name: "play",
 	fullCategory: ["Radio"]
 })
-export class PingCommand extends Command {
+export class PlayCommand extends Command {
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) =>

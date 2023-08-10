@@ -16,7 +16,7 @@ export class ChatCommand extends Command {
 			(builder) =>
 				builder
 					.setName("chat")
-					.setDescription("Chat to Akari.")
+					.setDescription("Chat to the bot.")
 					.addStringOption((option) =>
 						option.setName("message").setDescription("The message you want to chat.").setRequired(true)
 					)

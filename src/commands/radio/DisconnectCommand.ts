@@ -8,7 +8,7 @@ import { getVoiceConnection } from "@discordjs/voice";
 	name: "disconnect",
 	fullCategory: ["Radio"]
 })
-export class PingCommand extends Command {
+export class DisconnectCommand extends Command {
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) =>

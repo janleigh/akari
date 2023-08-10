@@ -1,7 +1,7 @@
 {
 	"HELP_HELPCMD_DESCRIPTION": "Display the help menu or help for a specific command.",
 	"HELP_PINGCMD_DESCRIPTION": "Check if the bot is alive.",
-	"HELP_CHATCMD_DESCRIPTION": "Chat to Akari.",
+	"HELP_CHATCMD_DESCRIPTION": "Chat to the bot.",
 	"HELP_CONFIGCMD_DESCRIPTION": "View the current settings of the server.",
 	"HELP_LANGCMD_DESCRIPTION": "Change the language of the bot for the server.",
 	"HELP_DISCONNECTCMD_DESCRIPTION": "Disconnects the bot from the active voice channel.",

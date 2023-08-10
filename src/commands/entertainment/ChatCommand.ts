@@ -22,7 +22,7 @@ export class ChatCommand extends Command {
 					)
 					.addBooleanOption((option) =>
 						option
-							.setName("silent")
+							.setName("ephemeral")
 							.setDescription("Whether to send the reply public or not.")
 							.setRequired(false)
 					),

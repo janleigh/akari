@@ -21,12 +21,17 @@ export class SongCommand extends Command {
 		const guild = interaction.guild;
 		const type = this.container.players.get(guild?.id as string);
 
+		let ws = this.container.listenmoeJPOP;
+		if (type === "kpop") {
+			ws = this.container.listenmoeKPOP;
+		}
+
 		let ty = "J-Pop",
-			np = this.container.listenmoeJPOP.nowPlaying.song;
+			np = ws.nowPlaying.song;
 
 		if (type === "kpop") {
 			ty = "K-Pop";
-			np = this.container.listenmoeKPOP.nowPlaying.song;
+			np = ws.nowPlaying.song;
 		}
 
 		embed.setAuthor({
@@ -36,16 +41,25 @@ export class SongCommand extends Command {
 
 		embed.setThumbnail(`https://cdn.listen.moe/covers/${np.albums[0].image}`);
 
-		embed.addFields({
-			name: "—  **SONG INFO**",
-			value: `
-					${transparent} Title: **\`${np.title}\`**
-					${transparent} Duration: **\`${this.toMMSS(np.duration)}\`**
-					${transparent} Artist: **\`${np.artists
-				.map((artist) => (artist.nameRomaji ? artist.nameRomaji : artist.name))
-				.join(", ")}\`**
+		embed.addFields(
+			{
+				name: "—  **SONG INFO**",
+				value: `
+						${transparent} Title: **\`${np.title}\`**
+						${transparent} Duration: **\`${this.toMMSS(np.duration)}\`**
+						${transparent} Artist: **\`${np.artists
+					.map((artist) => (artist.nameRomaji ? artist.nameRomaji : artist.name))
+					.join(", ")}\`**
+							`
+			},
+			{
+				name: "—  **RADIO STATION**",
+				value: `
+						${transparent} Name: **[Listen.moe](https://listen.moe/)**
+						${transparent} Listeners: **\`${ws.listeners}\`**
 						`
-		});
+			}
+		);
 
 		return interaction.reply({ content: "", embeds: [embed] });
 	}

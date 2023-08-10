@@ -30,7 +30,7 @@ declare module "@sapphire/pieces" {
 declare namespace ListenMoe {
 	type ListenMoeResponse = {
 		op: number;
-		d: SongResponse & HeartBeatResponse;
+		d: SongResponse & HeartBeatResponse & ListenerResponse;
 		t?: string;
 	};
 
@@ -55,5 +55,9 @@ declare namespace ListenMoe {
 			albums: array;
 			duration: number;
 		};
+	};
+
+	type ListenerResponse = {
+		listeners: number;
 	};
 }

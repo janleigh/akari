@@ -11,6 +11,7 @@ export class ListenMoeWebSocket {
 
 	public gateway: string;
 	public heartbeatInterval: NodeJS.Timer | undefined;
+	public listeners: number;
 
 	public nowPlaying: ListenMoe.SongResponse;
 
@@ -23,6 +24,7 @@ export class ListenMoeWebSocket {
 		this.gateway = gateway;
 
 		this.heartbeatInterval = undefined;
+		this.listeners = 0;
 		this.nowPlaying = {} as ListenMoe.SongResponse;
 
 		this.client.on("ready", () => this.initialize());
@@ -52,6 +54,7 @@ export class ListenMoeWebSocket {
 				case 1:
 					if (res.t != "TRACK_UPDATE" && res.t != "TRACK_UPDATE_REQUEST") return;
 					this.nowPlaying = res.d;
+					this.listeners = res.d.listeners;
 					break;
 				default:
 					break;

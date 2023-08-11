@@ -21,7 +21,7 @@ export class EvalCommand extends Command {
 					)
 					.addBooleanOption((option) =>
 						option
-							.setName("silent")
+							.setName("ephemeral")
 							.setDescription("Whether to send the reply public or not.")
 							.setRequired(false)
 					),
@@ -31,6 +31,7 @@ export class EvalCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const input = interaction.options.getString("input");
+		const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
 		const embed = new BaseEmbedBuilder();
 		let content = "";
 
@@ -49,7 +50,7 @@ export class EvalCommand extends Command {
 			return interaction.reply({
 				content: content,
 				embeds: embed.data.description ? [embed] : [],
-				ephemeral: interaction.options.getBoolean("silent") ?? false,
+				ephemeral: ephemeral,
 				components: [
 					{
 						type: ComponentType.ActionRow,
@@ -70,7 +71,7 @@ export class EvalCommand extends Command {
 			return interaction.reply({
 				content: "",
 				embeds: embed.data.description ? [embed] : [],
-				ephemeral: interaction.options.getBoolean("silent") ?? false,
+				ephemeral: ephemeral,
 				components: [
 					{
 						type: ComponentType.ActionRow,

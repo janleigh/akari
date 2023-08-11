@@ -9,7 +9,7 @@ import {
 	createAudioResource,
 	joinVoiceChannel
 } from "@discordjs/voice";
-import { parseEmojiByID } from "../../libraries/utils/common/parsers";
+import { getEmoji } from "../../libraries/utils/common/parsers";
 import { resolveKey } from "@sapphire/plugin-i18next";
 import { LanguageKeys } from "../../libraries/language";
 
@@ -37,7 +37,7 @@ export class PlayCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const embed = new BaseEmbedBuilder();
-		const infoEmoji = parseEmojiByID("1126390222620463214");
+		const infoEmoji = getEmoji("info");
 		const type = interaction.options.getString("type") as RadioType;
 		const guild = interaction.guild;
 		const member = interaction.member as GuildMember;
@@ -91,7 +91,8 @@ export class PlayCommand extends Command {
 							channelId: voiceChannel.id,
 							type: type === "jpop" ? "J-Pop" : "K-Pop"
 						}
-					)}`
+					)}`,
+					true
 				);
 			}
 		} else {

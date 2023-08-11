@@ -3,7 +3,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { resolveKey } from "@sapphire/plugin-i18next";
 import { ComponentType } from "discord.js";
 import { BaseEmbedBuilder, githubBtn, inviteBtn } from "../../libraries/structures/components";
-import { parseEmojiByID } from "../../libraries/utils/common/parsers";
+import { getEmoji } from "../../libraries/utils/common/parsers";
 import { LanguageKeys } from "../../libraries/language";
 
 @ApplyOptions<Command.Options>({
@@ -20,7 +20,7 @@ export class HelpCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const embed = new BaseEmbedBuilder();
-		const transparent = parseEmojiByID("1126301870210695239");
+		const transparent = getEmoji("transparent");
 
 		embed.setAuthor({
 			name: (this.container.client.user?.username ?? "") + " Help Menu",

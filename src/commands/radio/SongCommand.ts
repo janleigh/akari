@@ -1,7 +1,7 @@
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
-import { parseEmojiByID } from "../../libraries/utils/common/parsers";
+import { getEmoji } from "../../libraries/utils/common/parsers";
 import { RadioType } from "./PlayCommand";
 
 @ApplyOptions<Command.Options>({
@@ -28,7 +28,7 @@ export class SongCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const embed = new BaseEmbedBuilder();
-		const transparent = parseEmojiByID("1126301870210695239");
+		const transparent = getEmoji("transparent");
 		const guild = interaction.guild;
 		const type =
 			this.container.players.get(guild?.id as string) ??

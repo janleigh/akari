@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import { parseEmojiByID } from "../../utils/common/parsers";
+import { getEmoji } from "../../utils/common/parsers";
 
 export class BaseEmbedBuilder extends EmbedBuilder {
 	/**
@@ -31,15 +31,17 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 	/**
 	 * @override
 	 * @description Sets the embed description.
+	 * @param {string | null} [description] The embed description.
+	 * @param {boolean} [boldDescription] Whether to bold the description.
 	 * @returns {this}
 	 */
 	public override setDescription(description: string | null, boldDescription = false): this {
 		if (description === null) return this;
 		if (this.errorEmbed === true) {
-			return super.setDescription(`${parseEmojiByID("1125590268419244042")} **${description}**`);
+			return super.setDescription(`${getEmoji("crossmark")} **${description}**`);
 		}
 		if (this.hasCheckmark === true) {
-			return super.setDescription(`${parseEmojiByID("1125590254313811998")} **${description}**`);
+			return super.setDescription(`${getEmoji("checkmark")} **${description}**`);
 		}
 
 		return super.setDescription(`${boldDescription ? "**" : ""}${description}${boldDescription ? "**" : ""}`);
@@ -57,12 +59,11 @@ export class BaseEmbedBuilder extends EmbedBuilder {
 
 	/**
 	 * @description Sets the embed color to green.
-	 * @param {boolean} emoji Whether to add the checkmark emoji to the embed description.
+	 * @param {boolean} [emoji] Whether to add the checkmark emoji to the embed description.
 	 * @returns {this}
 	 */
 	public isSuccessEmbed(emoji?: boolean): this {
 		this.setColor("#1ED760");
-		this.errorEmbed = false;
 		this.hasCheckmark = emoji ?? false;
 		return this;
 	}

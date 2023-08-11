@@ -1,7 +1,7 @@
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
-import { parseEmojiByID, parseLanguageCode } from "../../libraries/utils/common/parsers";
+import { getEmoji, parseLanguageCode } from "../../libraries/utils/common/parsers";
 
 @ApplyOptions<Command.Options>({
 	name: "config",
@@ -17,7 +17,7 @@ export class ConfigCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const embed = new BaseEmbedBuilder();
-		const transparent = parseEmojiByID("1126301870210695239");
+		const transparent = getEmoji("transparent");
 		const dbConf = await this.container.database.guildConfig.findUnique({
 			where: { guildId: interaction.guildId as string }
 		});

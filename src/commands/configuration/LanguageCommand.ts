@@ -1,7 +1,7 @@
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { BaseEmbedBuilder } from "../../libraries/structures/components";
-import { parseEmojiByID } from "../../libraries/utils/common/parsers";
+import { getEmoji } from "../../libraries/utils/common/parsers";
 import { resolveKey } from "@sapphire/plugin-i18next";
 import { LanguageKeys } from "../../libraries/language";
 
@@ -35,7 +35,7 @@ export class LanguageCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const lang = interaction.options.getString("lang") as Language;
 		const dbLang = await this.getCurrentLang(interaction.guildId as string);
-		const infoEmoji = parseEmojiByID("1126390222620463214");
+		const infoEmoji = getEmoji("info");
 		const embed = new BaseEmbedBuilder();
 
 		if (!lang) {

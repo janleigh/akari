@@ -5,7 +5,7 @@ import { CLIENT_OPTIONS } from "../config";
 
 @ApplyOptions<Listener.Options>({ event: Events.ClientReady, name: "ready" })
 export class ReadyListener extends Listener<typeof Events.ClientReady> {
-	public run(): void {
+	public async run(): Promise<void> {
 		this.container.logger.info(`Logged in as ${this.container.client.user?.tag}`);
 
 		this.container.client.user?.setPresence({

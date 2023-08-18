@@ -23,8 +23,8 @@ export class LanguageCommand extends Command {
 							.setDescription("The language you want to set for the server.")
 							.setRequired(false)
 							.addChoices(
-								{ name: "English | English", value: "en-US" },
-								{ name: "Filipino | Pilipino", value: "fil-PH" },
+								{ name: "English (US)", value: "en-US" },
+								{ name: "Filipino", value: "fil-PH" },
 								{ name: "Reset", value: "en-US" }
 							)
 					),

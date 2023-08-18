@@ -33,13 +33,12 @@ export class ChatCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const message = interaction.options.getString("message");
 		const silent = interaction.options.getBoolean("ephemeral") ?? false;
-		const serverStatus = await pingServer();
 		const embed = new BaseEmbedBuilder();
 
 		await interaction.deferReply({ ephemeral: silent });
 
-		if (serverStatus === true) {
-			await fetchResponseFromAI(String(message), removeSymbols(interaction.user.username))
+		if ((await pingServer()) === true) {
+			await fetchResponseFromAI(message as string, removeSymbols(interaction.user.username))
 				.then((res) => {
 					return interaction.editReply({
 						content: res.content

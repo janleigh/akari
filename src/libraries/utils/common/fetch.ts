@@ -1,24 +1,18 @@
 const API_URL = process.env.API_URL ?? "http://localhost:8080";
 
-// Closed source ;) No stealing
+const _fetch = async (url: string) => {
+	return await import("node-fetch").then(({ default: fetch }) => fetch(url));
+};
+
 export const pingServer = async () => {
-	return await import("node-fetch").then(({ default: fetch }) =>
-		fetch(API_URL)
-			.then(() => {
-				return true;
-			})
-			.catch(() => {
-				return false;
-			})
-	);
+	const status = await _fetch(API_URL);
+
+	return status.status === 200 ? true : false;
 };
 
 export const fetchResponseFromAI = async (message: string, uid: string) => {
-	const response = await import("node-fetch").then(({ default: fetch }) =>
-		fetch(`${API_URL}/response?message=${message}&userId=${encodeURIComponent(uid)}`)
-	);
-	if (response instanceof Error) {
-		return response;
-	}
-	return response.json();
+	// Closed source ;) No stealing
+	const response = await _fetch(`${API_URL}/response?message=${message}&userId=${encodeURIComponent(uid)}`);
+
+	return response.json() as Promise<{ content: string }>;
 };

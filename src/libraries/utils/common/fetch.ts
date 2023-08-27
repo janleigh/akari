@@ -7,7 +7,7 @@ const _fetch = async (url: string) => {
 export const pingServer = async () => {
 	const status = await _fetch(API_URL);
 
-	return status.status === 200 ? true : false;
+	return status.status === 200;
 };
 
 export const fetchResponseFromAI = async (message: string, uid: string) => {

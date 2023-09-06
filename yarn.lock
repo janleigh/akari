@@ -543,14 +543,14 @@ __metadata:
   linkType: hard
 
 "@sapphire/plugin-i18next@npm:^5.0.5":
-  version: 5.0.5
-  resolution: "@sapphire/plugin-i18next@npm:5.0.5"
+  version: 5.1.1
+  resolution: "@sapphire/plugin-i18next@npm:5.1.1"
   dependencies:
     "@sapphire/utilities": ^3.13.0
     "@skyra/i18next-backend": ^2.0.3
     chokidar: ^3.5.3
     i18next: ^22.5.1
-  checksum: 3d6be5f9cefcdd9f78444311206d8775543aa30888106bc6f3de74cb8a82f35845e3a4acdf32d0a841e3dbe7cd3f1ee3b66947e1d1c415deb54daa144beab0d9
+  checksum: e6d4b4fd15d5c99ba0493dd427dadef47d1bff6632857f3218c9b36da4c91af6cca37997548372c1c7ddedbf8b12b9f5fe60dbf0b4ce9cbce04c95fad91f010b
   languageName: node
   linkType: hard
 

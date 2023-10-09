@@ -25,14 +25,14 @@
 		"husky": "^8.0.3",
 		"lint-staged": "^13.2.0",
 		"prettier": "^2.8.2",
-		"prisma": "^4.16.2",
+		"prisma": "^5.0.0",
 		"tsup": "^7.1.0",
 		"typescript": "^5.0.0"
 	},
 	"packageManager": "yarn@3.6.3",
 	"dependencies": {
 		"@discordjs/voice": "^0.16.0",
-		"@prisma/client": "4.16.2",
+		"@prisma/client": "5.4.2",
 		"@sapphire/decorators": "^6.0.1",
 		"@sapphire/framework": "^4.5.3",
 		"@sapphire/pieces": "^3.6.3",

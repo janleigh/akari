@@ -1,4 +1,4 @@
-const API_URL = process.env.API_URL ?? "http://localhost:8080";
+const API_URL = process.env.API_URL ?? "http://localhost:3000";
 
 const _fetch = async (url: string) => {
 	return await import("node-fetch").then(({ default: fetch }) => fetch(url));

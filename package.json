@@ -9,12 +9,13 @@
 	"license": "MIT",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "npx tsup && cp -rvf src/languages/ build/",
+		"build": "npx tsup && yarn locales",
 		"build:production": "yarn format:check && yarn lint && yarn build",
 		"format": "prettier --write src",
 		"format:check": "prettier --check src",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --ext .ts --fix",
+		"locales": "cp -rf src/languages/ build/ && echo \"Copied language files to build directory.\"",
 		"start:development": "NODE_ENV=development node --trace-deprecation .",
 		"start:production": "NODE_ENV=production node .",
 		"husky": "husky install .github/husky"
@@ -29,7 +30,7 @@
 		"tsup": "^7.1.0",
 		"typescript": "^5.0.0"
 	},
-	"packageManager": "yarn@3.6.3",
+	"packageManager": "yarn@3.6.4",
 	"dependencies": {
 		"@discordjs/voice": "^0.16.0",
 		"@prisma/client": "4.16.2",

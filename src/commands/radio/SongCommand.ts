@@ -48,6 +48,8 @@ export class SongCommand extends Command {
 			np = ws.nowPlaying.song;
 		}
 
+		const artists = np.artists.map((artist) => (artist.nameRomaji ? artist.nameRomaji : artist.name)).join(", ");
+
 		embed.setAuthor({
 			name: `Now Playing on ${ty} Radio`,
 			iconURL: "https://github.com/LISTEN-moe.png"
@@ -60,9 +62,7 @@ export class SongCommand extends Command {
 				name: "—  **SONG INFO**",
 				value: `
 						${transparent} Title: **\`${np.title}\`**
-						${transparent} Artist: **\`${np.artists
-					.map((artist) => (artist.nameRomaji ? artist.nameRomaji : artist.name))
-					.join(", ")}\`**
+						${transparent} Artist: **\`${artists}\`**
 						${transparent} Duration: **\`${this.toMMSS(np.duration)}\`**
 						${transparent} Requested by: **\`${ws.nowPlaying.requester !== null ? ws.nowPlaying.requester : "None"}\`**
 							`

@@ -12,7 +12,7 @@ export const pingServer = async () => {
 
 export const fetchResponseFromAI = async (message: string, uid: string) => {
 	// Closed source ;) No stealing
-	const response = await _fetch(`${API_URL}/response?message=${message}&userId=${encodeURIComponent(uid)}`);
+	const response = await _fetch(`${API_URL}/v2/response?message=${message}&userId=${encodeURIComponent(uid)}`);
 
 	return response.json() as Promise<{ content: string }>;
 };

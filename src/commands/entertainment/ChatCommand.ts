@@ -41,7 +41,7 @@ export class ChatCommand extends Command {
 			await fetchResponseFromAI(message as string, removeSymbols(interaction.user.username))
 				.then((res) => {
 					return interaction.editReply({
-						content: res.content
+						content: res.content.toLowerCase()
 					});
 				})
 				.catch(async () => {

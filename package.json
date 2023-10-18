@@ -21,8 +21,11 @@
 		"husky": "husky install .github/husky"
 	},
 	"devDependencies": {
-		"@types/node-fetch": "^2.6.6",
 		"@types/ws": "^8.5.7",
+		"@typescript-eslint/eslint-plugin": "^6.8.0",
+		"@typescript-eslint/parser": "^6.8.0",
+		"eslint": "^8.51.0",
+		"eslint-plugin-prettier": "^5.0.1",
 		"husky": "^8.0.3",
 		"lint-staged": "^15.0.1",
 		"prettier": "^3.0.3",
@@ -39,12 +42,8 @@
 		"@sapphire/pieces": "^3.7.0",
 		"@sapphire/plugin-i18next": "^6.0.1",
 		"@sapphire/plugin-logger": "^3.0.6",
-		"@typescript-eslint/eslint-plugin": "^6.7.5",
-		"@typescript-eslint/parser": "^6.7.5",
 		"discord.js": "^14.13.0",
 		"dotenv": "^16.3.1",
-		"eslint": "^8.51.0",
-		"eslint-plugin-prettier": "^5.0.1",
 		"libsodium": "^0.7.13",
 		"libsodium-wrappers": "^0.7.13",
 		"node-fetch": "^3.3.2"

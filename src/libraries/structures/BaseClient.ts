@@ -1,7 +1,6 @@
 import { SapphireClient, container } from "@sapphire/framework";
 import { CLIENT_OPTIONS } from "../../config";
 import { PrismaClient } from "@prisma/client";
-import { ListenMoeWebSocket } from "./ws/ListenMoeWebSocket";
 
 export class BaseClient extends SapphireClient {
 	/**
@@ -12,9 +11,6 @@ export class BaseClient extends SapphireClient {
 		super(CLIENT_OPTIONS);
 
 		container.database = new PrismaClient();
-		container.players = new Map();
-		container.listenmoeJPOP = new ListenMoeWebSocket(this, "gateway_v2");
-		container.listenmoeKPOP = new ListenMoeWebSocket(this, "kpop/gateway_v2");
 	}
 
 	/**

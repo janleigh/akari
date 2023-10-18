@@ -62,23 +62,6 @@ export class HelpCommand extends Command {
 					LanguageKeys.Commands.General.HelpCommand.HELP_LANGCMD_DESCRIPTION
 				)}
 				`
-			},
-			{
-				name: "—  **RADIO	**",
-				value: `
-				${transparent} </leave:${this.getCommandID("leave")}> - ${await resolveKey(
-					interaction,
-					LanguageKeys.Commands.General.HelpCommand.HELP_DISCONNECTCMD_DESCRIPTION
-				)}
-				${transparent} </play:${this.getCommandID("play")}> - ${await resolveKey(
-					interaction,
-					LanguageKeys.Commands.General.HelpCommand.HELP_PLAYCMD_DESCRIPTION
-				)}
-				${transparent} </song:${this.getCommandID("song")}> - ${await resolveKey(
-					interaction,
-					LanguageKeys.Commands.General.HelpCommand.HELP_SONGCMD_DESCRIPTION
-				)}
-				`
 			}
 		);
 

@@ -3,8 +3,5 @@
 	"HELP_PINGCMD_DESCRIPTION": "Check the bot's latency.",
 	"HELP_CHATCMD_DESCRIPTION": "Chat to the bot.",
 	"HELP_CONFIGCMD_DESCRIPTION": "View the current settings of the server.",
-	"HELP_LANGCMD_DESCRIPTION": "Change the language of the bot for the server.",
-	"HELP_DISCONNECTCMD_DESCRIPTION": "Disconnects the bot from the active voice channel.",
-	"HELP_PLAYCMD_DESCRIPTION": "Plays the listen.moe radio on connected voice channel.",
-	"HELP_SONGCMD_DESCRIPTION": "Shows the currently playing song on listen.moe."
+	"HELP_LANGCMD_DESCRIPTION": "Change the language of the bot for the server."
 }

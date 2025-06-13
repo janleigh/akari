@@ -44,8 +44,8 @@ export class ChatCommand extends Command {
 					.addBooleanOption((option) =>
 						option
 							.setName("ephemeral")
-							.setDescription("Whether to send the reply privately.")
-							.setRequired(true)
+							.setDescription("Whether to send the reply privately. Defaults to true.")
+							.setRequired(false)
 					)
 					.addBooleanOption((option) =>
 						option
@@ -60,7 +60,7 @@ export class ChatCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const startTime = Date.now();
 		const userMessage = interaction.options.getString("message", true);
-		const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
+		const ephemeral = interaction.options.getBoolean("ephemeral") ?? true;
 		const newConversation = interaction.options.getBoolean("new_conversation") ?? false;
 		const embed = new EmbedBuilder();
 		const isDev = DEV_USER_IDS.includes(interaction.user.id);
@@ -184,7 +184,7 @@ export class ChatCommand extends Command {
 		};
 
 		const response = await axios.post(`${OLLAMA_OPTIONS.server}/api/chat`, payload, {
-			timeout: 999999,
+			timeout: 250000,
 			headers: {
 				"Content-Type": "application/json"
 			}

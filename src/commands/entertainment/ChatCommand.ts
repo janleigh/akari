@@ -180,7 +180,12 @@ export class ChatCommand extends Command {
 		const payload = {
 			model: OLLAMA_OPTIONS.model,
 			messages,
-			stream: false
+			stream: false,
+			options: {
+				temperature: 0.8,
+				top_p: 0.9,
+				top_k: 40
+			}
 		};
 
 		const response = await axios.post(`${OLLAMA_OPTIONS.server}/api/chat`, payload, {

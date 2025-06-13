@@ -58,7 +58,9 @@ export const generateResponse = async (message: string, username?: string) => {
 		],
 		stream: false,
 		options: {
-			num_thread: 2
+			temperature: 0.8,
+			top_p: 0.9,
+			top_k: 40
 		}
 	};
 

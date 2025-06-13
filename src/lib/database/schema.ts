@@ -15,21 +15,22 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  **/
 
-import { inspect } from "util";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-/**
- * Cleans a string by removing sensitive information and formatting issues.
- * @param {string} [text] The text to clean.
- * @returns The cleaned text.
- */
-export const clean = (text: string) => {
-	if (typeof text !== "string") {
-		text = inspect(text, { depth: 1 });
-	}
+export const conversations = sqliteTable("conversations", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	userId: text("user_id").notNull(),
+	guildId: text("guild_id"),
+	systemInstructions: text("system_instructions"),
+	createdAt: integer("created_at").notNull()
+});
 
-	text = text
-		.replace(/`/g, "`" + String.fromCharCode(8203))
-		.replace(/@/g, "@" + String.fromCharCode(8203))
-		.replace(process.env.DISCORD_TOKEN, "<TOKEN>");
-	return text;
-};
+export const messages = sqliteTable("messages", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	conversationId: integer("conversation_id")
+		.notNull()
+		.references(() => conversations.id, { onDelete: "cascade" }),
+	role: text("role", { enum: ["user", "assistant", "system"] }).notNull(),
+	content: text("content").notNull(),
+	timestamp: integer("timestamp").notNull()
+});

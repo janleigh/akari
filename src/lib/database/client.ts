@@ -15,26 +15,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  **/
 
-import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
-import type { ButtonInteraction } from "discord.js";
+import { drizzle } from "drizzle-orm/bun-sqlite";
+import { Database } from "bun:sqlite";
+import * as schema from "./schema";
 
-export class EvalDeleteButtonHandler extends InteractionHandler {
-	public constructor(ctx: InteractionHandler.LoaderContext, options: InteractionHandler.Options) {
-		super(ctx, {
-			...options,
-			interactionHandlerType: InteractionHandlerTypes.Button
-		});
-	}
-
-	public override parse(interaction: ButtonInteraction) {
-		if (interaction.customId !== "evalDelete") return this.none();
-
-		return this.some();
-	}
-
-	public async run(interaction: ButtonInteraction) {
-		await interaction.deferUpdate();
-
-		return interaction.message.delete();
-	}
-}
+// Initialize the SQLite database using Bun's native SQLite
+const sqlite = new Database("./akari.db");
+export const db = drizzle(sqlite, { schema });

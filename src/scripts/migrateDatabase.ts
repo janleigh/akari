@@ -15,26 +15,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  **/
 
-import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
-import type { ButtonInteraction } from "discord.js";
+import { db } from "../lib/database/client";
+import fs from "fs";
+import { migrate } from "drizzle-orm/bun-sqlite/migrator";
 
-export class EvalDeleteButtonHandler extends InteractionHandler {
-	public constructor(ctx: InteractionHandler.LoaderContext, options: InteractionHandler.Options) {
-		super(ctx, {
-			...options,
-			interactionHandlerType: InteractionHandlerTypes.Button
-		});
-	}
+const dbExists = fs.existsSync("./akari.db");
 
-	public override parse(interaction: ButtonInteraction) {
-		if (interaction.customId !== "evalDelete") return this.none();
-
-		return this.some();
-	}
-
-	public async run(interaction: ButtonInteraction) {
-		await interaction.deferUpdate();
-
-		return interaction.message.delete();
-	}
+if (!dbExists) {
+	console.log("Database file not found. Creating new database...");
+	fs.writeFileSync("./akari.db", "");
 }
+
+console.log("Running database migrations...");
+migrate(db, { migrationsFolder: "./drizzle" });
+console.log("Migrations complete!");

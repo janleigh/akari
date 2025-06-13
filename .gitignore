@@ -16,4 +16,4 @@ node_modules/*
 .env
 public/*
 !public/README.md
-```
+akari.db

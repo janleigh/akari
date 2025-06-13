@@ -1,6 +1,0 @@
-{
-	"PING_WAITING": "Ping?",
-	"PING_SUCCESS": "Pong 🏓!",
-	"PING_SUCCESS_DESCRIPTION": "**Discord API**: `{{ping}}`ms\n**Websocket**: `{{diff}}`ms",
-	"PING_FAILED": ":(, may nangyaring mali sa pagpapadala ng ping."
-}

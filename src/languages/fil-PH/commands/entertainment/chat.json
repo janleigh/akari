@@ -1,5 +1,0 @@
-{
-	"CHAT_FAILED": "May naganap na error habang kinukuha ang tugon mula sa AI. Subukang muli mamaya.",
-	"CHAT_TIMEOUT": "Masyadong matagal bago tumugon ang AI server. Subukang muli mamaya.",
-	"CHAT_SERVER_DOWN": "Offline ang AI server. Subukang muli mamaya."
-}

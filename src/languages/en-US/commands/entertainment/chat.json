@@ -1,5 +1,0 @@
-{
-	"CHAT_FAILED": "An error occurred while fetching response from AI. Please try again.",
-	"CHAT_TIMEOUT": "AI server is taking too long to respond. Please try again later.",
-	"CHAT_SERVER_DOWN": "AI server is down. Please try again later."
-}

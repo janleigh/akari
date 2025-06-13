@@ -1,7 +1,0 @@
-{
-	"HELP_HELPCMD_DESCRIPTION": "Display the help menu.",
-	"HELP_PINGCMD_DESCRIPTION": "Check the bot's latency.",
-	"HELP_CHATCMD_DESCRIPTION": "Chat to the bot.",
-	"HELP_CONFIGCMD_DESCRIPTION": "View the current settings of the server.",
-	"HELP_LANGCMD_DESCRIPTION": "Change the language of the bot for the server."
-}

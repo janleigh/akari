@@ -33,3 +33,49 @@ export const clean = (text: string) => {
 		.replace(process.env.DISCORD_TOKEN, "<TOKEN>");
 	return text;
 };
+
+/**
+ * Splits a message into chunks of specified length while preserving word boundaries
+ * @param {string} message - The message to split
+ * @param {number} maxLength - The maximum length of each chunk
+ * @returns {string[]} An array of message chunks
+ */
+export const splitMessage = (message: string, maxLength: number) => {
+	if (message.length <= maxLength) {
+		return [message];
+	}
+
+	const chunks: string[] = [];
+	let currentChunk = "";
+	const words = message.split(" ");
+
+	for (const word of words) {
+		// If adding this word would exceed the limit
+		if (currentChunk.length + word.length + 1 > maxLength) {
+			if (currentChunk.length > 0) {
+				chunks.push(currentChunk.trim());
+				currentChunk = "";
+			}
+
+			// If a single word is longer than maxLength, split it
+			if (word.length > maxLength) {
+				let remainingWord = word;
+				while (remainingWord.length > maxLength) {
+					chunks.push(remainingWord.substring(0, maxLength));
+					remainingWord = remainingWord.substring(maxLength);
+				}
+				currentChunk = remainingWord;
+			} else {
+				currentChunk = word;
+			}
+		} else {
+			currentChunk += (currentChunk.length > 0 ? " " : "") + word;
+		}
+	}
+
+	if (currentChunk.length > 0) {
+		chunks.push(currentChunk.trim());
+	}
+
+	return chunks;
+};

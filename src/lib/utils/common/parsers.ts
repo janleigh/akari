@@ -34,7 +34,7 @@ export const parseEmojiByID = (emojiID: string): GuildEmoji | undefined => {
  * @param {EmojiName} emoji The name of the emoji to get.
  * @returns {GuildEmoji | undefined} The emoji if found, otherwise undefined.
  */
-export const getEmoji = (emoji: EmojiName): GuildEmoji | undefined => {
+export const getEmoji = (emoji: EmojiName | string): GuildEmoji | undefined => {
 	switch (emoji) {
 		case "checkmark":
 			return parseEmojiByID(Emoji.CheckmarkEmoji);

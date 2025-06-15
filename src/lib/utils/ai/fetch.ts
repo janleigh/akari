@@ -35,27 +35,46 @@ export const pingOllamaServer = async () => {
 };
 
 /**
- * Generates a response from the AI without conversation history (simplified version)
+ * Generates a response from the AI with conversation history
+ * @param {string} [message] - The user's message to the AI.
+ * @param {Array<{ role: string; content: string }>} [conversationHistory] - The conversation history to provide context.
+ * @param {string} [username] - The username to replace in the system prompt.
+ * @param {string | null} [customSystemInstructions] - Custom system instructions to use instead of the default.
+ * @returns {Promise<string>} The AI's response.
  */
-export const generateResponse = async (message: string, username?: string) => {
-	const systemPrompt = fs
-		.readFileSync("./public/Modelfile", "utf-8")
-		.replace("{{user}}", username ?? "User")
-		.replace(/\n/g, " ")
-		.trim();
+export const generateResponse = async (
+	message: string,
+	conversationHistory: Array<{ role: string; content: string }>,
+	username?: string,
+	customSystemInstructions?: string | null
+) => {
+	let systemPrompt: string;
+
+	if (customSystemInstructions) {
+		systemPrompt = customSystemInstructions.replace("{{user}}", username ?? "User");
+	} else {
+		systemPrompt = fs
+			.readFileSync("./public/Modelfile", "utf-8")
+			.replace("{{user}}", username ?? "User")
+			.replace(/\n/g, " ")
+			.trim();
+	}
+
+	const messages = [
+		{
+			role: "system",
+			content: systemPrompt
+		},
+		...conversationHistory,
+		{
+			role: "user",
+			content: message
+		}
+	];
 
 	const payload = {
 		model: OLLAMA_OPTIONS.model,
-		messages: [
-			{
-				role: "system",
-				content: systemPrompt
-			},
-			{
-				role: "user",
-				content: message
-			}
-		],
+		messages,
 		stream: false,
 		options: {
 			num_thread: 2,
@@ -66,7 +85,7 @@ export const generateResponse = async (message: string, username?: string) => {
 	};
 
 	const response = await axios.post(`${OLLAMA_OPTIONS.server}/api/chat`, payload, {
-		timeout: 999999,
+		timeout: 250000,
 		headers: {
 			"Content-Type": "application/json"
 		}

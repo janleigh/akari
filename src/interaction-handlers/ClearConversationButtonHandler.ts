@@ -18,7 +18,7 @@
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
 import type { ButtonInteraction } from "discord.js";
 import { ConversationService } from "../lib/services/ConversationService";
-import { EmbedBuilder } from "../lib/components/EmbedBuilder";
+import { getEmoji } from "../lib/utils/common/parsers";
 
 export class ClearConversationButtonHandler extends InteractionHandler {
 	public constructor(ctx: InteractionHandler.LoaderContext, options: InteractionHandler.Options) {
@@ -29,7 +29,7 @@ export class ClearConversationButtonHandler extends InteractionHandler {
 	}
 
 	public override parse(interaction: ButtonInteraction) {
-		if (interaction.customId !== "clearConversation") return this.none();
+		if (!interaction.customId.startsWith("clearConversation")) return this.none();
 
 		return this.some();
 	}
@@ -38,41 +38,36 @@ export class ClearConversationButtonHandler extends InteractionHandler {
 		await interaction.deferUpdate();
 
 		try {
+			const customIdParts = interaction.customId.split("_");
+			const targetUserId = customIdParts.length > 1 ? customIdParts[1] : interaction.user.id;
+
+			if (targetUserId !== interaction.user.id) {
+				return interaction.editReply({
+					content: `${getEmoji("crossmark")} You can only clear your own conversation history.`,
+					components: []
+				});
+			}
+
 			const conversationData = await ConversationService.getConversationHistory(interaction.user.id);
 
 			if (conversationData.messages.length === 0) {
-				const embed = new EmbedBuilder()
-					.isErrorEmbed()
-					.setDescription("You can only clear your own conversation history.");
-
 				return interaction.editReply({
-					content: "",
-					embeds: [embed],
+					content: `${getEmoji("crossmark")} You don't have any conversation history to clear.`,
 					components: []
 				});
 			}
 
 			await ConversationService.clearConversation(interaction.user.id);
 
-			const embed = new EmbedBuilder()
-				.isSuccessEmbed(true)
-				.setDescription("Your conversation history has been cleared. You can start a new conversation now!");
-
 			return interaction.editReply({
-				content: "",
-				embeds: [embed],
+				content: `${getEmoji("checkmark")} Your conversation history has been cleared.`,
 				components: []
 			});
 		} catch (error) {
 			this.container.logger.error(`[ClearConversationButtonHandler] Error: ${error}`);
 
-			const embed = new EmbedBuilder()
-				.isErrorEmbed()
-				.setDescription("An error occurred while clearing your conversation history.");
-
 			return interaction.editReply({
-				content: "",
-				embeds: [embed],
+				content: `${getEmoji("crossmark")} An error occurred while clearing your conversation history. Please try again later.`,
 				components: []
 			});
 		}

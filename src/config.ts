@@ -69,8 +69,8 @@ export const CLIENT_OPTIONS: ClientOptions = {
 		scope: BucketScope.User
 	},
 	defaultPrefix: "/",
-	loadMessageCommandListeners: false,
-	enableLoaderTraceLoggings: false,
+	loadMessageCommandListeners: true,
+	enableLoaderTraceLoggings: true,
 	logger: {
 		level: process.env.NODE_ENV === "production" ? LogLevel.Info : LogLevel.Debug
 	}

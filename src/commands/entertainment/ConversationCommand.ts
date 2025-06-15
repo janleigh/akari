@@ -17,9 +17,10 @@
 
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { EmbedBuilder } from "../../lib/components/EmbedBuilder";
 import { ConversationService } from "../../lib/services/ConversationService";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
+import { splitMessage } from "../../lib/utils/common/text";
+import { getEmoji } from "../../lib/utils/common/parsers";
 
 @ApplyOptions<Command.Options>({
 	name: "conversation",
@@ -78,7 +79,6 @@ export class ConversationCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const ephemeral = interaction.options.getBoolean("ephemeral") ?? true;
 		const subcommand = interaction.options.getSubcommand();
-		const embed = new EmbedBuilder();
 
 		await interaction.deferReply({ flags: ephemeral ? MessageFlags.Ephemeral : undefined });
 
@@ -91,10 +91,9 @@ export class ConversationCommand extends Command {
 				);
 
 				if (conversationData.messages.length === 0) {
-					embed.setDescription(
-						"You don't have any conversation history yet. Start chatting with the `/chat` command!"
-					);
-					return interaction.editReply({ embeds: [embed] });
+					return interaction.editReply({
+						content: "You don't have any conversation history yet. Start chatting with the `/chat` command!"
+					});
 				}
 
 				const formattedHistory = conversationData.messages
@@ -114,34 +113,26 @@ export class ConversationCommand extends Command {
 
 				const row = new ActionRowBuilder<ButtonBuilder>().addComponents(clearButton);
 
-				const fullContent = `\`\`\`\n${formattedHistory}\n\`\`\``;
+				const fullContent = `**Conversation Transcript**\n\`\`\`\n${formattedHistory}\n\`\`\`\n*Conversation ID: ${conversationData.conversationId}*`;
 
-				if (fullContent.length > 1023) {
-					const chunks = this.splitMessage(fullContent, 926);
-					embed
-						.setTitle("Conversation Transcript")
-						.setDescription(chunks[0])
-						.setFooter({
-							text: `Conversation ID: ${conversationData.conversationId} (1/${chunks.length})`
-						});
+				if (fullContent.length > 2000) {
+					const chunks = splitMessage(fullContent, 1950);
 
 					await interaction.editReply({
-						embeds: [embed],
+						content: chunks[0],
 						components: chunks.length === 1 ? [row] : []
 					});
 
-					// Send remaining chunks as follow-up messages
 					for (let i = 1; i < chunks.length; i++) {
 						const isLastChunk = i === chunks.length - 1;
-						const chunkEmbed = new EmbedBuilder()
-							.setTitle("Conversation Transcript (continued)")
-							.setDescription(chunks[i])
-							.setFooter({
-								text: `Conversation ID: ${conversationData.conversationId} (${i + 1}/${chunks.length})`
-							});
+						const chunkContent =
+							chunks[i] +
+							(isLastChunk
+								? `\n*Conversation ID: ${conversationData.conversationId} (${i + 1}/${chunks.length})*`
+								: "");
 
 						await interaction.followUp({
-							embeds: [chunkEmbed],
+							content: chunkContent,
 							components: isLastChunk ? [row] : [],
 							flags: ephemeral ? MessageFlags.Ephemeral : undefined
 						});
@@ -150,52 +141,35 @@ export class ConversationCommand extends Command {
 					return;
 				}
 
-				embed
-					.setTitle("Conversation Transcript")
-					.setDescription(fullContent)
-					.setFooter({ text: `Conversation ID: ${conversationData.conversationId}` });
-
-				return interaction.editReply({ embeds: [embed], components: [row] });
+				return interaction.editReply({ content: fullContent, components: [row] });
 			} else if (subcommand === "clear") {
 				await ConversationService.clearConversation(interaction.user.id);
 
-				embed
-					.isSuccessEmbed(true)
-					.setDescription(
-						"Your conversation history has been cleared. You can start a new conversation now!"
-					);
-
-				return interaction.editReply({ embeds: [embed] });
+				return interaction.editReply({
+					content: `${getEmoji("success")} Your conversation history has been cleared. You can start a new conversation now!`
+				});
 			} else if (subcommand === "system") {
 				const instructions = interaction.options.getString("instructions");
 
 				if (!instructions) {
 					await ConversationService.setSystemInstructions(interaction.user.id, null);
 
-					embed
-						.isSuccessEmbed(true)
-						.setDescription(
-							"System instructions have been reset to default. Violetta will use her original personality."
-						);
+					return interaction.editReply({
+						content: `${getEmoji("success")} Your custom system instructions have been reset.`
+					});
 				} else {
 					await ConversationService.setSystemInstructions(interaction.user.id, instructions);
 
-					const successMessage = `Custom system instructions have been set! Your conversation will now use these instructions:\n\`\`\`\n${instructions.length > 500 ? instructions.substring(0, 500) + "..." : instructions}\n\`\`\``;
+					const successMessage = `✅ **Custom system instructions have been set!**\n\nYour conversation will now use these instructions:\n\`\`\`\n${instructions.length > 500 ? instructions.substring(0, 500) + "..." : instructions}\n\`\`\``;
 
-					// Handle long system instructions by splitting
-					if (successMessage.length > 1023) {
-						const chunks = this.splitMessage(successMessage, 926);
+					if (successMessage.length > 2000) {
+						const chunks = splitMessage(successMessage, 1950);
 
-						embed.isSuccessEmbed(true).setDescription(chunks[0]);
+						await interaction.editReply({ content: chunks[0] });
 
-						await interaction.editReply({ embeds: [embed] });
-
-						// Send remaining chunks as follow-up messages
 						for (let i = 1; i < chunks.length; i++) {
-							const chunkEmbed = new EmbedBuilder().isSuccessEmbed(true).setDescription(chunks[i]);
-
 							await interaction.followUp({
-								embeds: [chunkEmbed],
+								content: chunks[i],
 								flags: ephemeral ? MessageFlags.Ephemeral : undefined
 							});
 						}
@@ -203,58 +177,14 @@ export class ConversationCommand extends Command {
 						return;
 					}
 
-					embed.isSuccessEmbed(true).setDescription(successMessage);
+					return interaction.editReply({ content: successMessage });
 				}
-
-				return interaction.editReply({ embeds: [embed] });
 			}
 		} catch (error) {
 			this.container.logger.error(`[ConversationCommand] Error: ${error}`);
-			embed.isErrorEmbed().setDescription("An error occurred while processing your request. Please try again.");
-			return interaction.editReply({ embeds: [embed] });
+			return interaction.editReply({
+				content: `${getEmoji("crossmark")} An error occurred while processing your request. Please try again later.`
+			});
 		}
-	}
-
-	/**
-	 * Splits a message into chunks of specified length while preserving word boundaries
-	 */
-	private splitMessage(message: string, maxLength: number): string[] {
-		if (message.length <= maxLength) {
-			return [message];
-		}
-
-		const chunks: string[] = [];
-		let currentChunk = "";
-		const words = message.split(" ");
-
-		for (const word of words) {
-			// If adding this word would exceed the limit
-			if (currentChunk.length + word.length + 1 > maxLength) {
-				if (currentChunk.length > 0) {
-					chunks.push(currentChunk.trim());
-					currentChunk = "";
-				}
-
-				// If a single word is longer than maxLength, split it
-				if (word.length > maxLength) {
-					let remainingWord = word;
-					while (remainingWord.length > maxLength) {
-						chunks.push(remainingWord.substring(0, maxLength));
-						remainingWord = remainingWord.substring(maxLength);
-					}
-					currentChunk = remainingWord;
-				} else {
-					currentChunk = word;
-				}
-			} else {
-				currentChunk += (currentChunk.length > 0 ? " " : "") + word;
-			}
-		}
-
-		if (currentChunk.length > 0) {
-			chunks.push(currentChunk.trim());
-		}
-
-		return chunks;
 	}
 }

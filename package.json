@@ -9,13 +9,13 @@
 	"license": "MIT",
 	"main": "src/index.ts",
 	"scripts": {
-		"start": "bun run start:development",
+		"start": "bun run start:prod",
+		"start:dev": "NODE_ENV=development bun run src/index.ts",
+		"start:prod": "NODE_ENV=production bun run src/index.ts",
 		"format": "prettier --write src",
 		"format:check": "prettier --check src",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --ext .ts --fix",
-		"start:development": "NODE_ENV=development node --trace-deprecation .",
-		"start:production": "NODE_ENV=production node .",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "bun run src/scripts/migrateDatabase.ts",
 		"db:studio": "drizzle-kit studio"

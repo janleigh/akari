@@ -19,7 +19,7 @@ import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework
 import { ApplyOptions } from "@sapphire/decorators";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
 import { text } from "../../lib/utils";
-import { EmbedBuilder } from "../../lib/components/EmbedBuilder";
+import { getEmoji } from "../../lib/utils/common/parsers";
 
 @ApplyOptions<Command.Options>({
 	name: "eval",
@@ -49,7 +49,6 @@ export class EvaluateCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const input = interaction.options.getString("input");
 		const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
-		const embed = new EmbedBuilder();
 		let content = "";
 
 		const deleteButton = new ButtonBuilder()
@@ -68,13 +67,15 @@ export class EvaluateCommand extends Command {
 			content = `:bricks: **EVAL COMPLETE** (${timeTaken}s) :bricks:\n\`\`\`xl\n${evaled}\`\`\``;
 		} catch (err) {
 			this.container.logger.error(`[EvalCommand] ${err}`);
-			embed.isErrorEmbed().setDescription("An error occurred. Check the console for more details.");
+			content = `:x: **EVAL ERROR**\n\`\`\`xl\n${text.clean(String(err))}\`\`\``;
+			return interaction.reply({
+				content: content
+			});
 		}
 
 		if (content.length < 2000) {
 			return interaction.reply({
 				content: content,
-				embeds: embed.data.description ? [embed] : [],
 				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 				components: [deleteRow]
 			});
@@ -82,15 +83,8 @@ export class EvaluateCommand extends Command {
 			this.container.logger.info("!! EVAL COMPLETE !!");
 			console.log(content.replaceAll("```xl", "").replaceAll("```", ""));
 
-			embed
-				.isErrorEmbed()
-				.setDescription(
-					"The output was too long to be sent as a message. Output has been logged to the console."
-				);
-
 			return interaction.reply({
-				content: "",
-				embeds: [embed],
+				content: `${getEmoji("crossmark")} The output was too long to be sent as a message. Output has been logged to the console.`,
 				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 				components: [deleteRow]
 			});

@@ -15,17 +15,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  **/
 
-import axios from "axios";
-import fs from "fs";
 import { ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
-import { EmbedBuilder } from "../../lib/components/EmbedBuilder";
 import { text } from "../../lib/utils";
-import { pingOllamaServer } from "../../lib/utils/ai/fetch";
+import { generateResponse, pingOllamaServer } from "../../lib/utils/ai/fetch";
 import { ConversationService } from "../../lib/services/ConversationService";
-import { OLLAMA_OPTIONS } from "../../config";
 import { DEV_USER_IDS } from "../../config";
+import { splitMessage } from "../../lib/utils/common/text";
+import { getEmoji } from "../../lib/utils/common/parsers";
 
 @ApplyOptions<Command.Options>({
 	name: "chat",
@@ -62,7 +60,6 @@ export class ChatCommand extends Command {
 		const userMessage = interaction.options.getString("message", true);
 		const ephemeral = interaction.options.getBoolean("ephemeral") ?? true;
 		const newConversation = interaction.options.getBoolean("new_conversation") ?? false;
-		const embed = new EmbedBuilder();
 		const isDev = DEV_USER_IDS.includes(interaction.user.id);
 
 		await interaction.deferReply({ flags: ephemeral ? MessageFlags.Ephemeral : undefined });
@@ -70,8 +67,9 @@ export class ChatCommand extends Command {
 		try {
 			const isServerUp = await pingOllamaServer();
 			if (!isServerUp) {
-				embed.isErrorEmbed().setDescription("The AI server is currently unavailable. Please try again later.");
-				return interaction.editReply({ embeds: [embed] });
+				return interaction.editReply({
+					content: `${getEmoji("crossmark")} The AI server is currently unavailable. Please try again later.`
+				});
 			}
 
 			let conversationData;
@@ -90,7 +88,7 @@ export class ChatCommand extends Command {
 
 			await ConversationService.addMessage(conversationData.conversationId, "user", userMessage);
 
-			const response = await this.generateResponse(
+			const response = await generateResponse(
 				userMessage,
 				conversationData.messages,
 				interaction.user.username,
@@ -108,15 +106,17 @@ export class ChatCommand extends Command {
 			const row = new ActionRowBuilder<ButtonBuilder>().addComponents(clearButton);
 
 			const endTime = Date.now();
-			const totalTime = endTime - startTime;
+			const ms = endTime - startTime;
+			const min = (ms / 60000).toFixed(2);
+			const sec = (ms / 1000).toFixed(2);
 			let responseContent = cleanedResponse;
 
 			if (isDev) {
-				responseContent += `\n\n*Developer Info: Response time: ${totalTime}ms*`;
+				responseContent += `\n\nResponse Time: ${min} minutes (${sec} seconds)`;
 			}
 
 			if (responseContent.length > 1023) {
-				const chunks = this.splitMessage(responseContent, 926);
+				const chunks = splitMessage(responseContent, 926);
 
 				await interaction.editReply({
 					content: chunks[0],
@@ -135,114 +135,13 @@ export class ChatCommand extends Command {
 
 			return interaction.editReply({
 				content: responseContent,
-				components: [row]
+				components: ephemeral ? [row] : []
 			});
 		} catch (error) {
 			this.container.logger.error(`[ChatCommand] Error: ${error}`);
-			embed.isErrorEmbed().setDescription("An error occurred while processing your request. Please try again.");
-			return interaction.editReply({ embeds: [embed] });
+			return interaction.editReply({
+				content: `${getEmoji("crossmark")} An error occurred while processing your request. Please try again later.`
+			});
 		}
-	}
-
-	/**
-	 * Generates a response from the AI with conversation history
-	 */
-	private async generateResponse(
-		message: string,
-		conversationHistory: Array<{ role: string; content: string }>,
-		username?: string,
-		customSystemInstructions?: string | null
-	) {
-		let systemPrompt: string;
-
-		if (customSystemInstructions) {
-			systemPrompt = customSystemInstructions.replace("{{user}}", username ?? "User");
-		} else {
-			systemPrompt = fs
-				.readFileSync("./public/Modelfile", "utf-8")
-				.replace("{{user}}", username ?? "User")
-				.replace(/\n/g, " ")
-				.trim();
-		}
-
-		const messages = [
-			{
-				role: "system",
-				content: systemPrompt
-			},
-			...conversationHistory,
-			{
-				role: "user",
-				content: message
-			}
-		];
-
-		const payload = {
-			model: OLLAMA_OPTIONS.model,
-			messages,
-			stream: false,
-			options: {
-				num_thread: 2,
-				temperature: 0.8,
-				top_p: 0.9,
-				top_k: 40
-			}
-		};
-
-		const response = await axios.post(`${OLLAMA_OPTIONS.server}/api/chat`, payload, {
-			timeout: 250000,
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
-
-		if (response.data?.message?.content) {
-			return response.data.message.content;
-		}
-
-		throw new Error("Invalid response from Ollama server");
-	}
-
-	/**
-	 * Splits a message into chunks of specified length while preserving word boundaries
-	 */
-	private splitMessage(message: string, maxLength: number): string[] {
-		if (message.length <= maxLength) {
-			return [message];
-		}
-
-		const chunks: string[] = [];
-		let currentChunk = "";
-		const words = message.split(" ");
-
-		for (const word of words) {
-			// If adding this word would exceed the limit
-			if (currentChunk.length + word.length + 1 > maxLength) {
-				if (currentChunk.length > 0) {
-					chunks.push(currentChunk.trim());
-					currentChunk = "";
-				}
-
-				// If a single word is longer than maxLength, split it
-				if (word.length > maxLength) {
-					let remainingWord = word;
-					while (remainingWord.length > maxLength) {
-						chunks.push(remainingWord.substring(0, maxLength));
-						remainingWord = remainingWord.substring(maxLength);
-					}
-					currentChunk = remainingWord;
-				} else {
-					currentChunk = word;
-				}
-			} else {
-				currentChunk += (currentChunk.length > 0 ? " " : "") + word;
-			}
-		}
-
-		if (currentChunk.length > 0) {
-			chunks.push(currentChunk.trim());
-		}
-
-		return chunks;
 	}
 }

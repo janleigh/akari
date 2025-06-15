@@ -17,7 +17,8 @@
 
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, type ListenerOptions } from "@sapphire/framework";
-import { ActivityType, type Client } from "discord.js";
+import { type Client } from "discord.js";
+import { PRESENCE_OPTIONS } from "../config";
 
 @ApplyOptions<ListenerOptions>({
 	once: true
@@ -34,15 +35,6 @@ export class ReadyListener extends Listener<typeof Events.ClientReady> {
 		const { id, tag } = client.user;
 		this.container.logger.info(`Successfully logged in as ${tag} (${id})`);
 
-		this.container.client.user?.setPresence({
-			activities: [
-				{
-					name: "sucking my dev's blood 🔪",
-					type: ActivityType.Streaming,
-					url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-				}
-			],
-			status: "dnd"
-		});
+		this.container.client.user?.setPresence(PRESENCE_OPTIONS);
 	}
 }

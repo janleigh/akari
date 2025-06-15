@@ -11,91 +11,115 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+	baseDirectory: __dirname,
+	recommendedConfig: js.configs.recommended,
+	allConfig: js.configs.all
 });
 
-export default defineConfig([{
-    extends: compat.extends("eslint:recommended", "plugin:@typescript-eslint/recommended"),
+export default defineConfig([
+	{
+		extends: compat.extends("eslint:recommended", "plugin:@typescript-eslint/recommended"),
 
-    plugins: {
-        prettier,
-        "@typescript-eslint": typescriptEslint,
-    },
+		plugins: {
+			prettier,
+			"@typescript-eslint": typescriptEslint
+		},
 
-    languageOptions: {
-        globals: {
-            ...globals.node,
-        },
+		languageOptions: {
+			globals: {
+				...globals.node
+			},
 
-        parser: tsParser,
-        ecmaVersion: "latest",
-        sourceType: "module",
-    },
+			parser: tsParser,
+			ecmaVersion: "latest",
+			sourceType: "module"
+		},
 
-    rules: {
-        "arrow-spacing": ["warn", {
-            before: true,
-            after: true,
-        }],
+		rules: {
+			"arrow-spacing": [
+				"warn",
+				{
+					before: true,
+					after: true
+				}
+			],
 
-        "brace-style": ["error", "1tbs", {
-            allowSingleLine: true,
-        }],
+			"brace-style": [
+				"error",
+				"1tbs",
+				{
+					allowSingleLine: true
+				}
+			],
 
-        "comma-spacing": "error",
-        "comma-style": "error",
-        curly: ["error", "multi-line", "consistent"],
-        "dot-location": ["error", "property"],
-        "handle-callback-err": "off",
-        indent: ["off", "tab"],
-        "keyword-spacing": "error",
+			"comma-spacing": "error",
+			"comma-style": "error",
+			"curly": ["error", "multi-line", "consistent"],
+			"dot-location": ["error", "property"],
+			"handle-callback-err": "off",
+			"indent": ["off", "tab"],
+			"keyword-spacing": "error",
 
-        "max-nested-callbacks": ["error", {
-            max: 4,
-        }],
+			"max-nested-callbacks": [
+				"error",
+				{
+					max: 4
+				}
+			],
 
-        "max-statements-per-line": ["error", {
-            max: 2,
-        }],
+			"max-statements-per-line": [
+				"error",
+				{
+					max: 2
+				}
+			],
 
-        "no-console": "off",
-        "no-empty-function": "error",
-        "no-floating-decimal": "error",
-        "no-inline-comments": "error",
-        "no-lonely-if": "error",
-        "no-multi-spaces": "error",
+			"no-console": "off",
+			"no-empty-function": "error",
+			"no-floating-decimal": "error",
+			"no-inline-comments": "error",
+			"no-lonely-if": "error",
+			"no-multi-spaces": "error",
 
-        "no-multiple-empty-lines": ["error", {
-            max: 2,
-            maxEOF: 1,
-            maxBOF: 0,
-        }],
+			"no-multiple-empty-lines": [
+				"error",
+				{
+					max: 2,
+					maxEOF: 1,
+					maxBOF: 0
+				}
+			],
 
-        "no-shadow": ["error", {
-            allow: ["err", "resolve", "reject"],
-        }],
+			"no-shadow": [
+				"error",
+				{
+					allow: ["err", "resolve", "reject"]
+				}
+			],
 
-        "no-trailing-spaces": ["error"],
-        "no-var": "error",
-        "object-curly-spacing": ["error", "always"],
-        "prefer-const": "error",
-        "prettier/prettier": "error",
-        quotes: ["error", "double"],
-        semi: ["error", "always"],
-        "space-before-blocks": "error",
+			"no-trailing-spaces": ["error"],
+			"no-var": "error",
+			"object-curly-spacing": ["error", "always"],
+			"prefer-const": "error",
+			"prettier/prettier": "error",
+			"quotes": ["error", "double"],
+			"semi": ["error", "always"],
+			"space-before-blocks": "error",
 
-        "space-before-function-paren": ["error", {
-            anonymous: "never",
-            named: "never",
-            asyncArrow: "always",
-        }],
+			"space-before-function-paren": [
+				"error",
+				{
+					anonymous: "never",
+					named: "never",
+					asyncArrow: "always"
+				}
+			],
 
-        "space-in-parens": "error",
-        "space-infix-ops": "error",
-        "space-unary-ops": "error",
-        "spaced-comment": "error",
-        yoda: "error",
-    },
-}]);
+			"space-in-parens": "error",
+			"space-infix-ops": "error",
+			"space-unary-ops": "error",
+			"spaced-comment": "error",
+			"yoda": "error"
+		}
+	}
+]);

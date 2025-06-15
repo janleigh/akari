@@ -16,7 +16,7 @@
  **/
 
 import { BucketScope, LogLevel } from "@sapphire/framework";
-import { ClientOptions, GatewayIntentsString } from "discord.js";
+import { ActivityType, ClientOptions, GatewayIntentsString, PresenceData } from "discord.js";
 
 /**
  * @description The dev server IDs. The only places where developer commands will be registered.
@@ -74,4 +74,19 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	logger: {
 		level: process.env.NODE_ENV === "production" ? LogLevel.Info : LogLevel.Debug
 	}
+};
+
+/**
+ * @description The presence data for the bot.
+ * @type {PresenceData}
+ */
+export const PRESENCE_OPTIONS: PresenceData = {
+	activities: [
+		{
+			name: "sucking my dev's blood 🔪",
+			type: ActivityType.Streaming,
+			url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+		}
+	],
+	status: "dnd"
 };

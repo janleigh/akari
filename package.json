@@ -1,12 +1,12 @@
 {
 	"name": "akari",
-	"description": "A configurable helper bot for Discord.",
+	"description": "A chatbot for Discord. Powered by Ollama.",
 	"version": "1.0.0",
 	"author": {
 		"name": "janleigh",
 		"url": "https://github.com/janleigh/akari"
 	},
-	"license": "MIT",
+	"license": "AGPL-3.0-only",
 	"main": "src/index.ts",
 	"scripts": {
 		"start": "bun run start:prod",

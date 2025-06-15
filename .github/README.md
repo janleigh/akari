@@ -8,7 +8,7 @@ this readme sucks
 <!--- DESCRIPTION --->
 <div align="center">
    <p>
-   <strong>A configurable helper bot for Discord.</strong>
+   <strong>A chatbot for Discord. Powered by Ollama.</strong>
    </p>
    <br>
 </div>

@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -17,6 +17,7 @@
 
 import { type Command, Precondition } from "@sapphire/framework";
 import type { Message } from "discord.js";
+
 import { DEV_USER_IDS } from "../config.ts";
 
 export class DeveloperOnlyPrecondition extends Precondition {
@@ -35,6 +36,8 @@ export class DeveloperOnlyPrecondition extends Precondition {
 	private checkDev(userId: string) {
 		return DEV_USER_IDS.includes(userId)
 			? this.ok()
-			: this.error({ message: "This command is only available to developers." });
+			: this.error({
+					message: "This command is only available to developers.",
+				});
 	}
 }

@@ -3,7 +3,7 @@ this readme sucks
 --->
 
 <!--- TITLE --->
-<h1 align="center"> violetta </h1>
+<h1 align="center"> akari </h1>
 
 <!--- DESCRIPTION --->
 <div align="center">
@@ -17,15 +17,15 @@ this readme sucks
 ## <samp>SETUP</samp>
 
 ### Prerequisites
-   - [Bun](https://bun.sh) (v1.0.0 or higher)
+   - [Bun](https://bun.sh)
    - A Discord Bot Token (get one from the [Discord Developer Portal](https://discord.com/developers/applications))
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/janleigh/violetta.git
-   cd violetta
+   git clone https://github.com/janleigh/akari.git
+   cd akari
    ```
 
 2. **Install dependencies**
@@ -73,11 +73,11 @@ When inviting the bot to your server, make sure it has these permissions:
 - `Connect` & `Speak` - For voice channel functionality
 - `View Channel` - To see channels in the server
 
-Or just use the [invite link below](#links) and switch the client id to your application as it includes all necessary permissions.
+Or just use the [~~invite link below~~](#links) and switch the client id to your application as it includes all necessary permissions.
 
 <!--- LINKS --->
 ## <samp>LINKS</samp>
-   - [Invite Violetta](https://discord.com/oauth2/authorize?client_id=1320575111304314901&permissions=1237423877622&scope=bot%20applications.commands)
+   - [~~Invite Akari~~](https://discord.com/oauth2/authorize?client_id=1320575111304314901&permissions=1237423877622&scope=bot%20applications.commands)
    - [Support Server](https://discord.gg/fPdqz4f8wf)
 
 <!--- LICENSE --->

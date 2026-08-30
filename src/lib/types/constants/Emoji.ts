@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -15,9 +15,11 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export const CrossMarkEmoji = "892539273075650661";
-export const CheckmarkEmoji = "892539273373417522";
-export const InfoEmoji = "1012432342683496539";
-export const TypingEmoji = "1383049172873248840";
+import { EMOJI_IDS } from "../../../config";
+
+export const CrossMarkEmoji = EMOJI_IDS.crossmark;
+export const CheckmarkEmoji = EMOJI_IDS.checkmark;
+export const InfoEmoji = EMOJI_IDS.info;
+export const TypingEmoji = EMOJI_IDS.typing;
 
 export type EmojiName = "crossmark" | "checkmark" | "info" | "typing";

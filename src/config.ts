@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -27,7 +27,10 @@ import {
  * @description The dev server IDs. The only places where developer commands will be registered.
  * @type {string[]}
  */
-export const DEV_SERVER_IDS: string[] = ["853812920919261235", "1125589968694280273"];
+export const DEV_SERVER_IDS: string[] = [
+	"853812920919261235",
+	"1125589968694280273",
+];
 
 /**
  * @description The dev user IDs. The only users who can use developer commands.
@@ -67,7 +70,8 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	loadMessageCommandListeners: true,
 	enableLoaderTraceLoggings: true,
 	logger: {
-		level: process.env.NODE_ENV === "production" ? LogLevel.Info : LogLevel.Debug,
+		level:
+			process.env.NODE_ENV === "production" ? LogLevel.Info : LogLevel.Debug,
 	},
 };
 
@@ -84,4 +88,11 @@ export const PRESENCE_OPTIONS: PresenceData = {
 		},
 	],
 	status: "dnd",
+};
+
+export const EMOJI_IDS = {
+	crossmark: "892539273075650661",
+	checkmark: "892539273373417522",
+	info: "1012432342683496539",
+	typing: "1383049172873248840",
 };

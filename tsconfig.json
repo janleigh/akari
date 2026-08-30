@@ -1,10 +1,8 @@
 {
 	"compilerOptions": {
 		"outDir": "dist/",
-		"module": "ESNext",
-		"moduleResolution": "Node",
-		"target": "ESNext",
-		"lib": ["ESNext", "DOM"],
+		"module": "esnext",
+		"target": "esnext",
 
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
@@ -17,7 +15,11 @@
 		"experimentalDecorators": true,
 		"allowSyntheticDefaultImports": true,
 
-		"allowImportingTsExtensions": true
+		"allowImportingTsExtensions": true,
+		"paths": {
+			"@/*": ["./src/*"],
+			"@utils/*": ["./src/lib/utils/*"],
+		}
 	},
 	"exclude": [".git/", ".github/", ".vscode/", "build/"],
 	"include": ["src/**/*"]

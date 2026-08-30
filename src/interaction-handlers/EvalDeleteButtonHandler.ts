@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -15,11 +15,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
+import {
+	InteractionHandler,
+	InteractionHandlerTypes,
+} from "@sapphire/framework";
 import type { ButtonInteraction } from "discord.js";
 
 export class EvalDeleteButtonHandler extends InteractionHandler {
-	constructor(ctx: InteractionHandler.LoaderContext, options: InteractionHandler.Options) {
+	constructor(
+		ctx: InteractionHandler.LoaderContext,
+		options: InteractionHandler.Options,
+	) {
 		super(ctx, {
 			...options,
 			interactionHandlerType: InteractionHandlerTypes.Button,

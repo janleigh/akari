@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -16,8 +16,18 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { type ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
+import {
+	type ChatInputCommand,
+	Command,
+	RegisterBehavior,
+} from "@sapphire/framework";
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	MessageFlags,
+} from "discord.js";
+
 import { getEmoji } from "../../lib/utils/common/parsers.ts";
 import { text } from "../../lib/utils/index.ts";
 
@@ -27,14 +37,19 @@ import { text } from "../../lib/utils/index.ts";
 	preconditions: ["DeveloperOnlyPrecondition"],
 })
 export class EvaluateCommand extends Command {
-	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
+	public override registerApplicationCommands(
+		registry: ChatInputCommand.Registry,
+	) {
 		registry.registerChatInputCommand(
 			(builder) =>
 				builder
 					.setName("eval")
 					.setDescription("Execute some raw JavaScript code.")
 					.addStringOption((option) =>
-						option.setName("input").setDescription("The code to execute.").setRequired(true),
+						option
+							.setName("input")
+							.setDescription("The code to execute.")
+							.setRequired(true),
 					)
 					.addBooleanOption((option) =>
 						option
@@ -46,7 +61,9 @@ export class EvaluateCommand extends Command {
 		);
 	}
 
-	public override chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public override chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const input = interaction.options.getString("input");
 		const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
 		let content = "";
@@ -57,12 +74,17 @@ export class EvaluateCommand extends Command {
 			.setStyle(ButtonStyle.Danger)
 			.setEmoji("🗑️");
 
-		const deleteRow = new ActionRowBuilder<ButtonBuilder>().addComponents(deleteButton);
+		const deleteRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+			deleteButton,
+		);
 
 		try {
 			// biome-ignore lint/security/noGlobalEval: needed for command
 			let evaled = eval(input as string);
-			const timeTaken = ((Date.now() - interaction.createdTimestamp) / 1000).toFixed(3);
+			const timeTaken = (
+				(Date.now() - interaction.createdTimestamp) /
+				1000
+			).toFixed(3);
 			evaled = text.clean(evaled);
 
 			content = `:bricks: **EVAL COMPLETE** (${timeTaken}s) :bricks:\n\`\`\`xl\n${evaled}\`\`\``;
@@ -82,7 +104,9 @@ export class EvaluateCommand extends Command {
 			});
 		} else {
 			this.container.logger.info("!! EVAL COMPLETE !!");
-			this.container.logger.info(content.replaceAll("```xl", "").replaceAll("```", ""));
+			this.container.logger.info(
+				content.replaceAll("```xl", "").replaceAll("```", ""),
+			);
 
 			return interaction.reply({
 				content: `${getEmoji("crossmark")} The output was too long to be sent as a message. Output has been logged to the console.`,

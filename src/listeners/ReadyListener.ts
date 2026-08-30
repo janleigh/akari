@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -18,13 +18,17 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, type ListenerOptions } from "@sapphire/framework";
 import type { Client } from "discord.js";
+
 import { PRESENCE_OPTIONS } from "../config.ts";
 
 @ApplyOptions<ListenerOptions>({
 	once: true,
 })
 export class ReadyListener extends Listener<typeof Events.ClientReady> {
-	public constructor(context: Listener.LoaderContext, options: Listener.Options) {
+	public constructor(
+		context: Listener.LoaderContext,
+		options: Listener.Options,
+	) {
 		super(context, {
 			...options,
 			event: Events.ClientReady,

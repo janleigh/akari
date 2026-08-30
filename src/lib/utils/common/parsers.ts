@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -17,6 +17,7 @@
 
 import { container } from "@sapphire/pieces";
 import type { GuildEmoji } from "discord.js";
+
 import type { EmojiName } from "../../types/constants/Emoji.ts";
 import { Emoji } from "../../types/constants/index.ts";
 

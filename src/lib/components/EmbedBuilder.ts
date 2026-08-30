@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -16,6 +16,7 @@
  */
 
 import { EmbedBuilder as DEmbedBuilder } from "discord.js";
+
 import { getEmoji } from "../utils/common/parsers.ts";
 
 export class EmbedBuilder extends DEmbedBuilder {
@@ -56,10 +57,14 @@ export class EmbedBuilder extends DEmbedBuilder {
 	): this {
 		if (description === null) return this;
 		if (this.errorEmbed === true) {
-			return super.setDescription(`${getEmoji("crossmark")} **${description}**`);
+			return super.setDescription(
+				`${getEmoji("crossmark")} **${description}**`,
+			);
 		}
 		if (this.hasCheckmark === true) {
-			return super.setDescription(`${getEmoji("checkmark")} **${description}**`);
+			return super.setDescription(
+				`${getEmoji("checkmark")} **${description}**`,
+			);
 		}
 
 		return super.setDescription(

@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2025 Jan Leigh Muñoz
+ *  Copyright (C) 2026 Jan Leigh Muñoz
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published
@@ -16,16 +16,23 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { type ChatInputCommand, Command, RegisterBehavior } from "@sapphire/framework";
+import {
+	type ChatInputCommand,
+	Command,
+	RegisterBehavior,
+} from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
 	name: "ping",
 	fullCategory: ["General"],
 })
 export class PingCommand extends Command {
-	public override registerApplicationCommands(registry: ChatInputCommand.Registry) {
+	public override registerApplicationCommands(
+		registry: ChatInputCommand.Registry,
+	) {
 		registry.registerChatInputCommand(
-			(builder) => builder.setName("ping").setDescription("Check the bot's latency."),
+			(builder) =>
+				builder.setName("ping").setDescription("Check the bot's latency."),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}

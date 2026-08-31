@@ -37,7 +37,7 @@
 		"riffy": "^1.0.12"
 	},
 	"peerDependencies": {
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3 || ^7.0.0"
 	},
 	"lint-staged": {
 		"*.{js,mjs,cjs,ts}": [

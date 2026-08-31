@@ -18,9 +18,10 @@
 		"allowImportingTsExtensions": true,
 		"paths": {
 			"@/*": ["./src/*"],
+			"@lib/*": ["./src/lib/*"],
 			"@utils/*": ["./src/lib/utils/*"],
 		}
 	},
 	"exclude": [".git/", ".github/", ".vscode/", "build/"],
-	"include": ["src/**/*"]
+	"include": ["src/**/*", "scripts"]
 }

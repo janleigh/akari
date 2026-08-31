@@ -23,20 +23,14 @@ import { PRESENCE_OPTIONS } from "../config.ts";
 
 @ApplyOptions<ListenerOptions>({
 	once: true,
+	event: Events.ClientReady,
 })
 export class ReadyListener extends Listener<typeof Events.ClientReady> {
-	public constructor(
-		context: Listener.LoaderContext,
-		options: Listener.Options,
-	) {
-		super(context, {
-			...options,
-			event: Events.ClientReady,
-		});
-	}
-
 	public run(client: Client<true>) {
 		const { id, tag } = client.user;
+
+		// Init riffy
+		this.container.client.riffy.init(id);
 		this.container.logger.info(`Successfully logged in as ${tag} (${id})`);
 
 		this.container.client.user?.setPresence(PRESENCE_OPTIONS);

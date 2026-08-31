@@ -87,6 +87,25 @@ export const PRESENCE_OPTIONS: PresenceData = {
 	status: "dnd",
 };
 
+/**
+ * @description The lavalink nodes to be used by the bot.
+ * Check here for free nodes: https://riffy.js.org/resources
+ */
+export const LAVALINK_NODES = [
+	{
+		// APAC (SG)
+		host: "lava1.horizxon.studio",
+		port: 80,
+		password: "horizxon.studio",
+		secure: false,
+	},
+];
+
+/**
+ * @description The emoji IDs for the bot.
+ * Idk why application emojis return nothing so better use guild emojis instead.
+ * @type {Record<string, string>}
+ */
 export const EMOJI_IDS: Record<string, string> = {
 	crossmark: "1543822619189575792",
 	checkmark: "1543822636130508931",

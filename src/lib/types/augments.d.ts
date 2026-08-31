@@ -15,6 +15,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { Riffy } from "riffy";
+
 export declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
@@ -29,8 +31,7 @@ declare module "@sapphire/framework" {
 		DeveloperOnlyPrecondition: never;
 	}
 	interface SapphireClient {
-		tempVoiceChannels: Set<string>;
-		tempVoiceChannelTimeouts: Map<string, ReturnType<typeof setTimeout>>;
+		riffy: Riffy;
 	}
 }
 

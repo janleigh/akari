@@ -16,12 +16,31 @@
  */
 
 import { SapphireClient } from "@sapphire/framework";
+import { Riffy } from "riffy";
 
-import { CLIENT_OPTIONS } from "../config.ts";
+import { CLIENT_OPTIONS, LAVALINK_NODES } from "../config.ts";
 
 export class BaseClient extends SapphireClient {
+	/**
+	 * @description The lavalink client to be used by the bot.
+	 * @type {Riffy}
+	 */
+	public riffy: Riffy;
+
 	public constructor() {
 		super(CLIENT_OPTIONS);
+
+		this.riffy = new Riffy(this, LAVALINK_NODES, {
+			send: (pl) => {
+				const g = this.guilds.cache.get(pl.d.guild_id);
+				if (g) g.shard.send(pl);
+			},
+			defaultSearchPlatform: "ytmsearch",
+			restVersion: "v4",
+			bypassChecks: {
+				nodeFetchInfo: true,
+			},
+		});
 	}
 
 	/**

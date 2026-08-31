@@ -18,8 +18,9 @@
 import { container } from "@sapphire/pieces";
 import type { GuildEmoji } from "discord.js";
 
+import { EMOJI_IDS } from "@/config.ts";
+
 import type { EmojiName } from "../../types/constants/Emoji.ts";
-import { Emoji } from "../../types/constants/index.ts";
 
 /**
  * Parses an emoji by its ID.
@@ -35,15 +36,6 @@ export const parseEmojiByID = (emojiID: string): GuildEmoji | undefined => {
  * @param {EmojiName} emoji The name of the emoji to get.
  * @returns {GuildEmoji | undefined} The emoji if found, otherwise undefined.
  */
-export const getEmoji = (emoji: EmojiName | string): GuildEmoji | undefined => {
-	switch (emoji) {
-		case "checkmark":
-			return parseEmojiByID(Emoji.CheckmarkEmoji);
-		case "crossmark":
-			return parseEmojiByID(Emoji.CrossMarkEmoji);
-		case "info":
-			return parseEmojiByID(Emoji.InfoEmoji);
-		case "typing":
-			return parseEmojiByID(Emoji.TypingEmoji);
-	}
+export const getEmoji = (emoji: EmojiName): GuildEmoji | undefined => {
+	return parseEmojiByID(EMOJI_IDS[emoji]);
 };

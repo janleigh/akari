@@ -27,16 +27,13 @@ import {
  * @description The dev server IDs. The only places where developer commands will be registered.
  * @type {string[]}
  */
-export const DEV_SERVER_IDS: string[] = [
-	"853812920919261235",
-	"1125589968694280273",
-];
+export const DEV_SERVER_IDS: string[] = ["1543805959636516864"];
 
 /**
  * @description The dev user IDs. The only users who can use developer commands.
  * @type {string[]}
  */
-export const DEV_USER_IDS: string[] = ["380307921952833537"];
+export const DEV_USER_IDS: string[] = ["359641658654064641"];
 
 /**
  * @description The priveledged intents to be used by the bot.
@@ -82,7 +79,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
 export const PRESENCE_OPTIONS: PresenceData = {
 	activities: [
 		{
-			name: "sucking my dev's blood 🔪",
+			name: "idk to put here",
 			type: ActivityType.Streaming,
 			url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 		},
@@ -90,9 +87,9 @@ export const PRESENCE_OPTIONS: PresenceData = {
 	status: "dnd",
 };
 
-export const EMOJI_IDS = {
-	crossmark: "892539273075650661",
-	checkmark: "892539273373417522",
-	info: "1012432342683496539",
-	typing: "1383049172873248840",
+export const EMOJI_IDS: Record<string, string> = {
+	crossmark: "1543822619189575792",
+	checkmark: "1543822636130508931",
+	info: "1543831524913188864",
+	loading: "1543831689543946301",
 };

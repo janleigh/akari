@@ -21,15 +21,14 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import { getEmoji } from "@utils/common/parsers.ts";
+import { text } from "@utils/index.ts";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
 	MessageFlags,
 } from "discord.js";
-
-import { getEmoji } from "../../lib/utils/common/parsers.ts";
-import { text } from "../../lib/utils/index.ts";
 
 @ApplyOptions<Command.Options>({
 	name: "eval",
@@ -79,7 +78,7 @@ export class EvaluateCommand extends Command {
 		);
 
 		try {
-			// biome-ignore lint/security/noGlobalEval: needed for command
+			// oxlint-disable-next-line no-eval
 			let evaled = eval(input as string);
 			const timeTaken = (
 				(Date.now() - interaction.createdTimestamp) /
@@ -89,8 +88,8 @@ export class EvaluateCommand extends Command {
 
 			content = `:bricks: **EVAL COMPLETE** (${timeTaken}s) :bricks:\n\`\`\`xl\n${evaled}\`\`\``;
 		} catch (err) {
-			this.container.logger.error(`[EvalCommand] ${err}`);
-			content = `:x: **EVAL ERROR**\n\`\`\`xl\n${text.clean(String(err))}\`\`\``;
+			this.container.logger.error("[EvalCommand] " + String(err));
+			content = `${getEmoji("crossmark")?.toString() ?? ""} **EVAL ERROR**\n\`\`\`xl\n${text.clean(String(err))}\`\`\``;
 			return interaction.reply({
 				content,
 			});
@@ -109,7 +108,7 @@ export class EvaluateCommand extends Command {
 			);
 
 			return interaction.reply({
-				content: `${getEmoji("crossmark")} The output was too long to be sent as a message. Output has been logged to the console.`,
+				content: `${getEmoji("crossmark")?.toString() ?? ""} The output was too long to be sent as a message. Output has been logged to the console.`,
 				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 				components: [deleteRow],
 			});

@@ -15,12 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { BaseClient } from "@lib/BaseClient.ts";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
 import { TextChannel } from "discord.js";
 import { Player } from "riffy";
 
-import type { BaseClient } from "../../lib/BaseClient.ts";
+import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
 
 @ApplyOptions<Listener.Options>({
 	emitter: (container.client as BaseClient).riffy,
@@ -35,7 +36,13 @@ export class QueueEndListener extends Listener {
 
 		player.destroy();
 		if (channel) {
-			await channel.send("Queue has ended. Leaving the voice channel.");
+			const embed = new EmbedBuilder()
+				.setTitle("🎵  Queue Ended")
+				.setDescription("The queue has ended. Leaving the voice channel.")
+				.isSuccessEmbed()
+				.setTimestamp();
+
+			await channel.send({ embeds: [embed] });
 		}
 	}
 }

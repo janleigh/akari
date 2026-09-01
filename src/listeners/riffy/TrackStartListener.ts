@@ -15,12 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { BaseClient } from "@lib/BaseClient.ts";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
+import { parsers } from "@utils/index.js";
 import type { TextChannel } from "discord.js";
 import { Player, Track } from "riffy";
 
-import type { BaseClient } from "../../lib/BaseClient.ts";
+import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
 
 @ApplyOptions<Listener.Options>({
 	emitter: (container.client as BaseClient).riffy,
@@ -34,8 +36,31 @@ export class TrackStartListener extends Listener {
 			| undefined;
 
 		if (channel) {
-			await channel.send(
-				`Now playing: \`${track.info.title}\` by \`${track.info.author}\`.`,
+			const embed = new EmbedBuilder()
+				.setTitle("🎵  Now Playing")
+				.setColor("Random")
+				.setDescription(
+					`[${track.info.title}](${track.info.uri}) by \`${track.info.author}\``,
+				)
+				.addFields(
+					{
+						name: "Duration",
+						value: parsers.formatDuration(track.info.length),
+						inline: true,
+					},
+					{
+						name: "Requested by",
+						value: `${track.info.requester}`,
+						inline: true,
+					},
+				)
+				.setTimestamp()
+				.setFooter({ text: `Songs in queue: ${player.queue.length}` })
+				.setThumbnail(track.info.thumbnail);
+
+			await channel.send({ embeds: [embed] });
+			this.container.logger.info(
+				`Lavalink[trackStart] Now playing: ${track.info.title} by ${track.info.author}.`,
 			);
 		}
 	}

@@ -19,7 +19,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, type ListenerOptions } from "@sapphire/framework";
 import type { Client } from "discord.js";
 
-import { PRESENCE_OPTIONS } from "../../config";
+import { PRESENCE_OPTIONS } from "@/config";
 
 @ApplyOptions<ListenerOptions>({
 	once: true,

@@ -35,7 +35,7 @@ export class BaseClient extends SapphireClient {
 				const g = this.guilds.cache.get(pl.d.guild_id);
 				if (g) g.shard.send(pl);
 			},
-			defaultSearchPlatform: "ytmsearch",
+			defaultSearchPlatform: "ytsearch",
 			restVersion: "v4",
 			bypassChecks: {
 				nodeFetchInfo: true,

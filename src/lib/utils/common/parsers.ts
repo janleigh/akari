@@ -39,3 +39,24 @@ export const parseEmojiByID = (emojiID: string): GuildEmoji | undefined => {
 export const getEmoji = (emoji: EmojiName): GuildEmoji | undefined => {
 	return parseEmojiByID(EMOJI_IDS[emoji]);
 };
+
+/**
+ * Formats a duration in milliseconds to a string in the format of "HH:MM:SS" or "MM:SS".
+ * @param {number} duration The duration in milliseconds.
+ * @returns {string} The formatted duration string.
+ */
+export const formatDuration = (duration: number): string => {
+	const seconds = Math.floor((duration / 1000) % 60);
+	const minutes = Math.floor((duration / (1000 * 60)) % 60);
+	const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+	const formattedDuration = [
+		hours > 0 ? String(hours).padStart(2, "0") : null,
+		String(minutes).padStart(2, "0"),
+		String(seconds).padStart(2, "0"),
+	]
+		.filter(Boolean)
+		.join(":");
+
+	return formattedDuration;
+};

@@ -15,10 +15,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { BaseClient } from "@lib/BaseClient.ts";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
-
-import type { BaseClient } from "../../lib/BaseClient.ts";
 
 @ApplyOptions<Listener.Options>({
 	emitter: (container.client as BaseClient).riffy,

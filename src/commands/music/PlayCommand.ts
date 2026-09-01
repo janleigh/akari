@@ -21,6 +21,9 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import { AutocompleteInteraction } from "discord.js";
+
+import { parsers } from "@/lib/utils";
 
 @ApplyOptions<Command.Options>({
 	name: "play",
@@ -39,7 +42,8 @@ export class PlayCommand extends Command {
 						option
 							.setName("query")
 							.setDescription("The song to play.")
-							.setRequired(true),
+							.setRequired(true)
+							.setAutocomplete(true),
 					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
@@ -86,7 +90,7 @@ export class PlayCommand extends Command {
 			}
 
 			await interaction.editReply({
-				content: `Added **${tracks.length}** songs from the playlist **${playlistInfo?.name}** to the queue.`,
+				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Added \`${tracks.length}\` tracks from the playlist \`${playlistInfo?.name}\` to the queue by ${interaction.user.tag}.`,
 			});
 
 			if (!player.playing && !player.paused) return player.play();
@@ -97,7 +101,7 @@ export class PlayCommand extends Command {
 			player.queue.add(track!);
 
 			await interaction.editReply({
-				content: `Added **${track?.info.title}** to the queue.`,
+				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Track \`${track?.info.title}\` added to the queue by ${interaction.user.tag}.`,
 			});
 
 			if (!player.playing && !player.paused) return player.play();
@@ -105,6 +109,36 @@ export class PlayCommand extends Command {
 			return interaction.editReply({
 				content: "No results found.",
 			});
+		}
+	}
+
+	public override async autocompleteRun(
+		interaction: AutocompleteInteraction,
+	): Promise<void> {
+		const query = interaction.options.getFocused();
+
+		if (!query || query.length < 3) return interaction.respond([]);
+		if (query.startsWith("http")) return interaction.respond([]);
+
+		try {
+			const resolve = await this.container.client.riffy.resolve({
+				query: query,
+				requester: interaction.user,
+			});
+
+			const { loadType, tracks } = resolve;
+			if (loadType === "track" || loadType === "search") {
+				const results = tracks.slice(0, 10).map((track) => ({
+					name:
+						track.info.title.length > 80
+							? track.info.title.slice(0, 80) + "..."
+							: track.info.title,
+					value: track.info.uri,
+				}));
+				return interaction.respond(results);
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	}
 }

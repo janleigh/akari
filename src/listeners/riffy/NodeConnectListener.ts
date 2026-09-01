@@ -15,19 +15,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { BaseClient } from "@lib/BaseClient";
-import "@sapphire/plugin-logger/register";
-import "dotenv/config";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Listener, container } from "@sapphire/framework";
 
-const main = (): void => {
-	if (!process.env.DISCORD_TOKEN) {
-		throw new TypeError(
-			`Environment variable 'DISCORD_TOKEN' should be type string. Got type ${typeof process
-				.env.DISCORD_TOKEN} instead.`,
+import type { BaseClient } from "../../lib/BaseClient.ts";
+
+@ApplyOptions<Listener.Options>({
+	emitter: (container.client as BaseClient).riffy,
+	event: "nodeConnect",
+})
+export class NodeConnectListener extends Listener {
+	public run(node: any) {
+		this.container.logger.info(
+			`Lavalink[nodeConnect] Node "${node.name}" connected.`,
 		);
 	}
-
-	void new BaseClient().login();
-};
-
-main();
+}

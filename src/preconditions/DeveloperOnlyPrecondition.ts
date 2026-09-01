@@ -18,7 +18,7 @@
 import { type Command, Precondition } from "@sapphire/framework";
 import type { Message } from "discord.js";
 
-import { DEV_USER_IDS } from "../config.ts";
+import { DEV_USER_IDS } from "@/config";
 
 export class DeveloperOnlyPrecondition extends Precondition {
 	public chatInputRun(interaction: Command.ChatInputCommandInteraction) {

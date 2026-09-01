@@ -15,19 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { BaseClient } from "@lib/BaseClient";
-import "@sapphire/plugin-logger/register";
-import "dotenv/config";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Events, Listener, type ListenerOptions } from "@sapphire/framework";
+import { GatewayDispatchEvents } from "discord.js";
+import { Riffy } from "riffy";
 
-const main = (): void => {
-	if (!process.env.DISCORD_TOKEN) {
-		throw new TypeError(
-			`Environment variable 'DISCORD_TOKEN' should be type string. Got type ${typeof process
-				.env.DISCORD_TOKEN} instead.`,
-		);
+@ApplyOptions<ListenerOptions>({
+	once: false,
+	event: Events.Raw,
+})
+export class RawListener extends Listener<typeof Events.Raw> {
+	public run(packet: Parameters<Riffy["updateVoiceState"]>[0]) {
+		if (
+			packet.t !== GatewayDispatchEvents.VoiceServerUpdate &&
+			packet.t !== GatewayDispatchEvents.VoiceStateUpdate
+		) {
+			return;
+		}
+
+		this.container.logger.debug(`Received voice gateway event: ${packet.t}`);
+
+		this.container.client.riffy.updateVoiceState(packet);
 	}
-
-	void new BaseClient().login();
-};
-
-main();
+}

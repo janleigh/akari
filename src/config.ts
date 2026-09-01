@@ -46,8 +46,7 @@ const INTENTS: GatewayIntentsString[] = [
 	"GuildMessageReactions",
 	"GuildEmojisAndStickers",
 	"GuildVoiceStates",
-	"DirectMessages",
-	"DirectMessageReactions",
+	"MessageContent",
 ];
 
 /**
@@ -93,10 +92,9 @@ export const PRESENCE_OPTIONS: PresenceData = {
  */
 export const LAVALINK_NODES = [
 	{
-		// APAC (SG)
-		host: "lava1.horizxon.studio",
+		host: "lava-v4.ajieblogs.eu.org",
 		port: 80,
-		password: "horizxon.studio",
+		password: "https://dsc.gg/ajidevserver",
 		secure: false,
 	},
 ];

@@ -18,9 +18,9 @@
 import { container } from "@sapphire/pieces";
 import type { GuildEmoji } from "discord.js";
 
-import { EMOJI_IDS } from "@/config.ts";
+import { EMOJI_IDS } from "@/config";
 
-import type { EmojiName } from "../../types/constants/Emoji.ts";
+import type { EmojiName } from "../../types/constants/Emoji";
 
 /**
  * Parses an emoji by its ID.

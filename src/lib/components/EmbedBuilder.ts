@@ -15,9 +15,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { parsers } from "@utils/index";
 import { EmbedBuilder as DEmbedBuilder } from "discord.js";
-
-import { getEmoji } from "../utils/common/parsers.ts";
 
 export class EmbedBuilder extends DEmbedBuilder {
 	/**
@@ -58,12 +57,12 @@ export class EmbedBuilder extends DEmbedBuilder {
 		if (description === null) return this;
 		if (this.errorEmbed === true) {
 			return super.setDescription(
-				`${getEmoji("crossmark")} **${description}**`,
+				`${parsers.getEmoji("crossmark")?.toString() ?? ""} **${description}**`,
 			);
 		}
 		if (this.hasCheckmark === true) {
 			return super.setDescription(
-				`${getEmoji("checkmark")} **${description}**`,
+				`${parsers.getEmoji("checkmark")?.toString() ?? ""} **${description}**`,
 			);
 		}
 

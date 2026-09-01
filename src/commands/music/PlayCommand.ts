@@ -1,0 +1,110 @@
+/**
+ *  Copyright (C) 2026 Jan Leigh Muñoz
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published
+ *  by the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { ApplyOptions } from "@sapphire/decorators";
+import {
+	type ChatInputCommand,
+	Command,
+	RegisterBehavior,
+} from "@sapphire/framework";
+
+@ApplyOptions<Command.Options>({
+	name: "play",
+	fullCategory: ["Music"],
+})
+export class PlayCommand extends Command {
+	public override registerApplicationCommands(
+		registry: ChatInputCommand.Registry,
+	) {
+		registry.registerChatInputCommand(
+			(builder) =>
+				builder
+					.setName("play")
+					.setDescription("Play a song.")
+					.addStringOption((option) =>
+						option
+							.setName("query")
+							.setDescription("The song to play.")
+							.setRequired(true),
+					),
+			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
+		);
+	}
+
+	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+		const { riffy } = this.container.client;
+
+		await interaction.deferReply();
+		const query = interaction.options.getString("query", true);
+
+		if (!interaction.guild) {
+			return interaction.reply({
+				content: "This command can only be used in a server.",
+				ephemeral: true,
+			});
+		}
+
+		const member = await interaction.guild.members.fetch(interaction.user.id);
+		if (!member.voice.channelId) {
+			return interaction.reply({
+				content: "You must be in a voice channel to use this command.",
+				ephemeral: true,
+			});
+		}
+
+		const player = riffy.createConnection({
+			guildId: interaction.guild.id,
+			voiceChannel: member.voice.channelId!,
+			textChannel: interaction.channelId,
+			deaf: true,
+		});
+
+		const resolve = await riffy.resolve({
+			query: query,
+			requester: interaction.user,
+		});
+
+		const { loadType, tracks, playlistInfo } = resolve;
+
+		if (loadType === "playlist") {
+			for (const track of tracks) {
+				player.queue.add(track);
+			}
+
+			await interaction.editReply({
+				content: `Added **${tracks.length}** songs from the playlist **${playlistInfo?.name}** to the queue.`,
+			});
+
+			if (!player.playing && !player.paused) return player.play();
+		} else if (loadType === "track" || loadType === "search") {
+			const track = tracks.shift()!;
+			track.info.requester = interaction.user;
+
+			player.queue.add(track!);
+
+			await interaction.editReply({
+				content: `Added **${track?.info.title}** to the queue.`,
+			});
+
+			if (!player.playing && !player.paused) return player.play();
+		} else {
+			return interaction.editReply({
+				content: "No results found.",
+			});
+		}
+	}
+}

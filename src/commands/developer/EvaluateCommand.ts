@@ -21,8 +21,7 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import { getEmoji } from "@utils/common/parsers.ts";
-import { text } from "@utils/index.ts";
+import { text, parsers } from "@utils/index";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -89,7 +88,7 @@ export class EvaluateCommand extends Command {
 			content = `:bricks: **EVAL COMPLETE** (${timeTaken}s) :bricks:\n\`\`\`xl\n${evaled}\`\`\``;
 		} catch (err) {
 			this.container.logger.error("[EvalCommand] " + String(err));
-			content = `${getEmoji("crossmark")?.toString() ?? ""} **EVAL ERROR**\n\`\`\`xl\n${text.clean(String(err))}\`\`\``;
+			content = `${parsers.getEmoji("crossmark")?.toString() ?? ""} **EVAL ERROR**\n\`\`\`xl\n${text.clean(String(err))}\`\`\``;
 			return interaction.reply({
 				content,
 			});
@@ -108,7 +107,7 @@ export class EvaluateCommand extends Command {
 			);
 
 			return interaction.reply({
-				content: `${getEmoji("crossmark")?.toString() ?? ""} The output was too long to be sent as a message. Output has been logged to the console.`,
+				content: `${parsers.getEmoji("crossmark")?.toString() ?? ""} The output was too long to be sent as a message. Output has been logged to the console.`,
 				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 				components: [deleteRow],
 			});

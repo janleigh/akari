@@ -15,19 +15,24 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { BaseClient } from "@lib/BaseClient";
-import "@sapphire/plugin-logger/register";
-import "dotenv/config";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Events, Listener, type ListenerOptions } from "@sapphire/framework";
+import type { Client } from "discord.js";
 
-const main = (): void => {
-	if (!process.env.DISCORD_TOKEN) {
-		throw new TypeError(
-			`Environment variable 'DISCORD_TOKEN' should be type string. Got type ${typeof process
-				.env.DISCORD_TOKEN} instead.`,
-		);
+import { PRESENCE_OPTIONS } from "../../config";
+
+@ApplyOptions<ListenerOptions>({
+	once: true,
+	event: Events.ClientReady,
+})
+export class ReadyListener extends Listener<typeof Events.ClientReady> {
+	public run(client: Client<true>) {
+		const { id, tag } = client.user;
+
+		// Init riffy
+		this.container.client.riffy.init(id);
+		this.container.logger.info(`Successfully logged in as ${tag} (${id})`);
+
+		this.container.client.user?.setPresence(PRESENCE_OPTIONS);
 	}
-
-	void new BaseClient().login();
-};
-
-main();
+}

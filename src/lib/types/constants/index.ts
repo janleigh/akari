@@ -15,4 +15,4 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * as Emoji from "./Emoji.ts";
+export * as Emoji from "./Emoji";

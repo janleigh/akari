@@ -18,7 +18,7 @@
 import { SapphireClient } from "@sapphire/framework";
 import { Riffy } from "riffy";
 
-import { CLIENT_OPTIONS, LAVALINK_NODES } from "../config.ts";
+import { CLIENT_OPTIONS, LAVALINK_NODES } from "../config";
 
 export class BaseClient extends SapphireClient {
 	/**

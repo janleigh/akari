@@ -16,23 +16,26 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { Events, Listener, type ListenerOptions } from "@sapphire/framework";
-import type { Client } from "discord.js";
+import { Listener, container } from "@sapphire/framework";
+import { TextChannel } from "discord.js";
+import { Player } from "riffy";
 
-import { PRESENCE_OPTIONS } from "../config.ts";
+import type { BaseClient } from "../../lib/BaseClient.ts";
 
-@ApplyOptions<ListenerOptions>({
-	once: true,
-	event: Events.ClientReady,
+@ApplyOptions<Listener.Options>({
+	emitter: (container.client as BaseClient).riffy,
+	event: "queueEnd",
 })
-export class ReadyListener extends Listener<typeof Events.ClientReady> {
-	public run(client: Client<true>) {
-		const { id, tag } = client.user;
+export class QueueEndListener extends Listener {
+	public async run(player: Player) {
+		const client = this.container.client as BaseClient;
+		const channel = client.channels.cache.get(player.textChannel) as
+			| TextChannel
+			| undefined;
 
-		// Init riffy
-		this.container.client.riffy.init(id);
-		this.container.logger.info(`Successfully logged in as ${tag} (${id})`);
-
-		this.container.client.user?.setPresence(PRESENCE_OPTIONS);
+		player.destroy();
+		if (channel) {
+			await channel.send("Queue has ended. Leaving the voice channel.");
+		}
 	}
 }

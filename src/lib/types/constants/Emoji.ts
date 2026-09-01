@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EMOJI_IDS } from "../../../config";
+import { EMOJI_IDS } from "@/config";
 
 export const CrossMarkEmoji = EMOJI_IDS.crossmark!;
 export const CheckmarkEmoji = EMOJI_IDS.checkmark!;

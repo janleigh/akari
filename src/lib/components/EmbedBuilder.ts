@@ -40,7 +40,7 @@ export class EmbedBuilder extends DEmbedBuilder {
 	public constructor() {
 		super();
 
-		this.setColor("#b3d6ff");
+		this.setColor("#ff9e7d");
 	}
 
 	/**
@@ -55,19 +55,19 @@ export class EmbedBuilder extends DEmbedBuilder {
 		boldDescription: boolean = false,
 	): this {
 		if (description === null) return this;
-		if (this.errorEmbed === true) {
-			return super.setDescription(
-				`${parsers.getEmoji("crossmark")?.toString() ?? ""} **${description}**`,
-			);
-		}
-		if (this.hasCheckmark === true) {
-			return super.setDescription(
-				`${parsers.getEmoji("checkmark")?.toString() ?? ""} **${description}**`,
-			);
-		}
+
+		const emoji = this.errorEmbed
+			? parsers.getEmoji("crossmark")?.toString()
+			: this.hasCheckmark
+				? parsers.getEmoji("checkmark")?.toString()
+				: undefined;
+
+		const formattedDescription = boldDescription
+			? `**${description}**`
+			: description;
 
 		return super.setDescription(
-			`${boldDescription ? "**" : ""}${description}${boldDescription ? "**" : ""}`,
+			emoji ? `${emoji} ${formattedDescription}` : formattedDescription,
 		);
 	}
 

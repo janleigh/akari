@@ -22,6 +22,8 @@ import {
 	RegisterBehavior,
 } from "@sapphire/framework";
 
+import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
+
 @ApplyOptions<Command.Options>({
 	name: "destroy",
 	fullCategory: ["Music"],
@@ -51,9 +53,12 @@ export class DestroyPlayerCommand extends Command {
 
 		player.destroy();
 
-		return interaction.reply({
-			content: "The music player has been destroyed.",
-			ephemeral: true,
-		});
+		const embed = new EmbedBuilder()
+			.setTitle("🎵  Music Player")
+			.setDescription("The music player has been destroyed.")
+			.isSuccessEmbed(true)
+			.setTimestamp();
+
+		await interaction.reply({ embeds: [embed] });
 	}
 }

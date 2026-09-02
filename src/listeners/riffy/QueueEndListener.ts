@@ -39,7 +39,7 @@ export class QueueEndListener extends Listener {
 			const embed = new EmbedBuilder()
 				.setTitle("🎵  Queue Ended")
 				.setDescription("The queue has ended. Leaving the voice channel.")
-				.isSuccessEmbed()
+				.isSuccessEmbed(true)
 				.setTimestamp();
 
 			await channel.send({ embeds: [embed] });

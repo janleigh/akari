@@ -52,9 +52,6 @@ export class PlayCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const { riffy } = this.container.client;
 
-		await interaction.deferReply();
-		const query = interaction.options.getString("query", true);
-
 		if (!interaction.guild) {
 			return interaction.reply({
 				content: "This command can only be used in a server.",
@@ -69,6 +66,9 @@ export class PlayCommand extends Command {
 				ephemeral: true,
 			});
 		}
+
+		await interaction.deferReply();
+		const query = interaction.options.getString("query", true);
 
 		const player = riffy.createConnection({
 			guildId: interaction.guild.id,
@@ -90,7 +90,7 @@ export class PlayCommand extends Command {
 			}
 
 			await interaction.editReply({
-				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Added \`${tracks.length}\` tracks from the playlist \`${playlistInfo?.name}\` to the queue by ${interaction.user.tag}.`,
+				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Added \`${tracks.length}\` tracks from the playlist \`${playlistInfo?.name}\` to the queue by **${interaction.user.tag}**.`,
 			});
 
 			if (!player.playing && !player.paused) return player.play();
@@ -101,7 +101,7 @@ export class PlayCommand extends Command {
 			player.queue.add(track!);
 
 			await interaction.editReply({
-				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Track \`${track?.info.title}\` added to the queue by ${interaction.user.tag}.`,
+				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Track \`${track?.info.title}\` added to the queue by **${interaction.user.tag}**.`,
 			});
 
 			if (!player.playing && !player.paused) return player.play();

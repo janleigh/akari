@@ -59,8 +59,8 @@ export class TrackStartListener extends Listener {
 				.setThumbnail(track.info.thumbnail);
 
 			await channel.send({ embeds: [embed] });
-			this.container.logger.info(
-				`Lavalink[trackStart] Now playing: ${track.info.title} by ${track.info.author}.`,
+			this.container.logger.debug(
+				`Lavalink[trackStart] Now playing: ${track.info.title} by ${track.info.author} at guild: ${player.guildId}`,
 			);
 		}
 	}

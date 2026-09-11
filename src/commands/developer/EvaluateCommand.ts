@@ -42,7 +42,7 @@ export class EvaluateCommand extends Command {
 			(builder) =>
 				builder
 					.setName("eval")
-					.setDescription("Execute some raw JavaScript code.")
+					.setDescription("Execute some raw JavaScript code")
 					.addStringOption((option) =>
 						option
 							.setName("input")

@@ -15,32 +15,42 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-
-import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
+import { parsers } from "@utils/index";
 
 @ApplyOptions<Command.Options>({
-	name: "destroy",
+	name: "volume",
+	aliases: ["vol"],
 	fullCategory: ["Music"],
 	preconditions: [
 		"HasActivePlayerPrecondition",
 		"InVoiceChannelPrecondition",
 		"SameVoiceChannelPrecondition",
 	],
-	requiredUserPermissions: ["ManageChannels"],
 })
-export class DestroyPlayerCommand extends Command {
+export class VolumeCommand extends Command {
 	public override registerApplicationCommands(
 		registry: ChatInputCommand.Registry,
 	) {
 		registry.registerChatInputCommand(
 			(builder) =>
-				builder.setName("destroy").setDescription("Destroy the music player"),
+				builder
+					.setName("volume")
+					.setDescription("Check or adjust the playback volume")
+					.addIntegerOption((option) =>
+						option
+							.setName("level")
+							.setDescription("The volume percentage to set (0 - 150%)")
+							.setMinValue(0)
+							.setMaxValue(150)
+							.setRequired(false),
+					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
@@ -50,14 +60,34 @@ export class DestroyPlayerCommand extends Command {
 			interaction.guildId!,
 		)!;
 
-		player.destroy();
+		const level = interaction.options.getInteger("level");
+
+		if (level === null) {
+			const volumeEmoji =
+				player.volume === 0 ? "🔇" : player.volume < 50 ? "🔉" : "🔊";
+			const embed = new EmbedBuilder()
+				.setTitle(`${volumeEmoji}  Playback Volume`)
+				.setDescription(
+					`The current playback volume is **${player.volume}%**.\n\n${parsers.createProgressBar(player.volume, 150, 12)}`,
+				)
+				.setTimestamp();
+
+			return interaction.reply({ embeds: [embed] });
+		}
+
+		const oldVolume = player.volume;
+		player.setVolume(level);
+
+		const volumeEmoji = level === 0 ? "🔇" : level < 50 ? "🔉" : "🔊";
 
 		const embed = new EmbedBuilder()
-			.setTitle("🎵  Music Player")
-			.setDescription("The music player has been destroyed.")
+			.setTitle(`${volumeEmoji}  Volume Adjusted`)
+			.setDescription(
+				`Volume changed from **${oldVolume}%** to **${level}%**.\n\n${parsers.createProgressBar(level, 150, 12)}`,
+			)
 			.isSuccessEmbed(true)
 			.setTimestamp();
 
-		await interaction.reply({ embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 }

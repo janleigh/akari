@@ -34,10 +34,16 @@ export const parseEmojiByID = (emojiID: string): GuildEmoji | undefined => {
 /**
  * Gets an emoji by its name.
  * @param {EmojiName} emoji The name of the emoji to get.
- * @returns {GuildEmoji | undefined} The emoji if found, otherwise undefined.
+ * @returns {GuildEmoji | string | undefined} The emoji if found, otherwise formatted emoji string or undefined.
  */
-export const getEmoji = (emoji: EmojiName): GuildEmoji | undefined => {
-	return parseEmojiByID(EMOJI_IDS[emoji]);
+export const getEmoji = (emoji: EmojiName): GuildEmoji | string | undefined => {
+	const emojiId = EMOJI_IDS[emoji];
+	if (!emojiId) return undefined;
+
+	const cachedEmoji = parseEmojiByID(emojiId);
+	if (cachedEmoji) return cachedEmoji;
+
+	return `<:${emoji}:${emojiId}>`;
 };
 
 /**
@@ -59,4 +65,27 @@ export const formatDuration = (duration: number): string => {
 		.join(":");
 
 	return formattedDuration;
+};
+
+/**
+ * Formats a playback progress bar.
+ * @param {number} current The current duration in milliseconds.
+ * @param {number} total The total duration in milliseconds.
+ * @param {number} [barLength=15] The length of the progress bar.
+ * @returns {string} The progress bar string.
+ */
+export const createProgressBar = (
+	current: number,
+	total: number,
+	barLength: number = 15,
+): string => {
+	if (total <= 0) return `🔘${"▬".repeat(barLength - 1)}`;
+	const progress = Math.min(Math.max(current / total, 0), 1);
+	const progressIndex = Math.min(
+		Math.floor(progress * barLength),
+		barLength - 1,
+	);
+	const before = "▬".repeat(progressIndex);
+	const after = "▬".repeat(barLength - 1 - progressIndex);
+	return `${before}🔘${after}`;
 };

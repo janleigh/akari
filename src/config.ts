@@ -78,8 +78,8 @@ export const CLIENT_OPTIONS: ClientOptions = {
 export const PRESENCE_OPTIONS: PresenceData = {
 	activities: [
 		{
-			name: "idk to put here",
-			type: ActivityType.Streaming,
+			name: "Umapyoi Legend",
+			type: ActivityType.Listening,
 			url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 		},
 	],
@@ -109,4 +109,12 @@ export const EMOJI_IDS: Record<string, string> = {
 	checkmark: "1543822636130508931",
 	info: "1543831524913188864",
 	loading: "1543831689543946301",
+};
+
+/**
+ * @description Whether to turn off announcing the built-in events
+ */
+export const LAVALINK_EVENTS = {
+	queueEnd: false,
+	trackStart: false,
 };

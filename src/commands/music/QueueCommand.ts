@@ -15,6 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
@@ -28,8 +29,6 @@ import {
 	ComponentType,
 } from "discord.js";
 import type { Track } from "riffy";
-
-import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
 
 interface Iterator<T> {
 	next(): T;
@@ -90,6 +89,7 @@ class QueueIterator implements Iterator<Track[]> {
 @ApplyOptions<Command.Options>({
 	name: "queue",
 	fullCategory: ["Music"],
+	preconditions: ["HasActivePlayerPrecondition"],
 })
 export class QueueCommand extends Command {
 	public override registerApplicationCommands(
@@ -99,22 +99,15 @@ export class QueueCommand extends Command {
 			(builder) =>
 				builder
 					.setName("queue")
-					.setDescription("Display the current music queue."),
+					.setDescription("Display the current music queue"),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const player = (this.container.client as any).riffy.players.get(
+		const player = this.container.client.riffy.players.get(
 			interaction.guildId!,
-		);
-
-		if (!player) {
-			return interaction.reply({
-				content: "There is no music playing in this server.",
-				ephemeral: true,
-			});
-		}
+		)!;
 
 		const queueItems = Array.from(player.queue) as Track[];
 		if (queueItems.length === 0 && !player.current) {

@@ -21,13 +21,13 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import { parsers } from "@utils/index";
 import { AutocompleteInteraction } from "discord.js";
-
-import { parsers } from "@/lib/utils";
 
 @ApplyOptions<Command.Options>({
 	name: "play",
 	fullCategory: ["Music"],
+	preconditions: ["InVoiceChannelPrecondition", "SameVoiceChannelPrecondition"],
 })
 export class PlayCommand extends Command {
 	public override registerApplicationCommands(
@@ -37,11 +37,11 @@ export class PlayCommand extends Command {
 			(builder) =>
 				builder
 					.setName("play")
-					.setDescription("Play a song.")
+					.setDescription("Play a song from YouTube/YT Music/Spotify")
 					.addStringOption((option) =>
 						option
 							.setName("query")
-							.setDescription("The song to play.")
+							.setDescription("The song to play")
 							.setRequired(true)
 							.setAutocomplete(true),
 					),
@@ -51,27 +51,13 @@ export class PlayCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const { riffy } = this.container.client;
-
-		if (!interaction.guild) {
-			return interaction.reply({
-				content: "This command can only be used in a server.",
-				ephemeral: true,
-			});
-		}
-
-		const member = await interaction.guild.members.fetch(interaction.user.id);
-		if (!member.voice.channelId) {
-			return interaction.reply({
-				content: "You must be in a voice channel to use this command.",
-				ephemeral: true,
-			});
-		}
+		const member = await interaction.guild!.members.fetch(interaction.user.id);
 
 		await interaction.deferReply();
 		const query = interaction.options.getString("query", true);
 
 		const player = riffy.createConnection({
-			guildId: interaction.guild.id,
+			guildId: interaction.guild!.id,
 			voiceChannel: member.voice.channelId!,
 			textChannel: interaction.channelId,
 			deaf: true,
@@ -90,7 +76,7 @@ export class PlayCommand extends Command {
 			}
 
 			await interaction.editReply({
-				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Added \`${tracks.length}\` tracks from the playlist \`${playlistInfo?.name}\` to the queue by **${interaction.user.tag}**.`,
+				content: `${parsers.getEmoji("checkmark")} Added \`${tracks.length}\` tracks from the playlist \`${playlistInfo?.name}\` to the queue by **${interaction.user.tag}**.`,
 			});
 
 			if (!player.playing && !player.paused) return player.play();
@@ -101,7 +87,7 @@ export class PlayCommand extends Command {
 			player.queue.add(track!);
 
 			await interaction.editReply({
-				content: `${parsers.getEmoji("checkmark")?.toString() ?? ""} Track \`${track?.info.title}\` added to the queue by **${interaction.user.tag}**.`,
+				content: `${parsers.getEmoji("checkmark")} Track \`${track?.info.title}\` added to the queue by **${interaction.user.tag}**.`,
 			});
 
 			if (!player.playing && !player.paused) return player.play();

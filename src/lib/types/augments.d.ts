@@ -29,6 +29,10 @@ export declare global {
 declare module "@sapphire/framework" {
 	interface Preconditions {
 		DeveloperOnlyPrecondition: never;
+		InVoiceChannelPrecondition: never;
+		SameVoiceChannelPrecondition: never;
+		HasActivePlayerPrecondition: never;
+		HasPlayingTrackPrecondition: never;
 	}
 	interface SapphireClient {
 		riffy: Riffy;

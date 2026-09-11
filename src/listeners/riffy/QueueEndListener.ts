@@ -15,13 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { BaseClient } from "@lib/BaseClient.ts";
+import { EmbedBuilder } from "@components/EmbedBuilder";
+import type { BaseClient } from "@lib/BaseClient";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
 import { TextChannel } from "discord.js";
 import { Player } from "riffy";
 
-import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
+import { LAVALINK_EVENTS } from "@/config";
 
 @ApplyOptions<Listener.Options>({
 	emitter: (container.client as BaseClient).riffy,
@@ -35,6 +36,9 @@ export class QueueEndListener extends Listener {
 			| undefined;
 
 		player.destroy();
+
+		if (!LAVALINK_EVENTS.queueEnd) return;
+
 		if (channel) {
 			const embed = new EmbedBuilder()
 				.setTitle("🎵  Queue Ended")

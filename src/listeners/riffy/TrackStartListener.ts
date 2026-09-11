@@ -15,14 +15,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { BaseClient } from "@lib/BaseClient.ts";
+import { EmbedBuilder } from "@components/EmbedBuilder";
+import type { BaseClient } from "@lib/BaseClient";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
-import { parsers } from "@utils/index.js";
+import { parsers } from "@utils/index";
 import type { TextChannel } from "discord.js";
 import { Player, Track } from "riffy";
 
-import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
+import { LAVALINK_EVENTS } from "@/config";
 
 @ApplyOptions<Listener.Options>({
 	emitter: (container.client as BaseClient).riffy,
@@ -34,6 +35,8 @@ export class TrackStartListener extends Listener {
 		const channel = client.channels.cache.get(player.textChannel) as
 			| TextChannel
 			| undefined;
+
+		if (!LAVALINK_EVENTS.trackStart) return;
 
 		if (channel) {
 			const embed = new EmbedBuilder()

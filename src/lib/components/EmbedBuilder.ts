@@ -34,6 +34,20 @@ export class EmbedBuilder extends DEmbedBuilder {
 	public hasCheckmark: boolean = false;
 
 	/**
+	 * @description The raw description before emoji formatting.
+	 * @type {string | null}
+	 * @private
+	 */
+	private rawDescription: string | null = null;
+
+	/**
+	 * @description Whether the description is bold.
+	 * @type {boolean}
+	 * @private
+	 */
+	private boldDescription: boolean = false;
+
+	/**
 	 * @description The embed constructor.
 	 * @constructor
 	 */
@@ -41,6 +55,28 @@ export class EmbedBuilder extends DEmbedBuilder {
 		super();
 
 		this.setColor("#ff9e7d");
+	}
+
+	/**
+	 * @description Applies the formatted description with emoji if configured.
+	 * @private
+	 */
+	private applyDescription(): void {
+		if (this.rawDescription === null) return;
+
+		const emoji = this.errorEmbed
+			? parsers.getEmoji("crossmark")
+			: this.hasCheckmark
+				? parsers.getEmoji("checkmark")
+				: undefined;
+
+		const formattedDescription = this.boldDescription
+			? `**${this.rawDescription}**`
+			: this.rawDescription;
+
+		super.setDescription(
+			emoji ? `${emoji} ${formattedDescription}` : formattedDescription,
+		);
 	}
 
 	/**
@@ -54,21 +90,15 @@ export class EmbedBuilder extends DEmbedBuilder {
 		description: string | null,
 		boldDescription: boolean = false,
 	): this {
-		if (description === null) return this;
+		if (description === null) {
+			this.rawDescription = null;
+			return super.setDescription(null);
+		}
 
-		const emoji = this.errorEmbed
-			? parsers.getEmoji("crossmark")?.toString()
-			: this.hasCheckmark
-				? parsers.getEmoji("checkmark")?.toString()
-				: undefined;
-
-		const formattedDescription = boldDescription
-			? `**${description}**`
-			: description;
-
-		return super.setDescription(
-			emoji ? `${emoji} ${formattedDescription}` : formattedDescription,
-		);
+		this.rawDescription = description;
+		this.boldDescription = boldDescription;
+		this.applyDescription();
+		return this;
 	}
 
 	/**
@@ -78,6 +108,7 @@ export class EmbedBuilder extends DEmbedBuilder {
 	public isErrorEmbed(): this {
 		this.setColor("#E84A5F");
 		this.errorEmbed = true;
+		this.applyDescription();
 		return this;
 	}
 
@@ -89,6 +120,7 @@ export class EmbedBuilder extends DEmbedBuilder {
 	public isSuccessEmbed(emoji?: boolean): this {
 		this.setColor("#1ED760");
 		this.hasCheckmark = emoji ?? false;
+		this.applyDescription();
 		return this;
 	}
 }

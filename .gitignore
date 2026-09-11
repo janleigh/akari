@@ -17,3 +17,6 @@ node_modules/*
 .env
 public/*
 !public/README.md
+
+# Agents
+.agents/

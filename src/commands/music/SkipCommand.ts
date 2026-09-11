@@ -15,6 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
@@ -23,33 +24,42 @@ import {
 } from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
-	name: "ping",
-	fullCategory: ["General"],
+	name: "skip",
+	fullCategory: ["Music"],
+	preconditions: [
+		"HasActivePlayerPrecondition",
+		"HasPlayingTrackPrecondition",
+		"InVoiceChannelPrecondition",
+		"SameVoiceChannelPrecondition",
+	],
 })
-export class PingCommand extends Command {
+export class SkipCommand extends Command {
 	public override registerApplicationCommands(
 		registry: ChatInputCommand.Registry,
 	) {
 		registry.registerChatInputCommand(
 			(builder) =>
-				builder.setName("ping").setDescription("Check the bot's latency"),
+				builder
+					.setName("skip")
+					.setDescription("Skip the currently playing track"),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const start = Date.now();
+		const player = this.container.client.riffy.players.get(
+			interaction.guildId!,
+		)!;
+		const track = player.current!;
 
-		await interaction.reply({
-			content: "> 🏓 Pinging...",
-		});
+		player.stop();
 
-		const end = Date.now();
-		const diff = end - start;
-		const ping = Math.round(this.container.client.ws.ping);
+		const embed = new EmbedBuilder()
+			.setTitle("⏭️  Skipped")
+			.setDescription(`Skipped [${track.info.title}](${track.info.uri})`)
+			.isSuccessEmbed(true)
+			.setTimestamp();
 
-		return interaction.editReply({
-			content: `> Pong 🏓!\n> **Discord API**: \`${diff}ms\`\n> **Websocket:** \`${ping}ms\``,
-		});
+		return interaction.reply({ embeds: [embed] });
 	}
 }

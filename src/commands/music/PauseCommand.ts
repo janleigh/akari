@@ -15,6 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
@@ -23,33 +24,49 @@ import {
 } from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
-	name: "ping",
-	fullCategory: ["General"],
+	name: "pause",
+	fullCategory: ["Music"],
+	preconditions: [
+		"HasActivePlayerPrecondition",
+		"HasPlayingTrackPrecondition",
+		"InVoiceChannelPrecondition",
+		"SameVoiceChannelPrecondition",
+	],
 })
-export class PingCommand extends Command {
+export class PauseCommand extends Command {
 	public override registerApplicationCommands(
 		registry: ChatInputCommand.Registry,
 	) {
 		registry.registerChatInputCommand(
 			(builder) =>
-				builder.setName("ping").setDescription("Check the bot's latency"),
+				builder.setName("pause").setDescription("Pause the current playback"),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const start = Date.now();
+		const player = this.container.client.riffy.players.get(
+			interaction.guildId!,
+		)!;
 
-		await interaction.reply({
-			content: "> 🏓 Pinging...",
-		});
+		if (player.paused) {
+			return interaction.reply({
+				content: "The player is already paused.",
+				ephemeral: true,
+			});
+		}
 
-		const end = Date.now();
-		const diff = end - start;
-		const ping = Math.round(this.container.client.ws.ping);
+		player.pause(true);
+		player.playing = false;
 
-		return interaction.editReply({
-			content: `> Pong 🏓!\n> **Discord API**: \`${diff}ms\`\n> **Websocket:** \`${ping}ms\``,
-		});
+		const embed = new EmbedBuilder()
+			.setTitle("⏸️  Paused")
+			.setDescription(
+				`Paused [${player.current?.info.title}](${player.current?.info.uri})`,
+			)
+			.isSuccessEmbed(true)
+			.setTimestamp();
+
+		return interaction.reply({ embeds: [embed] });
 	}
 }

@@ -15,13 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import { createMusicStatusContainer } from "@utils/commands/music";
+import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "skip",
@@ -54,12 +55,15 @@ export class SkipCommand extends Command {
 
 		player.stop();
 
-		const embed = new EmbedBuilder()
-			.setTitle("⏭️  Skipped")
-			.setDescription(`Skipped [${track.info.title}](${track.info.uri})`)
-			.isSuccessEmbed(true)
-			.setTimestamp();
-
-		return interaction.reply({ embeds: [embed] });
+		return interaction.reply({
+			components: [
+				createMusicStatusContainer(
+					"Skipped",
+					`Skipped [${track.info.title}](${track.info.uri})`,
+					"⏭️",
+				),
+			],
+			flags: MessageFlags.IsComponentsV2,
+		});
 	}
 }

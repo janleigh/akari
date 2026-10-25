@@ -21,13 +21,14 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import { text, parsers } from "@utils/index";
 import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	MessageFlags,
-} from "discord.js";
+	createEvalDeleteRow,
+	createEvalErrorContainer,
+	createEvalSuccessContainer,
+	createEvalTooLongContainer,
+} from "@utils/commands/eval";
+import { text } from "@utils/index";
+import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "eval",
@@ -64,52 +65,46 @@ export class EvaluateCommand extends Command {
 	) {
 		const input = interaction.options.getString("input");
 		const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
-		let content = "";
+		const baseFlags = ephemeral
+			? MessageFlags.Ephemeral | MessageFlags.IsComponentsV2
+			: MessageFlags.IsComponentsV2;
 
-		const deleteButton = new ButtonBuilder()
-			.setCustomId("evalDelete")
-			.setLabel("Delete")
-			.setStyle(ButtonStyle.Danger)
-			.setEmoji("🗑️");
-
-		const deleteRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-			deleteButton,
-		);
+		let evaled = "";
+		let timeTaken = "";
 
 		try {
 			// oxlint-disable-next-line no-eval
-			let evaled = eval(input as string);
-			const timeTaken = (
-				(Date.now() - interaction.createdTimestamp) /
-				1000
-			).toFixed(3);
-			evaled = text.clean(evaled);
-
-			content = `:bricks: **EVAL COMPLETE** (${timeTaken}s) :bricks:\n\`\`\`xl\n${evaled}\`\`\``;
+			const rawResult = eval(input as string);
+			timeTaken = ((Date.now() - interaction.createdTimestamp) / 1000).toFixed(
+				3,
+			);
+			evaled = text.clean(rawResult);
 		} catch (err) {
 			this.container.logger.error("[EvalCommand] " + String(err));
-			content = `${parsers.getEmoji("crossmark")?.toString() ?? ""} **EVAL ERROR**\n\`\`\`xl\n${text.clean(String(err))}\`\`\``;
 			return interaction.reply({
-				content,
+				components: [
+					createEvalErrorContainer(text.clean(String(err))),
+					createEvalDeleteRow(),
+				],
+				flags: baseFlags,
 			});
 		}
 
-		if (content.length < 2000) {
+		if (evaled.length < 1800) {
 			return interaction.reply({
-				content,
-				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
-				components: [deleteRow],
+				components: [
+					createEvalSuccessContainer(evaled, timeTaken),
+					createEvalDeleteRow(),
+				],
+				flags: baseFlags,
 			});
 		} else {
 			this.container.logger.info("!! EVAL COMPLETE !!");
-			this.container.logger.info(
-				content.replaceAll("```xl", "").replaceAll("```", ""),
-			);
+			this.container.logger.info(evaled);
 
 			return interaction.reply({
-				content: `${parsers.getEmoji("crossmark")?.toString() ?? ""} The output was too long to be sent as a message. Output has been logged to the console.`,
-				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
-				components: [deleteRow],
+				components: [createEvalTooLongContainer(), createEvalDeleteRow()],
+				flags: baseFlags,
 			});
 		}
 	}

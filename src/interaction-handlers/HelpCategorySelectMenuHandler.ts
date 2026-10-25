@@ -24,7 +24,7 @@ import {
 	createHelpContainer,
 	createHelpLinksRow,
 	HELP_CATEGORY_SELECT_ID,
-} from "@utils/help";
+} from "@utils/commands/help";
 import type { StringSelectMenuInteraction } from "discord.js";
 import { MessageFlags } from "discord.js";
 

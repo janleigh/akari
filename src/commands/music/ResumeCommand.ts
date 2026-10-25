@@ -15,16 +15,18 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import { createMusicStatusContainer } from "@utils/commands/music";
+import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "resume",
+	description: "[Deprecated] Resume playback. Use /playback resume instead",
 	fullCategory: ["Music"],
 	preconditions: [
 		"HasActivePlayerPrecondition",
@@ -38,7 +40,11 @@ export class ResumeCommand extends Command {
 	) {
 		registry.registerChatInputCommand(
 			(builder) =>
-				builder.setName("resume").setDescription("Resume the current playback"),
+				builder
+					.setName("resume")
+					.setDescription(
+						"[Deprecated] Resume playback. Use /playback resume instead",
+					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
@@ -50,29 +56,42 @@ export class ResumeCommand extends Command {
 
 		if (!player.current) {
 			return interaction.reply({
-				content: "There is no track to resume.",
-				ephemeral: true,
+				components: [
+					createMusicStatusContainer(
+						"Playback",
+						"There is no track to resume.\n\n> ⚠️ **Note:** `/resume` is deprecated. Please use `/playback resume` instead.",
+						"▶️",
+					),
+				],
+				flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
 			});
 		}
 
 		if (!player.paused) {
 			return interaction.reply({
-				content: "The player is not paused.",
-				ephemeral: true,
+				components: [
+					createMusicStatusContainer(
+						"Playback",
+						"The player is not paused.\n\n> ⚠️ **Note:** `/resume` is deprecated. Please use `/playback resume` instead.",
+						"▶️",
+					),
+				],
+				flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
 			});
 		}
 
 		player.pause(false);
 		player.playing = true;
 
-		const embed = new EmbedBuilder()
-			.setTitle("▶️  Resumed")
-			.setDescription(
-				`Resumed [${player.current.info.title}](${player.current.info.uri})`,
-			)
-			.isSuccessEmbed(true)
-			.setTimestamp();
-
-		return interaction.reply({ embeds: [embed] });
+		return interaction.reply({
+			components: [
+				createMusicStatusContainer(
+					"Resumed",
+					`Resumed [${player.current.info.title}](${player.current.info.uri})\n\n> ⚠️ **Note:** \`/resume\` is deprecated. Please use \`/playback resume\` instead.`,
+					"▶️",
+				),
+			],
+			flags: MessageFlags.IsComponentsV2,
+		});
 	}
 }

@@ -15,7 +15,6 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
@@ -23,71 +22,17 @@ import {
 	RegisterBehavior,
 } from "@sapphire/framework";
 import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	ComponentType,
-} from "discord.js";
+	createMusicStatusContainer,
+	createQueueContainer,
+	createQueueRow,
+	QueueIterator,
+} from "@utils/commands/music";
+import { ComponentType, MessageFlags } from "discord.js";
 import type { Track } from "riffy";
-
-interface Iterator<T> {
-	next(): T;
-	hasNext(): boolean;
-	prev(): T;
-	hasPrev(): boolean;
-	current(): T;
-}
-
-class QueueIterator implements Iterator<Track[]> {
-	private items: Track[];
-	private pageSize: number;
-	private currentIndex = 0;
-
-	constructor(items: Track[], pageSize: number = 10) {
-		this.items = items;
-		this.pageSize = pageSize;
-	}
-
-	public next(): Track[] {
-		if (this.hasNext()) {
-			this.currentIndex += this.pageSize;
-		}
-		return this.current();
-	}
-
-	public hasNext(): boolean {
-		return this.currentIndex + this.pageSize < this.items.length;
-	}
-
-	public prev(): Track[] {
-		if (this.hasPrev()) {
-			this.currentIndex -= this.pageSize;
-		}
-		return this.current();
-	}
-
-	public hasPrev(): boolean {
-		return this.currentIndex >= this.pageSize;
-	}
-
-	public current(): Track[] {
-		return this.items.slice(
-			this.currentIndex,
-			this.currentIndex + this.pageSize,
-		);
-	}
-
-	public get currentPage(): number {
-		return Math.floor(this.currentIndex / this.pageSize) + 1;
-	}
-
-	public get totalPages(): number {
-		return Math.max(1, Math.ceil(this.items.length / this.pageSize));
-	}
-}
 
 @ApplyOptions<Command.Options>({
 	name: "queue",
+	aliases: ["q"],
 	fullCategory: ["Music"],
 	preconditions: ["HasActivePlayerPrecondition"],
 })
@@ -112,62 +57,24 @@ export class QueueCommand extends Command {
 		const queueItems = Array.from(player.queue) as Track[];
 		if (queueItems.length === 0 && !player.current) {
 			return interaction.reply({
-				content: "The queue is currently empty.",
-				ephemeral: true,
+				components: [
+					createMusicStatusContainer(
+						"Music Queue",
+						"The queue is currently empty.",
+						"📻",
+					),
+				],
+				flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
 			});
 		}
 
 		const iterator = new QueueIterator(queueItems, 10);
-
-		const generateEmbed = (page: Track[], iterator: QueueIterator) => {
-			const embed = new EmbedBuilder()
-				.setTitle("📻  Music Queue")
-				.setThumbnail(player.current?.info.thumbnail ?? "")
-				.setFooter({
-					text: `Page ${iterator.currentPage} of ${iterator.totalPages}`,
-				});
-
-			let description = "";
-			if (player.current) {
-				description += `**Currently Playing:**\n[${player.current.info.title}](${player.current.info.uri})\n\n`;
-			}
-
-			if (page.length > 0) {
-				description += "**Up Next:**\n";
-				page.forEach((track, index) => {
-					const actualIndex = (iterator.currentPage - 1) * 10 + index + 1;
-					description += `${actualIndex}. [${track.info.title}](${track.info.uri})\n`;
-				});
-			} else if (queueItems.length === 0) {
-				description += "*No more tracks in queue.*";
-			}
-
-			embed.setDescription(description);
-			return embed;
-		};
-
-		const generateRow = (iterator: QueueIterator) => {
-			const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-				new ButtonBuilder()
-					.setCustomId("queue_prev")
-					.setLabel("⏮️  Prev")
-					.setStyle(ButtonStyle.Primary)
-					.setDisabled(!iterator.hasPrev()),
-				new ButtonBuilder()
-					.setCustomId("queue_next")
-					.setLabel("⏭️  Next")
-					.setStyle(ButtonStyle.Primary)
-					.setDisabled(!iterator.hasNext()),
-			);
-			return row;
-		};
-
-		const embed = generateEmbed(iterator.current(), iterator);
-		const row = generateRow(iterator);
+		const initialRows =
+			iterator.totalPages > 1 ? [createQueueRow(iterator)] : [];
 
 		const message = await interaction.reply({
-			embeds: [embed],
-			components: iterator.totalPages > 1 ? [row] : [],
+			components: [createQueueContainer(player, iterator), ...initialRows],
+			flags: MessageFlags.IsComponentsV2,
 			fetchReply: true,
 		});
 
@@ -175,14 +82,20 @@ export class QueueCommand extends Command {
 
 		const collector = message.createMessageComponentCollector({
 			componentType: ComponentType.Button,
-			time: 60000,
+			time: 60_000,
 		});
 
 		collector.on("collect", async (i) => {
 			if (i.user.id !== interaction.user.id) {
 				await i.reply({
-					content: "You cannot interact with these buttons.",
-					ephemeral: true,
+					components: [
+						createMusicStatusContainer(
+							"Queue Navigation",
+							"You cannot interact with these buttons.",
+							"⚠️",
+						),
+					],
+					flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
 				});
 				return;
 			}
@@ -194,27 +107,22 @@ export class QueueCommand extends Command {
 			}
 
 			await i.update({
-				embeds: [generateEmbed(iterator.current(), iterator)],
-				components: [generateRow(iterator)],
+				components: [
+					createQueueContainer(player, iterator),
+					createQueueRow(iterator),
+				],
+				flags: MessageFlags.IsComponentsV2,
 			});
 		});
 
 		collector.on("end", async () => {
-			const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-				new ButtonBuilder()
-					.setCustomId("queue_prev")
-					.setLabel("⏮️  Prev")
-					.setStyle(ButtonStyle.Primary)
-					.setDisabled(true),
-				new ButtonBuilder()
-					.setCustomId("queue_next")
-					.setLabel("⏭️  Next")
-					.setStyle(ButtonStyle.Primary)
-					.setDisabled(true),
-			);
 			await interaction
 				.editReply({
-					components: [disabledRow],
+					components: [
+						createQueueContainer(player, iterator),
+						createQueueRow(iterator, true),
+					],
+					flags: MessageFlags.IsComponentsV2,
 				})
 				.catch(() => {});
 		});

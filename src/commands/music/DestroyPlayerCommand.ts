@@ -21,8 +21,8 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-
-import { EmbedBuilder } from "@/lib/components/EmbedBuilder";
+import { createMusicStatusContainer } from "@utils/commands/music";
+import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "destroy",
@@ -52,12 +52,15 @@ export class DestroyPlayerCommand extends Command {
 
 		player.destroy();
 
-		const embed = new EmbedBuilder()
-			.setTitle("🎵  Music Player")
-			.setDescription("The music player has been destroyed.")
-			.isSuccessEmbed(true)
-			.setTimestamp();
-
-		await interaction.reply({ embeds: [embed] });
+		return interaction.reply({
+			components: [
+				createMusicStatusContainer(
+					"Music Player",
+					"The music player has been destroyed and disconnected.",
+					"🛑",
+				),
+			],
+			flags: MessageFlags.IsComponentsV2,
+		});
 	}
 }

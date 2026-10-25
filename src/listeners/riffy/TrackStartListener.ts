@@ -15,12 +15,11 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmbedBuilder } from "@components/EmbedBuilder";
 import type { BaseClient } from "@lib/BaseClient";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
-import { parsers } from "@utils/index";
-import type { TextChannel } from "discord.js";
+import { createTrackStartContainer } from "@utils/commands/music";
+import { MessageFlags, type TextChannel } from "discord.js";
 import { Player, Track } from "riffy";
 
 import { LAVALINK_EVENTS } from "@/config";
@@ -39,29 +38,10 @@ export class TrackStartListener extends Listener {
 		if (!LAVALINK_EVENTS.trackStart) return;
 
 		if (channel) {
-			const embed = new EmbedBuilder()
-				.setTitle("🎵  Now Playing")
-				.setColor("Random")
-				.setDescription(
-					`[${track.info.title}](${track.info.uri}) by \`${track.info.author}\``,
-				)
-				.addFields(
-					{
-						name: "Duration",
-						value: parsers.formatDuration(track.info.length),
-						inline: true,
-					},
-					{
-						name: "Requested by",
-						value: `${track.info.requester}`,
-						inline: true,
-					},
-				)
-				.setTimestamp()
-				.setFooter({ text: `Songs in queue: ${player.queue.length}` })
-				.setThumbnail(track.info.thumbnail);
-
-			await channel.send({ embeds: [embed] });
+			await channel.send({
+				components: [createTrackStartContainer(player, track)],
+				flags: MessageFlags.IsComponentsV2,
+			});
 			this.container.logger.debug(
 				`Lavalink[trackStart] Now playing: ${track.info.title} by ${track.info.author} at guild: ${player.guildId}`,
 			);

@@ -15,11 +15,11 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmbedBuilder } from "@components/EmbedBuilder";
 import type { BaseClient } from "@lib/BaseClient";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
-import { TextChannel } from "discord.js";
+import { createQueueEndContainer } from "@utils/commands/music";
+import { MessageFlags, type TextChannel } from "discord.js";
 import { Player } from "riffy";
 
 import { LAVALINK_EVENTS } from "@/config";
@@ -40,13 +40,10 @@ export class QueueEndListener extends Listener {
 		if (!LAVALINK_EVENTS.queueEnd) return;
 
 		if (channel) {
-			const embed = new EmbedBuilder()
-				.setTitle("🎵  Queue Ended")
-				.setDescription("The queue has ended. Leaving the voice channel.")
-				.isSuccessEmbed(true)
-				.setTimestamp();
-
-			await channel.send({ embeds: [embed] });
+			await channel.send({
+				components: [createQueueEndContainer()],
+				flags: MessageFlags.IsComponentsV2,
+			});
 		}
 	}
 }

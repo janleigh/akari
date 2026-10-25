@@ -15,14 +15,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import { createMusicStatusContainer } from "@utils/commands/music";
 import { parsers } from "@utils/index";
+import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "volume",
@@ -65,14 +66,17 @@ export class VolumeCommand extends Command {
 		if (level === null) {
 			const volumeEmoji =
 				player.volume === 0 ? "🔇" : player.volume < 50 ? "🔉" : "🔊";
-			const embed = new EmbedBuilder()
-				.setTitle(`${volumeEmoji}  Playback Volume`)
-				.setDescription(
-					`The current playback volume is **${player.volume}%**.\n\n${parsers.createProgressBar(player.volume, 150, 12)}`,
-				)
-				.setTimestamp();
 
-			return interaction.reply({ embeds: [embed] });
+			return interaction.reply({
+				components: [
+					createMusicStatusContainer(
+						"Playback Volume",
+						`The current playback volume is **${player.volume}%**.\n\n${parsers.createProgressBar(player.volume, 150, 12)}`,
+						volumeEmoji,
+					),
+				],
+				flags: MessageFlags.IsComponentsV2,
+			});
 		}
 
 		const oldVolume = player.volume;
@@ -80,14 +84,15 @@ export class VolumeCommand extends Command {
 
 		const volumeEmoji = level === 0 ? "🔇" : level < 50 ? "🔉" : "🔊";
 
-		const embed = new EmbedBuilder()
-			.setTitle(`${volumeEmoji}  Volume Adjusted`)
-			.setDescription(
-				`Volume changed from **${oldVolume}%** to **${level}%**.\n\n${parsers.createProgressBar(level, 150, 12)}`,
-			)
-			.isSuccessEmbed(true)
-			.setTimestamp();
-
-		return interaction.reply({ embeds: [embed] });
+		return interaction.reply({
+			components: [
+				createMusicStatusContainer(
+					"Volume Adjusted",
+					`Volume changed from **${oldVolume}%** to **${level}%**.\n\n${parsers.createProgressBar(level, 150, 12)}`,
+					volumeEmoji,
+				),
+			],
+			flags: MessageFlags.IsComponentsV2,
+		});
 	}
 }

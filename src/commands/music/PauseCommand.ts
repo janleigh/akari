@@ -15,16 +15,18 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EmbedBuilder } from "@components/EmbedBuilder";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import { createMusicStatusContainer } from "@utils/commands/music";
+import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "pause",
+	description: "[Deprecated] Pause playback. Use /playback pause instead",
 	fullCategory: ["Music"],
 	preconditions: [
 		"HasActivePlayerPrecondition",
@@ -39,7 +41,11 @@ export class PauseCommand extends Command {
 	) {
 		registry.registerChatInputCommand(
 			(builder) =>
-				builder.setName("pause").setDescription("Pause the current playback"),
+				builder
+					.setName("pause")
+					.setDescription(
+						"[Deprecated] Pause playback. Use /playback pause instead",
+					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
@@ -51,22 +57,29 @@ export class PauseCommand extends Command {
 
 		if (player.paused) {
 			return interaction.reply({
-				content: "The player is already paused.",
-				ephemeral: true,
+				components: [
+					createMusicStatusContainer(
+						"Playback",
+						"The player is already paused.\n\n> ⚠️ **Note:** `/pause` is deprecated. Please use `/playback pause` instead.",
+						"⏸️",
+					),
+				],
+				flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
 			});
 		}
 
 		player.pause(true);
 		player.playing = false;
 
-		const embed = new EmbedBuilder()
-			.setTitle("⏸️  Paused")
-			.setDescription(
-				`Paused [${player.current?.info.title}](${player.current?.info.uri})`,
-			)
-			.isSuccessEmbed(true)
-			.setTimestamp();
+		const trackTitle = player.current?.info.title ?? "Unknown track";
+		const trackUri = player.current?.info.uri;
+		const trackDesc = trackUri
+			? `Paused [${trackTitle}](${trackUri})\n\n> ⚠️ **Note:** \`/pause\` is deprecated. Please use \`/playback pause\` instead.`
+			: `Paused **${trackTitle}**\n\n> ⚠️ **Note:** \`/pause\` is deprecated. Please use \`/playback pause\` instead.`;
 
-		return interaction.reply({ embeds: [embed] });
+		return interaction.reply({
+			components: [createMusicStatusContainer("Paused", trackDesc, "⏸️")],
+			flags: MessageFlags.IsComponentsV2,
+		});
 	}
 }

@@ -21,7 +21,10 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import { createBotInfoContainer, createHelpLinksRow } from "@utils/help";
+import {
+	createBotInfoContainer,
+	createHelpLinksRow,
+} from "@utils/commands/help";
 import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({

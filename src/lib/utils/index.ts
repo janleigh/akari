@@ -15,5 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  **/
 
+export * as commands from "./commands";
+export * as components from "./components";
 export * as parsers from "./common/parsers";
 export * as text from "./common/text";

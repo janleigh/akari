@@ -21,6 +21,11 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
+import {
+	createPingContainer,
+	createPingInitialContainer,
+} from "@utils/commands/ping";
+import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "ping",
@@ -41,7 +46,8 @@ export class PingCommand extends Command {
 		const start = Date.now();
 
 		await interaction.reply({
-			content: "> 🏓 Pinging...",
+			components: [createPingInitialContainer()],
+			flags: MessageFlags.IsComponentsV2,
 		});
 
 		const end = Date.now();
@@ -49,7 +55,8 @@ export class PingCommand extends Command {
 		const ping = Math.round(this.container.client.ws.ping);
 
 		return interaction.editReply({
-			content: `> Pong 🏓!\n> **Discord API**: \`${diff}ms\`\n> **Websocket:** \`${ping}ms\``,
+			components: [createPingContainer(diff, ping)],
+			flags: MessageFlags.IsComponentsV2,
 		});
 	}
 }

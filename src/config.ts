@@ -113,8 +113,9 @@ export const EMOJI_IDS: Record<string, string> = {
 
 /**
  * @description Whether to turn off announcing the built-in events
+ * @type {Record<string, boolean>}
  */
-export const LAVALINK_EVENTS = {
+export const LAVALINK_EVENTS: Record<string, boolean> = {
 	queueEnd: false,
 	trackStart: false,
 };

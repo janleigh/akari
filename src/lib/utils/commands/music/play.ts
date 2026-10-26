@@ -50,19 +50,23 @@ export function createTrackEnqueuedContainer(options: {
 	userTag: string;
 	count?: number;
 	uri?: string;
+	playNext?: boolean;
 }): ContainerBuilder {
 	const checkmark = parsers.getEmoji("checkmark")?.toString() ?? "✅";
+	const nextUpSuffix = options.playNext ? " (Next Up)" : "";
 	if (options.type === "playlist") {
 		return new ContainerBuilder()
 			.addTextDisplayComponents(
 				new TextDisplayBuilder().setContent(
-					`## ${checkmark}  Playlist Enqueued`,
+					`## ${checkmark}  Playlist Enqueued${nextUpSuffix}`,
 				),
 			)
 			.addSeparatorComponents(new SeparatorBuilder())
 			.addTextDisplayComponents(
 				new TextDisplayBuilder().setContent(
-					`Added **${options.count ?? 0}** tracks from playlist **\`${options.title}\`** by **${options.userTag}**.`,
+					options.playNext
+						? `Added **${options.count ?? 0}** tracks from playlist **\`${options.title}\`** to the front of the queue by **${options.userTag}**.`
+						: `Added **${options.count ?? 0}** tracks from playlist **\`${options.title}\`** by **${options.userTag}**.`,
 				),
 			);
 	}
@@ -74,13 +78,15 @@ export function createTrackEnqueuedContainer(options: {
 	return new ContainerBuilder()
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
-				`## ${checkmark}  Track Enqueued`,
+				`## ${checkmark}  Track Enqueued${nextUpSuffix}`,
 			),
 		)
 		.addSeparatorComponents(new SeparatorBuilder())
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
-				`Added ${trackLink} to the queue by **${options.userTag}**.`,
+				options.playNext
+					? `Added ${trackLink} to the front of the queue by **${options.userTag}**.`
+					: `Added ${trackLink} to the queue by **${options.userTag}**.`,
 			),
 		);
 }

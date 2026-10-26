@@ -18,8 +18,10 @@
 import {
 	createMusicStatusContainer,
 	createQueueContainer,
+	createQueueRemoveSelectRow,
 	createQueueRow,
 	QueueIterator,
+	removeTracks,
 } from "@commandUtils/music/queue";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
@@ -27,7 +29,7 @@ import {
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import { ComponentType, MessageFlags } from "discord.js";
+import { MessageFlags } from "discord.js";
 import type { Track } from "riffy";
 
 @ApplyOptions<Command.Options>({
@@ -72,8 +74,13 @@ export class QueueCommand extends Command {
 		}
 
 		const iterator = new QueueIterator(queueItems, 10);
-		const initialRows =
-			iterator.totalPages > 1 ? [createQueueRow(iterator)] : [];
+		const initialRows = [];
+		if (iterator.totalPages > 1) {
+			initialRows.push(createQueueRow(iterator));
+		}
+		if (queueItems.length > 0) {
+			initialRows.push(createQueueRemoveSelectRow(iterator));
+		}
 
 		const message = await interaction.reply({
 			components: [
@@ -84,10 +91,9 @@ export class QueueCommand extends Command {
 			fetchReply: true,
 		});
 
-		if (iterator.totalPages <= 1) return;
+		if (initialRows.length === 0) return;
 
 		const collector = message.createMessageComponentCollector({
-			componentType: ComponentType.Button,
 			time: 60_000,
 		});
 
@@ -97,7 +103,7 @@ export class QueueCommand extends Command {
 					components: [
 						createMusicStatusContainer(
 							"Queue Navigation",
-							"You cannot interact with these buttons.",
+							"You cannot interact with these controls.",
 							"⚠️",
 						),
 					],
@@ -106,31 +112,95 @@ export class QueueCommand extends Command {
 				return;
 			}
 
-			if (i.customId === "queue_prev") {
-				iterator.prev();
-			} else if (i.customId === "queue_next") {
-				iterator.next();
-			} else if (i.customId === "queue_first") {
-				iterator.firstPage();
-			} else if (i.customId === "queue_last") {
-				iterator.lastPage();
-			}
+			if (i.isButton()) {
+				if (i.customId === "queue_prev") {
+					iterator.prev();
+				} else if (i.customId === "queue_next") {
+					iterator.next();
+				} else if (i.customId === "queue_first") {
+					iterator.firstPage();
+				} else if (i.customId === "queue_last") {
+					iterator.lastPage();
+				}
 
-			await i.update({
-				components: [
-					createQueueContainer(player, iterator),
-					createQueueRow(iterator),
-				],
-				flags: MessageFlags.IsComponentsV2,
-			});
+				const rows = [];
+				if (iterator.totalPages > 1) {
+					rows.push(createQueueRow(iterator));
+				}
+				if (iterator.totalItems > 0) {
+					rows.push(createQueueRemoveSelectRow(iterator));
+				}
+
+				await i.update({
+					components: [
+						createQueueContainer(player, iterator),
+						...rows,
+					],
+					flags: MessageFlags.IsComponentsV2,
+				});
+			} else if (
+				i.isStringSelectMenu() &&
+				i.customId === "queue_remove_track"
+			) {
+				const trackPosition = parseInt(i.values[0], 10);
+				if (isNaN(trackPosition)) return;
+
+				const removed = removeTracks(
+					player.queue as unknown as Track[],
+					trackPosition,
+					1,
+				);
+
+				const updatedQueue = Array.from(player.queue) as Track[];
+				iterator.updateItems(updatedQueue);
+
+				const rows = [];
+				if (iterator.totalPages > 1) {
+					rows.push(createQueueRow(iterator));
+				}
+				if (iterator.totalItems > 0) {
+					rows.push(createQueueRemoveSelectRow(iterator));
+				}
+
+				await i.update({
+					components: [
+						createQueueContainer(player, iterator),
+						...rows,
+					],
+					flags: MessageFlags.IsComponentsV2,
+				});
+
+				if (removed.length > 0) {
+					await i.followUp({
+						components: [
+							createMusicStatusContainer(
+								"Track Removed",
+								`Removed **[${removed[0].info.title}](${removed[0].info.uri})** from the queue.`,
+								"🗑️",
+							),
+						],
+						flags:
+							MessageFlags.Ephemeral |
+							MessageFlags.IsComponentsV2,
+					});
+				}
+			}
 		});
 
 		collector.on("end", async () => {
+			const rows = [];
+			if (iterator.totalPages > 1) {
+				rows.push(createQueueRow(iterator, true));
+			}
+			if (iterator.totalItems > 0) {
+				rows.push(createQueueRemoveSelectRow(iterator, true));
+			}
+
 			await interaction
 				.editReply({
 					components: [
 						createQueueContainer(player, iterator),
-						createQueueRow(iterator, true),
+						...rows,
 					],
 					flags: MessageFlags.IsComponentsV2,
 				})

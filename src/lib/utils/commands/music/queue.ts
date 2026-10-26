@@ -19,6 +19,8 @@ import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ContainerBuilder,
+	SelectMenuBuilder,
+	SelectMenuOptionBuilder,
 	SeparatorBuilder,
 	TextDisplayBuilder,
 } from "@discordjs/builders";
@@ -92,12 +94,62 @@ export class QueueIterator implements Iterator<Track[]> {
 	}
 
 	public get totalPages(): number {
-		return Math.ceil(this.items.length / this.pageSize);
+		return Math.max(1, Math.ceil(this.items.length / this.pageSize));
 	}
 
 	public get totalItems(): number {
 		return this.items.length;
 	}
+
+	public updateItems(items: Track[]): void {
+		this.items = items;
+		if (this.currentIndex >= this.items.length && this.currentIndex > 0) {
+			this.currentIndex = Math.max(
+				0,
+				(this.totalPages - 1) * this.pageSize,
+			);
+		}
+	}
+}
+
+/**
+ * Removes one or more tracks from the queue at the specified 1-based position.
+ */
+export function removeTracks(
+	queue: Track[],
+	position: number,
+	count: number = 1,
+): Track[] {
+	if (position < 1 || position > queue.length || count < 1) {
+		return [];
+	}
+
+	const maxCount = queue.length - position + 1;
+	const actualCount = Math.min(count, maxCount);
+	return queue.splice(position - 1, actualCount);
+}
+
+/**
+ * Moves a track from one 1-based position to another.
+ */
+export function moveTrack(
+	queue: Track[],
+	from: number,
+	to: number,
+): Track | null {
+	if (from < 1 || from > queue.length || to < 1 || to > queue.length) {
+		return null;
+	}
+
+	if (from === to) {
+		return queue[from - 1] ?? null;
+	}
+
+	const [track] = queue.splice(from - 1, 1);
+	if (!track) return null;
+
+	queue.splice(to - 1, 0, track);
+	return track;
 }
 
 export function createQueueContainer(
@@ -159,6 +211,46 @@ export function createQueueRow(
 				disabled || iterator.currentPage === iterator.totalPages,
 			),
 	);
+}
+
+export function createQueueRemoveSelectRow(
+	iterator: QueueIterator,
+	disabled: boolean = false,
+): ActionRowBuilder<SelectMenuBuilder> {
+	const page = iterator.current();
+	const selectMenu = new SelectMenuBuilder()
+		.setCustomId("queue_remove_track")
+		.setPlaceholder("Remove a track from this page...")
+		.setDisabled(disabled || page.length === 0);
+
+	if (page.length === 0) {
+		selectMenu.addOptions(
+			new SelectMenuOptionBuilder()
+				.setLabel("No tracks to remove")
+				.setValue("none"),
+		);
+	} else {
+		selectMenu.addOptions(
+			page.map((track, index) => {
+				const actualIndex = (iterator.currentPage - 1) * 10 + index + 1;
+				const title =
+					track.info.title.length > 90
+						? `${track.info.title.slice(0, 90)}...`
+						: track.info.title;
+				const author =
+					track.info.author.length > 95
+						? `${track.info.author.slice(0, 95)}...`
+						: track.info.author;
+
+				return new SelectMenuOptionBuilder()
+					.setLabel(`#${actualIndex}. ${title}`)
+					.setDescription(author || "Unknown artist")
+					.setValue(String(actualIndex));
+			}),
+		);
+	}
+
+	return new ActionRowBuilder<SelectMenuBuilder>().addComponents(selectMenu);
 }
 
 export function createQueueEndContainer(): ContainerBuilder {

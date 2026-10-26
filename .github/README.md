@@ -3,15 +3,26 @@ this readme sucks
 --->
 
 <!--- TITLE --->
-<h1 align="center"> homura </h1>
+<!-- <h1 align="left"> homura </h1> -->
 
-<!--- DESCRIPTION --->
-<div align="center">
-   <p>
-   <strong>A (not-so) generic music bot for Discord.</strong>
-   </p>
-   <br>
-</div>
+# <samp>homura</samp>
+
+<!--- SHORT DESCRIPTION --->
+<img align="right" src="./avatar.png" width="96" alt="Homura Icon" />
+
+![GitHub License](https://img.shields.io/github/license/janleigh/homura?style=for-the-badge)
+
+> A (not-so) generic music bot for Discord.
+
+<!--- FEATURES --->
+
+## <samp>FEATURES</samp>
+
+- **Find it. Play it.** Search Spotify, YouTube Music, and YouTube, or drop in a track or playlist URL.
+- **Own the queue.** Browse, reorder, remove, and fast-track what plays next.
+- **Keep the music moving.** Pause, resume, skip, stop, and check what is playing.
+- **Set the vibe.** Loop a track, loop the queue, shuffle it, or dial in the volume.
+- **Built for Discord.** Crisp, interactive controls powered by [Components V2](https://docs.discord.com/developers/components/reference).
 
 <!--- SETUP --->
 

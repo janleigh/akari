@@ -30,6 +30,8 @@ import {
 import { text } from "@utils/index";
 import { MessageFlags } from "discord.js";
 
+import { DEV_SERVER_IDS } from "@/config";
+
 @ApplyOptions<Command.Options>({
 	name: "eval",
 	description: "Developer Only",
@@ -59,7 +61,10 @@ export class EvaluateCommand extends Command {
 							)
 							.setRequired(false),
 					),
-			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
+			{
+				behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+				guildIds: DEV_SERVER_IDS,
+			},
 		);
 	}
 

@@ -51,13 +51,19 @@ export class HelpCommand extends Command {
 		interaction: Command.ChatInputCommandInteraction,
 	) {
 		const commands = this.container.stores.get("commands");
+		const nonDevCommands = commands.filter(
+			(command) => command.category?.toLowerCase() !== "developer",
+		);
+		const categories = commands.categories.filter(
+			(category) => category.toLowerCase() !== "developer",
+		);
 
 		return interaction.reply({
 			components: [
 				createBotInfoContainer(
 					this.container.client,
-					commands.size,
-					commands.categories,
+					nonDevCommands.size,
+					categories,
 				),
 				createHelpLinksRow(),
 			],

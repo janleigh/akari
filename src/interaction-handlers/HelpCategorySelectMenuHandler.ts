@@ -41,15 +41,14 @@ export class HelpCategorySelectMenuHandler extends InteractionHandler {
 
 	public async run(interaction: StringSelectMenuInteraction) {
 		const commands = this.container.stores.get("commands");
+		const categories = commands.categories.filter(
+			(cat) => cat.toLowerCase() !== "developer",
+		);
 		const category = interaction.values[0];
 
 		return interaction.update({
 			components: [
-				createHelpContainer(
-					commands.values(),
-					commands.categories,
-					category,
-				),
+				createHelpContainer(commands.values(), categories, category),
 				createHelpLinksRow(),
 			],
 			flags: MessageFlags.IsComponentsV2,

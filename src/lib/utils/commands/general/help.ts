@@ -61,11 +61,12 @@ export function createHelpContainer(
 	categories: readonly string[],
 	category?: string,
 ): ContainerBuilder {
-	const matchingCommands = Array.from(commands).filter((command) =>
-		category
+	const matchingCommands = Array.from(commands).filter((command) => {
+		if (command.category?.toLowerCase() === "developer") return false;
+		return category
 			? command.fullCategory[0]?.toLowerCase() === category.toLowerCase()
-			: true,
-	);
+			: true;
+	});
 	const commandList =
 		matchingCommands.length === 0
 			? "No commands are available in this category."
@@ -92,11 +93,15 @@ export function createHelpContainer(
 export function createHelpCategoryRow(
 	categories: readonly string[],
 ): ActionRowBuilder<SelectMenuBuilder> {
+	const filteredCategories = categories.filter(
+		(category) => category.toLowerCase() !== "developer",
+	);
+
 	const categorySelection = new SelectMenuBuilder()
 		.setCustomId(HELP_CATEGORY_SELECT_ID)
 		.setPlaceholder("Select a category")
 		.addOptions(
-			categories.map((category) =>
+			filteredCategories.map((category) =>
 				new SelectMenuOptionBuilder()
 					.setLabel(category)
 					.setValue(category.toLowerCase()),

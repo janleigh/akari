@@ -15,25 +15,30 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+	createMusicStatusContainer,
+	createNowPlayingContainer,
+	createNowPlayingDisabledRow,
+	createNowPlayingRow,
+} from "@commandUtils/music/nowplaying";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import {
-	createMusicStatusContainer,
-	createNowPlayingContainer,
-	createNowPlayingDisabledRow,
-	createNowPlayingRow,
-} from "@utils/commands/music";
 import { ComponentType, MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "nowplaying",
+	description:
+		"Display detailed information and playback controls for the current track",
 	aliases: ["np"],
 	fullCategory: ["Music"],
-	preconditions: ["HasActivePlayerPrecondition", "HasPlayingTrackPrecondition"],
+	preconditions: [
+		"HasActivePlayerPrecondition",
+		"HasPlayingTrackPrecondition",
+	],
 })
 export class NowPlayingCommand extends Command {
 	public override registerApplicationCommands(
@@ -50,7 +55,9 @@ export class NowPlayingCommand extends Command {
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const player = this.container.client.riffy.players.get(
 			interaction.guildId!,
 		)!;
@@ -109,7 +116,8 @@ export class NowPlayingCommand extends Command {
 					flags: MessageFlags.IsComponentsV2,
 				});
 			} else if (i.customId === "np_skip") {
-				const currentTitle = player.current?.info.title ?? "Current track";
+				const currentTitle =
+					player.current?.info.title ?? "Current track";
 				player.stop();
 
 				await i.reply({

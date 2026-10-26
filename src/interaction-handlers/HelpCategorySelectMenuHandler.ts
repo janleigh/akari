@@ -15,16 +15,16 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+	createHelpContainer,
+	createHelpLinksRow,
+	HELP_CATEGORY_SELECT_ID,
+} from "@commandUtils/general/help";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	InteractionHandler,
 	InteractionHandlerTypes,
 } from "@sapphire/framework";
-import {
-	createHelpContainer,
-	createHelpLinksRow,
-	HELP_CATEGORY_SELECT_ID,
-} from "@utils/commands/help";
 import type { StringSelectMenuInteraction } from "discord.js";
 import { MessageFlags } from "discord.js";
 
@@ -33,7 +33,8 @@ import { MessageFlags } from "discord.js";
 })
 export class HelpCategorySelectMenuHandler extends InteractionHandler {
 	public override parse(interaction: StringSelectMenuInteraction) {
-		if (interaction.customId !== HELP_CATEGORY_SELECT_ID) return this.none();
+		if (interaction.customId !== HELP_CATEGORY_SELECT_ID)
+			return this.none();
 
 		return this.some();
 	}
@@ -44,7 +45,11 @@ export class HelpCategorySelectMenuHandler extends InteractionHandler {
 
 		return interaction.update({
 			components: [
-				createHelpContainer(commands.values(), commands.categories, category),
+				createHelpContainer(
+					commands.values(),
+					commands.categories,
+					category,
+				),
 				createHelpLinksRow(),
 			],
 			flags: MessageFlags.IsComponentsV2,

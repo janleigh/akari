@@ -15,13 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { createMusicStatusContainer } from "@commandUtils/music/status";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import { createMusicStatusContainer } from "@utils/commands/music";
 import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
@@ -50,7 +50,9 @@ export class PauseCommand extends Command {
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const player = this.container.client.riffy.players.get(
 			interaction.guildId!,
 		)!;

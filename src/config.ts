@@ -67,7 +67,9 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	enableLoaderTraceLoggings: true,
 	logger: {
 		level:
-			process.env.NODE_ENV === "production" ? LogLevel.Info : LogLevel.Debug,
+			process.env.NODE_ENV === "production"
+				? LogLevel.Info
+				: LogLevel.Debug,
 	},
 };
 
@@ -78,12 +80,11 @@ export const CLIENT_OPTIONS: ClientOptions = {
 export const PRESENCE_OPTIONS: PresenceData = {
 	activities: [
 		{
-			name: "Umapyoi Legend",
-			type: ActivityType.Listening,
-			url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+			name: "M2 to parry | /help",
+			type: ActivityType.Playing,
 		},
 	],
-	status: "dnd",
+	status: "idle",
 };
 
 /**

@@ -33,7 +33,9 @@ export class RawListener extends Listener<typeof Events.Raw> {
 			return;
 		}
 
-		this.container.logger.debug(`Received voice gateway event: ${packet.t}`);
+		this.container.logger.debug(
+			`Received voice gateway event: ${packet.t}`,
+		);
 
 		this.container.client.riffy.updateVoiceState(packet);
 	}

@@ -49,7 +49,9 @@ export function createEvalErrorContainer(errorText: string): ContainerBuilder {
 		)
 		.addSeparatorComponents(new SeparatorBuilder())
 		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(`\`\`\`xl\n${errorText}\n\`\`\``),
+			new TextDisplayBuilder().setContent(
+				`\`\`\`xl\n${errorText}\n\`\`\``,
+			),
 		);
 }
 

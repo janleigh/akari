@@ -15,12 +15,6 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ApplyOptions } from "@sapphire/decorators";
-import {
-	type ChatInputCommand,
-	Command,
-	RegisterBehavior,
-} from "@sapphire/framework";
 import {
 	createMusicStatusContainer,
 	createSourceSelectRow,
@@ -29,14 +23,24 @@ import {
 	createTrackSelectRow,
 	getSourceName,
 	SUPPORTED_SOURCES,
-} from "@utils/commands/music";
+} from "@commandUtils/music/play";
+import { ApplyOptions } from "@sapphire/decorators";
+import {
+	type ChatInputCommand,
+	Command,
+	RegisterBehavior,
+} from "@sapphire/framework";
 import { ComponentType, MessageFlags } from "discord.js";
 import type { Track } from "riffy";
 
 @ApplyOptions<Command.Options>({
 	name: "play",
+	description: "Play a track or search with a selection menu",
 	fullCategory: ["Music"],
-	preconditions: ["InVoiceChannelPrecondition", "SameVoiceChannelPrecondition"],
+	preconditions: [
+		"InVoiceChannelPrecondition",
+		"SameVoiceChannelPrecondition",
+	],
 })
 export class PlayCommand extends Command {
 	public override registerApplicationCommands(
@@ -46,7 +50,9 @@ export class PlayCommand extends Command {
 			(builder) =>
 				builder
 					.setName("play")
-					.setDescription("Play a track or search with a selection menu")
+					.setDescription(
+						"Play a track or search with a selection menu",
+					)
 					.addStringOption((option) =>
 						option
 							.setName("query")
@@ -69,13 +75,18 @@ export class PlayCommand extends Command {
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const { riffy } = this.container.client;
-		const member = await interaction.guild!.members.fetch(interaction.user.id);
+		const member = await interaction.guild!.members.fetch(
+			interaction.user.id,
+		);
 
 		await interaction.deferReply();
 		const query = interaction.options.getString("query", true);
-		let currentSource = interaction.options.getString("source") ?? "ytmsearch";
+		let currentSource =
+			interaction.options.getString("source") ?? "ytmsearch";
 
 		const player = riffy.createConnection({
 			guildId: interaction.guild!.id,
@@ -175,7 +186,11 @@ export class PlayCommand extends Command {
 
 		const message = await interaction.editReply({
 			components: [
-				createTrackSelectContainer(query, currentSource, currentTracks.length),
+				createTrackSelectContainer(
+					query,
+					currentSource,
+					currentTracks.length,
+				),
 				createTrackSelectRow(currentTracks),
 				createSourceSelectRow(currentSource),
 			],
@@ -215,7 +230,9 @@ export class PlayCommand extends Command {
 								"⚠️",
 							),
 						],
-						flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
+						flags:
+							MessageFlags.Ephemeral |
+							MessageFlags.IsComponentsV2,
 					});
 					return;
 				}

@@ -39,21 +39,20 @@ export function createBotInfoContainer(
 		client.uptime === null
 			? "Unknown"
 			: `<t:${Math.floor((Date.now() - client.uptime) / 1000)}:R>`;
-	const botName = client.user?.username ?? "Akari";
+	const botName = client.user?.username ?? "Homura";
 
 	return new ContainerBuilder()
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
-				`## ${botName}\nUse the select menu below to explore ${botName}.`,
+				`\`\`\`Use the select menu below to explore ${botName}\`\`\``,
 			),
 		)
 		.addSeparatorComponents(new SeparatorBuilder())
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
-				`### About\nA music and utility bot for Discord.\n\n**Servers:** ${client.guilds.cache.size}\n**Commands:** ${commandCount}\n**Uptime:** ${uptime}`,
+				`[Homura](https://github.com/janleigh/homura) is a (not-so) generic music bot for Discord that plays\nmusic from various sources.\n\n**Servers:** ${client.guilds.cache.size}\n**Commands:** ${commandCount}\n**Uptime:** ${uptime}`,
 			),
 		)
-		.addSeparatorComponents(new SeparatorBuilder())
 		.addActionRowComponents(createHelpCategoryRow(categories));
 }
 
@@ -84,7 +83,9 @@ export function createHelpContainer(
 			),
 		)
 		.addSeparatorComponents(new SeparatorBuilder())
-		.addTextDisplayComponents(new TextDisplayBuilder().setContent(commandList))
+		.addTextDisplayComponents(
+			new TextDisplayBuilder().setContent(commandList),
+		)
 		.addActionRowComponents(createHelpCategoryRow(categories));
 }
 

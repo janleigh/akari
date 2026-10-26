@@ -15,7 +15,6 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * as eval from "./eval";
-export * as help from "./help";
+export * as developer from "./developer";
+export * as general from "./general";
 export * as music from "./music";
-export * as ping from "./ping";

@@ -15,13 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { createMusicStatusContainer } from "@commandUtils/music/status";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import { createMusicStatusContainer } from "@utils/commands/music";
 import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
@@ -56,13 +56,17 @@ export class PlaybackCommand extends Command {
 					.addSubcommand((subcommand) =>
 						subcommand
 							.setName("toggle")
-							.setDescription("Toggle playback between play and pause"),
+							.setDescription(
+								"Toggle playback between play and pause",
+							),
 					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const player = this.container.client.riffy.players.get(
 			interaction.guildId!,
 		)!;
@@ -106,7 +110,11 @@ export class PlaybackCommand extends Command {
 
 			return interaction.reply({
 				components: [
-					createMusicStatusContainer("Paused", `Paused ${trackLink}`, "⏸️"),
+					createMusicStatusContainer(
+						"Paused",
+						`Paused ${trackLink}`,
+						"⏸️",
+					),
 				],
 				flags: MessageFlags.IsComponentsV2,
 			});
@@ -131,7 +139,11 @@ export class PlaybackCommand extends Command {
 
 			return interaction.reply({
 				components: [
-					createMusicStatusContainer("Resumed", `Resumed ${trackLink}`, "▶️"),
+					createMusicStatusContainer(
+						"Resumed",
+						`Resumed ${trackLink}`,
+						"▶️",
+					),
 				],
 				flags: MessageFlags.IsComponentsV2,
 			});

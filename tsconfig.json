@@ -17,7 +17,8 @@
 			"@/*": ["./src/*"],
 			"@lib/*": ["./src/lib/*"],
 			"@components/*": ["./src/lib/components/*"],
-			"@utils/*": ["./src/lib/utils/*"]
+			"@utils/*": ["./src/lib/utils/*"],
+			"@commandUtils/*": ["./src/lib/utils/commands/*"]
 		}
 	},
 	"exclude": [".git/", ".github/", ".vscode/", "build/"],

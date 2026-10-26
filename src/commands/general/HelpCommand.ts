@@ -15,16 +15,16 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+	createBotInfoContainer,
+	createHelpLinksRow,
+} from "@commandUtils/general/help";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import {
-	createBotInfoContainer,
-	createHelpLinksRow,
-} from "@utils/commands/help";
 import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
@@ -47,7 +47,9 @@ export class HelpCommand extends Command {
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const commands = this.container.stores.get("commands");
 
 		return interaction.reply({

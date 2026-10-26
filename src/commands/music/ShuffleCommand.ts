@@ -15,17 +15,18 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { createMusicStatusContainer } from "@commandUtils/music/status";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import { createMusicStatusContainer } from "@utils/commands/music";
 import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "shuffle",
+	description: "Randomize the order of tracks in the queue",
 	fullCategory: ["Music"],
 	preconditions: [
 		"HasActivePlayerPrecondition",
@@ -41,12 +42,16 @@ export class ShuffleCommand extends Command {
 			(builder) =>
 				builder
 					.setName("shuffle")
-					.setDescription("Randomize the order of tracks in the queue"),
+					.setDescription(
+						"Randomize the order of tracks in the queue",
+					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const player = this.container.client.riffy.players.get(
 			interaction.guildId!,
 		)!;

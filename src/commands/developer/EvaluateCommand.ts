@@ -15,23 +15,24 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+	createEvalDeleteRow,
+	createEvalErrorContainer,
+	createEvalSuccessContainer,
+	createEvalTooLongContainer,
+} from "@commandUtils/developer/eval";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import {
-	createEvalDeleteRow,
-	createEvalErrorContainer,
-	createEvalSuccessContainer,
-	createEvalTooLongContainer,
-} from "@utils/commands/eval";
 import { text } from "@utils/index";
 import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "eval",
+	description: "Developer Only",
 	fullCategory: ["Developer"],
 	preconditions: ["DeveloperOnlyPrecondition"],
 })
@@ -53,7 +54,9 @@ export class EvaluateCommand extends Command {
 					.addBooleanOption((option) =>
 						option
 							.setName("ephemeral")
-							.setDescription("Whether to send the reply public or not.")
+							.setDescription(
+								"Whether to send the reply public or not.",
+							)
 							.setRequired(false),
 					),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
@@ -75,9 +78,10 @@ export class EvaluateCommand extends Command {
 		try {
 			// oxlint-disable-next-line no-eval
 			const rawResult = eval(input as string);
-			timeTaken = ((Date.now() - interaction.createdTimestamp) / 1000).toFixed(
-				3,
-			);
+			timeTaken = (
+				(Date.now() - interaction.createdTimestamp) /
+				1000
+			).toFixed(3);
 			evaled = text.clean(rawResult);
 		} catch (err) {
 			this.container.logger.error("[EvalCommand] " + String(err));
@@ -103,7 +107,10 @@ export class EvaluateCommand extends Command {
 			this.container.logger.info(evaled);
 
 			return interaction.reply({
-				components: [createEvalTooLongContainer(), createEvalDeleteRow()],
+				components: [
+					createEvalTooLongContainer(),
+					createEvalDeleteRow(),
+				],
 				flags: baseFlags,
 			});
 		}

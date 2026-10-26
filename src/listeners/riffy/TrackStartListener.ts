@@ -15,10 +15,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { createTrackStartContainer } from "@commandUtils/music/nowplaying";
 import type { BaseClient } from "@lib/BaseClient";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Listener, container } from "@sapphire/framework";
-import { createTrackStartContainer } from "@utils/commands/music";
 import { MessageFlags, type TextChannel } from "discord.js";
 import { Player, Track } from "riffy";
 

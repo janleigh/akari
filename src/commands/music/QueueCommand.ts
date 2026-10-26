@@ -15,23 +15,24 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+	createMusicStatusContainer,
+	createQueueContainer,
+	createQueueRow,
+	QueueIterator,
+} from "@commandUtils/music/queue";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import {
-	createMusicStatusContainer,
-	createQueueContainer,
-	createQueueRow,
-	QueueIterator,
-} from "@utils/commands/music";
 import { ComponentType, MessageFlags } from "discord.js";
 import type { Track } from "riffy";
 
 @ApplyOptions<Command.Options>({
 	name: "queue",
+	description: "Display the current music queue",
 	aliases: ["q"],
 	fullCategory: ["Music"],
 	preconditions: ["HasActivePlayerPrecondition"],
@@ -49,7 +50,9 @@ export class QueueCommand extends Command {
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const player = this.container.client.riffy.players.get(
 			interaction.guildId!,
 		)!;
@@ -73,7 +76,10 @@ export class QueueCommand extends Command {
 			iterator.totalPages > 1 ? [createQueueRow(iterator)] : [];
 
 		const message = await interaction.reply({
-			components: [createQueueContainer(player, iterator), ...initialRows],
+			components: [
+				createQueueContainer(player, iterator),
+				...initialRows,
+			],
 			flags: MessageFlags.IsComponentsV2,
 			fetchReply: true,
 		});
@@ -104,6 +110,10 @@ export class QueueCommand extends Command {
 				iterator.prev();
 			} else if (i.customId === "queue_next") {
 				iterator.next();
+			} else if (i.customId === "queue_first") {
+				iterator.firstPage();
+			} else if (i.customId === "queue_last") {
+				iterator.lastPage();
 			}
 
 			await i.update({

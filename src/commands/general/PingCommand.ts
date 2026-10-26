@@ -15,20 +15,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+	createPingContainer,
+	createPingInitialContainer,
+} from "@commandUtils/general/ping";
 import { ApplyOptions } from "@sapphire/decorators";
 import {
 	type ChatInputCommand,
 	Command,
 	RegisterBehavior,
 } from "@sapphire/framework";
-import {
-	createPingContainer,
-	createPingInitialContainer,
-} from "@utils/commands/ping";
 import { MessageFlags } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "ping",
+	description: "Check the bot's latency",
 	fullCategory: ["General"],
 })
 export class PingCommand extends Command {
@@ -37,12 +38,16 @@ export class PingCommand extends Command {
 	) {
 		registry.registerChatInputCommand(
 			(builder) =>
-				builder.setName("ping").setDescription("Check the bot's latency"),
+				builder
+					.setName("ping")
+					.setDescription("Check the bot's latency"),
 			{ behaviorWhenNotIdentical: RegisterBehavior.Overwrite },
 		);
 	}
 
-	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public async chatInputRun(
+		interaction: Command.ChatInputCommandInteraction,
+	) {
 		const start = Date.now();
 
 		await interaction.reply({

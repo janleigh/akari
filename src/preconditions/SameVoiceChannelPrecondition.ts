@@ -40,7 +40,8 @@ export class SameVoiceChannelPrecondition extends Precondition {
 
 		const botVoiceChannelId =
 			guild.members.me?.voice.channelId ??
-			(await guild.members.fetchMe().catch(() => null))?.voice.channelId ??
+			(await guild.members.fetchMe().catch(() => null))?.voice
+				.channelId ??
 			this.container.client.riffy.players.get(guild.id)?.voiceChannel;
 
 		// If the bot is not connected to a voice channel, allow execution

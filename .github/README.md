@@ -3,12 +3,12 @@ this readme sucks
 --->
 
 <!--- TITLE --->
-<h1 align="center"> akari </h1>
+<h1 align="center"> homura </h1>
 
 <!--- DESCRIPTION --->
 <div align="center">
    <p>
-   <strong>A (not-so) generic helper bot for Discord.</strong>
+   <strong>A (not-so) generic music bot for Discord.</strong>
    </p>
    <br>
 </div>
@@ -19,6 +19,7 @@ this readme sucks
 
 ### Prerequisites
 
+- [mise](https://mise.jdx.dev/)
 - [Bun](https://bun.sh)
 - A Discord Bot Token (get one from the [Discord Developer Portal](https://discord.com/developers/applications))
 
@@ -27,17 +28,23 @@ this readme sucks
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/janleigh/akari.git
-   cd akari
+   git clone https://github.com/janleigh/homura.git
+   cd homura
    ```
 
-2. **Install dependencies**
+2. **Install Bun with mise**
+
+   ```bash
+   mise install
+   ```
+
+3. **Install dependencies**
 
    ```bash
    bun install
    ```
 
-3. **Configure environment variables**
+4. **Configure environment variables**
 
    Create a `.env` file in the root directory:
 
@@ -51,14 +58,14 @@ this readme sucks
    DISCORD_TOKEN="your-bot-token-here"
    ```
 
-4. **Configure bot settings (optional)**
+5. **Configure bot settings (optional)**
 
    Edit `src/config.ts` to customize:
    - `DEV_SERVER_IDS` - Server IDs where developer commands will be registered
    - `DEV_USER_IDS` - User IDs who can use developer commands
    - Bot presence and activity settings
 
-5. **Run the bot**
+6. **Run the bot**
 
    For development (with debug logging):
 
@@ -76,19 +83,27 @@ this readme sucks
 
 When inviting the bot to your server, make sure it has these permissions:
 
-- `Manage Channels` - Required for creating/deleting voice channels
-- `Send Messages` - For sending command responses
-- `Embed Links` - For sending rich embeds
-- `Connect` & `Speak` - For voice channel functionality
+- `Add Reactions` - For reacting to messages
+- `Priority Speaker` - For priority voice audio
 - `View Channel` - To see channels in the server
+- `Send Messages` - For sending command responses
+- `Manage Messages` - For managing bot messages
+- `Embed Links` - For sending rich embeds
+- `Attach Files` - For sending files
+- `Read Message History` - For reading previous messages
+- `Use External Emojis` - For using custom emojis
+- `Connect` & `Speak` - For voice channel functionality
+- `Move Members` - For moving members between voice channels
+- `Use Voice Activity` - For voice activity detection
+- `Change Nickname` - For changing the bot's nickname
 
-Or just use the [~~invite link below~~](#links) and switch the client id to your application as it includes all necessary permissions.
+Or just use the [invite link below](#links) and switch the client id to your application as it includes all necessary permissions.
 
 <!--- LINKS --->
 
 ## <samp>LINKS</samp>
 
-- [~~Invite Akari~~](https://discord.com/oauth2/authorize?client_id=1320575111304314901&permissions=1237423877622&scope=bot%20applications.commands)
+- [Invite Homura](https://discord.com/oauth2/authorize?client_id=1543828308373016636&permissions=120974656&integration_type=0&scope=applications.commands+bot)
 - [Support Server](https://discord.gg/fPdqz4f8wf)
 
 <!--- LICENSE --->

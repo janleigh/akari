@@ -73,7 +73,7 @@ export function createHelpContainer(
 			: matchingCommands
 					.map(
 						(command) =>
-							`**\`/${command.name}\`** - ${command.description || "No description provided."}`,
+							`\`/${command.name}\` - ${command.description || "No description provided."}`,
 					)
 					.join("\n");
 
@@ -118,6 +118,6 @@ export function createHelpLinksRow(): ActionRowBuilder<ButtonBuilder> {
 		new ButtonBuilder()
 			.setLabel("Source Code")
 			.setStyle(ButtonStyle.Link)
-			.setURL("https://github.com/janleigh/akari"),
+			.setURL("https://github.com/janleigh/homura"),
 	);
 }

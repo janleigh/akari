@@ -24,6 +24,7 @@ import {
 	SeparatorBuilder,
 	TextDisplayBuilder,
 } from "@discordjs/builders";
+import { parsers } from "@utils/index";
 import { ButtonStyle } from "discord.js";
 import type { Player, Track } from "riffy";
 
@@ -37,11 +38,17 @@ export interface Iterator<T> {
 	prev(): T;
 	hasPrev(): boolean;
 	current(): T;
+	firstPage(): T;
+	lastPage(): T;
+	currentPage: number;
+	totalPages: number;
+	totalItems: number;
+	updateItems(items: T): void;
 }
 
 export class QueueIterator implements Iterator<Track[]> {
 	private items: Track[];
-	private pageSize: number;
+	public readonly pageSize: number;
 	private currentIndex = 0;
 
 	constructor(items: Track[], pageSize: number = 10) {
@@ -152,6 +159,93 @@ export function moveTrack(
 	return track;
 }
 
+export function formatRequester(requester: unknown): string {
+	if (!requester) return "Unknown";
+	if (typeof requester === "string") return requester;
+	if (typeof requester === "object") {
+		if (
+			"displayName" in requester &&
+			typeof (requester as { displayName?: unknown }).displayName ===
+				"string"
+		) {
+			return (requester as { displayName: string }).displayName;
+		}
+		if (
+			"username" in requester &&
+			typeof (requester as { username?: unknown }).username === "string"
+		) {
+			return (requester as { username: string }).username;
+		}
+	}
+	return "Unknown";
+}
+
+export function formatTrackLength(track: Track): string {
+	if (track.info.stream) return "LIVE";
+	return parsers.formatDuration(track.info.length || 0);
+}
+
+export function formatQueueTable(
+	tracks: Track[],
+	startPosition: number = 1,
+): string {
+	if (tracks.length === 0) return "";
+
+	const MAX_TITLE_LENGTH = 30;
+	const MAX_REQUESTER_LENGTH = 14;
+
+	const posHeader = "#";
+	const titleHeader = "Title";
+	const lengthHeader = "Length";
+	const requesterHeader = "Requester";
+
+	const rows = tracks.map((track, index) => {
+		const pos = String(startPosition + index);
+		const rawTitle = track.info.title.trim() || "Unknown Title";
+		const title =
+			rawTitle.length > MAX_TITLE_LENGTH
+				? `${rawTitle.slice(0, MAX_TITLE_LENGTH - 3)}...`
+				: rawTitle;
+		const length = formatTrackLength(track);
+		const rawRequester =
+			formatRequester(track.info.requester).trim() || "Unknown";
+		const requester =
+			rawRequester.length > MAX_REQUESTER_LENGTH
+				? `${rawRequester.slice(0, MAX_REQUESTER_LENGTH - 3)}...`
+				: rawRequester;
+
+		return { pos, title, length, requester };
+	});
+
+	const posWidth = Math.max(
+		posHeader.length,
+		...rows.map((r) => r.pos.length),
+	);
+	const titleWidth = Math.max(
+		titleHeader.length,
+		...rows.map((r) => r.title.length),
+	);
+	const lengthWidth = Math.max(
+		lengthHeader.length,
+		...rows.map((r) => r.length.length),
+	);
+
+	const headerPos = posHeader.padEnd(posWidth);
+	const headerTitle = titleHeader.padEnd(titleWidth);
+	const headerLength = lengthHeader.padEnd(lengthWidth);
+	const headerLine = `${headerPos}  ${headerTitle}  ${headerLength}  ${requesterHeader}`;
+	const separatorLine = "-".repeat(headerLine.length);
+
+	const dataLines = rows.map((r) => {
+		const p = r.pos.padEnd(posWidth);
+		const t = r.title.padEnd(titleWidth);
+		const l = r.length.padEnd(lengthWidth);
+		return `${p}  ${t}  ${l}  ${r.requester}`;
+	});
+
+	return [headerLine, separatorLine, ...dataLines].join("\n");
+}
+
 export function createQueueContainer(
 	player: Player,
 	iterator: QueueIterator,
@@ -160,15 +254,13 @@ export function createQueueContainer(
 	let content = "";
 
 	if (player.current) {
-		content += `**Currently Playing:**\n[${player.current.info.title}](${player.current.info.uri}) - ${player.current.info.author}\n\n`;
+		content += `**Currently Playing:**\n[${player.current.info.title}](${player.current.info.uri})\n\n`;
 	}
 
 	if (page.length > 0) {
-		content += "**Up Next:**\n";
-		page.forEach((track, index) => {
-			const actualIndex = (iterator.currentPage - 1) * 10 + index + 1;
-			content += `\`${actualIndex}.\` [${track.info.title}](${track.info.uri}) - ${track.info.author}\n`;
-		});
+		const startPosition =
+			(iterator.currentPage - 1) * iterator.pageSize + 1;
+		content += `**Up Next:**\n\`\`\`\n${formatQueueTable(page, startPosition)}\n\`\`\``;
 	} else {
 		content += "*No more tracks in queue.*";
 	}
@@ -232,7 +324,8 @@ export function createQueueRemoveSelectRow(
 	} else {
 		selectMenu.addOptions(
 			page.map((track, index) => {
-				const actualIndex = (iterator.currentPage - 1) * 10 + index + 1;
+				const actualIndex =
+					(iterator.currentPage - 1) * iterator.pageSize + index + 1;
 				const title =
 					track.info.title.length > 90
 						? `${track.info.title.slice(0, 90)}...`

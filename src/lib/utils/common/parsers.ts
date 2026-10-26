@@ -16,7 +16,7 @@
  */
 
 import { container } from "@sapphire/pieces";
-import type { GuildEmoji } from "discord.js";
+import type { ApplicationEmoji } from "discord.js";
 
 import { EMOJI_IDS } from "@/config";
 
@@ -25,18 +25,22 @@ import type { EmojiName } from "../../types/constants/Emoji";
 /**
  * Parses an emoji by its ID.
  * @param {string} [emojiID] The emoji ID.
- * @returns {GuildEmoji | undefined}
+ * @returns {ApplicationEmoji | undefined}
  */
-export const parseEmojiByID = (emojiID: string): GuildEmoji | undefined => {
-	return container.client.emojis.cache.get(emojiID);
+export const parseEmojiByID = (
+	emojiID: string,
+): ApplicationEmoji | undefined => {
+	return container.client.application?.emojis.cache.get(emojiID);
 };
 
 /**
  * Gets an emoji by its name.
  * @param {EmojiName} emoji The name of the emoji to get.
- * @returns {GuildEmoji | string | undefined} The emoji if found, otherwise formatted emoji string or undefined.
+ * @returns {ApplicationEmoji | string | undefined} The emoji if found, otherwise formatted emoji string or undefined.
  */
-export const getEmoji = (emoji: EmojiName): GuildEmoji | string | undefined => {
+export const getEmoji = (
+	emoji: EmojiName,
+): ApplicationEmoji | string | undefined => {
 	const emojiId = EMOJI_IDS[emoji];
 	if (!emojiId) return undefined;
 

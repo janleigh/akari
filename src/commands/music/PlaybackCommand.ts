@@ -75,7 +75,6 @@ export class PlaybackCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Playback",
 						"There is no active track to control.",
 						"⚠️",
 					),
@@ -96,7 +95,6 @@ export class PlaybackCommand extends Command {
 				return interaction.reply({
 					components: [
 						createMusicStatusContainer(
-							"Playback",
 							"The player is already paused.",
 							"⏸️",
 						),
@@ -110,11 +108,7 @@ export class PlaybackCommand extends Command {
 
 			return interaction.reply({
 				components: [
-					createMusicStatusContainer(
-						"Paused",
-						`Paused ${trackLink}`,
-						"⏸️",
-					),
+					createMusicStatusContainer(`Paused ${trackLink}`, "⏸️"),
 				],
 				flags: MessageFlags.IsComponentsV2,
 			});
@@ -125,7 +119,6 @@ export class PlaybackCommand extends Command {
 				return interaction.reply({
 					components: [
 						createMusicStatusContainer(
-							"Playback",
 							"The player is not paused.",
 							"▶️",
 						),
@@ -139,11 +132,7 @@ export class PlaybackCommand extends Command {
 
 			return interaction.reply({
 				components: [
-					createMusicStatusContainer(
-						"Resumed",
-						`Resumed ${trackLink}`,
-						"▶️",
-					),
+					createMusicStatusContainer(`Resumed ${trackLink}`, "▶️"),
 				],
 				flags: MessageFlags.IsComponentsV2,
 			});
@@ -160,7 +149,6 @@ export class PlaybackCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						actionTitle,
 						`${actionTitle} ${trackLink}`,
 						actionEmoji,
 					),

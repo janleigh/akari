@@ -60,7 +60,6 @@ export class ShuffleCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Queue Shuffle",
 						"There are not enough tracks in the queue to shuffle.",
 						"🔀",
 					),
@@ -74,7 +73,6 @@ export class ShuffleCommand extends Command {
 		return interaction.reply({
 			components: [
 				createMusicStatusContainer(
-					"Queue Shuffled",
 					`Randomized **${player.queue.length}** tracks in the queue.`,
 					"🔀",
 				),

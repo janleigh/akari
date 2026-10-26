@@ -20,7 +20,6 @@ import {
 	ContainerBuilder,
 	SelectMenuBuilder,
 	SelectMenuOptionBuilder,
-	SeparatorBuilder,
 	TextDisplayBuilder,
 } from "@discordjs/builders";
 import { parsers } from "@utils/index";
@@ -53,42 +52,26 @@ export function createTrackEnqueuedContainer(options: {
 	playNext?: boolean;
 }): ContainerBuilder {
 	const checkmark = parsers.getEmoji("checkmark")?.toString() ?? "✅";
-	const nextUpSuffix = options.playNext ? " (Next Up)" : "";
 	if (options.type === "playlist") {
-		return new ContainerBuilder()
-			.addTextDisplayComponents(
-				new TextDisplayBuilder().setContent(
-					`## ${checkmark}  Playlist Enqueued${nextUpSuffix}`,
-				),
-			)
-			.addSeparatorComponents(new SeparatorBuilder())
-			.addTextDisplayComponents(
-				new TextDisplayBuilder().setContent(
-					options.playNext
-						? `Added **${options.count ?? 0}** tracks from playlist **\`${options.title}\`** to the front of the queue by **${options.userTag}**.`
-						: `Added **${options.count ?? 0}** tracks from playlist **\`${options.title}\`** by **${options.userTag}**.`,
-				),
-			);
+		const description = options.playNext
+			? `Added **${options.count ?? 0}** tracks from playlist **\`${options.title}\`** to the front of the queue by **${options.userTag}**.`
+			: `Added **${options.count ?? 0}** tracks from playlist **\`${options.title}\`** by **${options.userTag}**.`;
+
+		return new ContainerBuilder().addTextDisplayComponents(
+			new TextDisplayBuilder().setContent(`${checkmark}  ${description}`),
+		);
 	}
 
 	const trackLink = options.uri
 		? `[${options.title}](${options.uri})`
 		: `\`${options.title}\``;
+	const description = options.playNext
+		? `Added ${trackLink} to the front of the queue by **${options.userTag}**.`
+		: `Added ${trackLink} to the queue by **${options.userTag}**.`;
 
-	return new ContainerBuilder()
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(
-				`## ${checkmark}  Track Enqueued${nextUpSuffix}`,
-			),
-		)
-		.addSeparatorComponents(new SeparatorBuilder())
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(
-				options.playNext
-					? `Added ${trackLink} to the front of the queue by **${options.userTag}**.`
-					: `Added ${trackLink} to the queue by **${options.userTag}**.`,
-			),
-		);
+	return new ContainerBuilder().addTextDisplayComponents(
+		new TextDisplayBuilder().setContent(`${checkmark}  ${description}`),
+	);
 }
 
 export function createTrackSelectContainer(
@@ -96,13 +79,11 @@ export function createTrackSelectContainer(
 	source: string,
 	trackCount: number,
 ): ContainerBuilder {
-	return new ContainerBuilder()
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(
-				`## 🔍  Search Results\nFound **${trackCount}** results for **"${query}"** on **${getSourceName(source)}**.\nSelect a track from the menu below to add it to the queue.`,
-			),
-		)
-		.addSeparatorComponents(new SeparatorBuilder());
+	return new ContainerBuilder().addTextDisplayComponents(
+		new TextDisplayBuilder().setContent(
+			`🔍  Found **${trackCount}** results for **"${query}"** on **${getSourceName(source)}**.\nSelect a track from the menu below to add it to the queue.`,
+		),
+	);
 }
 
 export function createTrackSelectRow(

@@ -15,23 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-	ContainerBuilder,
-	SeparatorBuilder,
-	TextDisplayBuilder,
-} from "@discordjs/builders";
+import { ContainerBuilder, TextDisplayBuilder } from "@discordjs/builders";
 
 export function createMusicStatusContainer(
-	title: string,
 	description: string,
 	emoji: string = "🎵",
 ): ContainerBuilder {
-	return new ContainerBuilder()
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(`## ${emoji}  ${title}`),
-		)
-		.addSeparatorComponents(new SeparatorBuilder())
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(description),
-		);
+	return new ContainerBuilder().addTextDisplayComponents(
+		new TextDisplayBuilder().setContent(`${emoji}  ${description}`),
+	);
 }

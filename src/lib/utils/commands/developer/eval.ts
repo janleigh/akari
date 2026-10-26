@@ -38,7 +38,7 @@ export function createEvalSuccessContainer(
 		)
 		.addSeparatorComponents(new SeparatorBuilder())
 		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(`\`\`\`xl\n${evaled}\n\`\`\``),
+			new TextDisplayBuilder().setContent(`\`\`\`ts\n${evaled}\n\`\`\``),
 		);
 }
 
@@ -50,7 +50,7 @@ export function createEvalErrorContainer(errorText: string): ContainerBuilder {
 		.addSeparatorComponents(new SeparatorBuilder())
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
-				`\`\`\`xl\n${errorText}\n\`\`\``,
+				`\`\`\`ts\n${errorText}\n\`\`\``,
 			),
 		);
 }
@@ -72,8 +72,7 @@ export function createEvalDeleteRow(): ActionRowBuilder<ButtonBuilder> {
 	return new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
 			.setCustomId(EVAL_DELETE_CUSTOM_ID)
-			.setLabel("Delete")
-			.setStyle(ButtonStyle.Danger)
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji({ name: "🗑️" }),
 	);
 }

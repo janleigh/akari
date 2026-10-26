@@ -60,7 +60,6 @@ export class DestroyPlayerCommand extends Command {
 		return interaction.reply({
 			components: [
 				createMusicStatusContainer(
-					"Music Player",
 					"The music player has been destroyed and disconnected.",
 					"🛑",
 				),

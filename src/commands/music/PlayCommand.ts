@@ -153,7 +153,6 @@ export class PlayCommand extends Command {
 			return interaction.editReply({
 				components: [
 					createMusicStatusContainer(
-						"Playback",
 						"No results found for the provided URL.",
 						"🔍",
 					),
@@ -175,7 +174,6 @@ export class PlayCommand extends Command {
 			return interaction.editReply({
 				components: [
 					createMusicStatusContainer(
-						"Search Results",
 						`No tracks found for **"${query}"** on **${getSourceName(currentSource)}**.`,
 						"🔍",
 					),
@@ -207,7 +205,6 @@ export class PlayCommand extends Command {
 				await i.reply({
 					components: [
 						createMusicStatusContainer(
-							"Permission Denied",
 							"Only the person who searched can choose from this menu.",
 							"⚠️",
 						),
@@ -225,7 +222,6 @@ export class PlayCommand extends Command {
 					await i.reply({
 						components: [
 							createMusicStatusContainer(
-								"Playback",
 								"Selected track is no longer available.",
 								"⚠️",
 							),
@@ -273,7 +269,6 @@ export class PlayCommand extends Command {
 					await interaction.editReply({
 						components: [
 							createMusicStatusContainer(
-								"Search Results",
 								`No tracks found for **"${query}"** on **${getSourceName(currentSource)}**. Try another source.`,
 								"🔍",
 							),
@@ -304,7 +299,6 @@ export class PlayCommand extends Command {
 					.editReply({
 						components: [
 							createMusicStatusContainer(
-								"Search Expired",
 								`Selection menu for **"${query}"** timed out.`,
 								"⏱️",
 							),

@@ -39,7 +39,6 @@ export function createNowPlayingContainer(
 	const track = player.current;
 	if (!track) {
 		return createMusicStatusContainer(
-			"Now Playing",
 			"No track is currently playing.",
 			"🎵",
 		);

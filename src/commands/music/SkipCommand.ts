@@ -61,7 +61,6 @@ export class SkipCommand extends Command {
 		return interaction.reply({
 			components: [
 				createMusicStatusContainer(
-					"Skipped",
 					`Skipped [${track.info.title}](${track.info.uri})`,
 					"⏭️",
 				),

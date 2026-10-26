@@ -347,14 +347,8 @@ export function createQueueRemoveSelectRow(
 }
 
 export function createQueueEndContainer(): ContainerBuilder {
-	return new ContainerBuilder()
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent("## 🎵  Queue Ended"),
-		)
-		.addSeparatorComponents(new SeparatorBuilder())
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(
-				"The queue has ended. Leaving the voice channel.",
-			),
-		);
+	return createMusicStatusContainer(
+		"The queue has ended. Leaving the voice channel.",
+		"🎵",
+	);
 }

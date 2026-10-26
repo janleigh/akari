@@ -75,7 +75,6 @@ export class VolumeCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Playback Volume",
 						`The current playback volume is **${player.volume}%**.\n\n${parsers.createProgressBar(player.volume, 150, 12)}`,
 						volumeEmoji,
 					),
@@ -92,7 +91,6 @@ export class VolumeCommand extends Command {
 		return interaction.reply({
 			components: [
 				createMusicStatusContainer(
-					"Volume Adjusted",
 					`Volume changed from **${oldVolume}%** to **${level}%**.\n\n${parsers.createProgressBar(level, 150, 12)}`,
 					volumeEmoji,
 				),

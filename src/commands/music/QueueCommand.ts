@@ -64,7 +64,6 @@ export class QueueCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Music Queue",
 						"The queue is currently empty.",
 						"📻",
 					),
@@ -102,7 +101,6 @@ export class QueueCommand extends Command {
 				await i.reply({
 					components: [
 						createMusicStatusContainer(
-							"Queue Navigation",
 							"You cannot interact with these controls.",
 							"⚠️",
 						),
@@ -174,7 +172,6 @@ export class QueueCommand extends Command {
 					await i.followUp({
 						components: [
 							createMusicStatusContainer(
-								"Track Removed",
 								`Removed **[${removed[0].info.title}](${removed[0].info.uri})** from the queue.`,
 								"🗑️",
 							),

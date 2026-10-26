@@ -102,14 +102,13 @@ export const LAVALINK_NODES = [
 
 /**
  * @description The emoji IDs for the bot.
- * Idk why application emojis return nothing so better use guild emojis instead.
+ * Now, uses application emojis. Set up those in the Discord Developer Portal.
  * @type {Record<string, string>}
  */
 export const EMOJI_IDS: Record<string, string> = {
-	crossmark: "1543822619189575792",
-	checkmark: "1543822636130508931",
-	info: "1543831524913188864",
-	loading: "1543831689543946301",
+	crossmark: "1543833839707885578",
+	checkmark: "1543833834859274280",
+	greytick: "1564170872800022579",
 };
 
 /**

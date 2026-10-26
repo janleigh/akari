@@ -60,7 +60,6 @@ export class ResumeCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Playback",
 						"There is no track to resume.\n\n> ⚠️ **Note:** `/resume` is deprecated. Please use `/playback resume` instead.",
 						"▶️",
 					),
@@ -73,7 +72,6 @@ export class ResumeCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Playback",
 						"The player is not paused.\n\n> ⚠️ **Note:** `/resume` is deprecated. Please use `/playback resume` instead.",
 						"▶️",
 					),
@@ -88,7 +86,6 @@ export class ResumeCommand extends Command {
 		return interaction.reply({
 			components: [
 				createMusicStatusContainer(
-					"Resumed",
 					`Resumed [${player.current.info.title}](${player.current.info.uri})\n\n> ⚠️ **Note:** \`/resume\` is deprecated. Please use \`/playback resume\` instead.`,
 					"▶️",
 				),

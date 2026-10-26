@@ -93,7 +93,6 @@ export class NowPlayingCommand extends Command {
 				await i.reply({
 					components: [
 						createMusicStatusContainer(
-							"Voice Channel",
 							"You must be in the same voice channel as the bot to use these controls.",
 							"⚠️",
 						),
@@ -123,7 +122,6 @@ export class NowPlayingCommand extends Command {
 				await i.reply({
 					components: [
 						createMusicStatusContainer(
-							"Skipped",
 							`Skipped **${currentTitle}** by ${i.user}.`,
 							"⏭️",
 						),
@@ -137,7 +135,6 @@ export class NowPlayingCommand extends Command {
 				await i.update({
 					components: [
 						createMusicStatusContainer(
-							"Playback Stopped",
 							`The music player was stopped and disconnected by ${i.user}.`,
 							"⏹️",
 						),

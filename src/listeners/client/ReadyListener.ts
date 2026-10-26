@@ -26,8 +26,9 @@ import { PRESENCE_OPTIONS } from "@/config";
 	event: Events.ClientReady,
 })
 export class ReadyListener extends Listener<typeof Events.ClientReady> {
-	public run(client: Client<true>) {
+	public async run(client: Client<true>) {
 		const { id, tag } = client.user;
+		await client.application.emojis.fetch();
 
 		// Init riffy
 		this.container.client.riffy.init(id);

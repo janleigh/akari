@@ -15,23 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-	ContainerBuilder,
-	SeparatorBuilder,
-	TextDisplayBuilder,
-} from "@discordjs/builders";
+import { ContainerBuilder, TextDisplayBuilder } from "@discordjs/builders";
 
 export function createPingInitialContainer(): ContainerBuilder {
-	return new ContainerBuilder()
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent("## 🏓  Pinging..."),
-		)
-		.addSeparatorComponents(new SeparatorBuilder())
-		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent(
-				"Measuring latency to Discord API and Websocket...",
-			),
-		);
+	return new ContainerBuilder().addTextDisplayComponents(
+		new TextDisplayBuilder().setContent(
+			"🏓  Measuring latency to Discord API and Websocket...",
+		),
+	);
 }
 
 export function createPingContainer(
@@ -42,7 +33,6 @@ export function createPingContainer(
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent("## 🏓  Pong!"),
 		)
-		.addSeparatorComponents(new SeparatorBuilder())
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
 				`**Discord API:** \`${apiLatency}ms\`\n**Websocket:** \`${wsLatency}ms\``,

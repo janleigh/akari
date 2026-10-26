@@ -84,7 +84,6 @@ export class RemoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Queue Empty",
 						"There are no tracks in the queue to remove.",
 						"⚠️",
 					),
@@ -100,7 +99,6 @@ export class RemoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Invalid Position",
 						`Position **#${position}** is out of bounds. The queue currently has **${queueItems.length}** track(s).`,
 						"⚠️",
 					),
@@ -119,7 +117,6 @@ export class RemoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Remove Failed",
 						"Failed to remove any tracks.",
 						"⚠️",
 					),
@@ -134,9 +131,7 @@ export class RemoveCommand extends Command {
 				: `Removed **${removed.length}** tracks from the queue starting at position **#${position}**.`;
 
 		return interaction.reply({
-			components: [
-				createMusicStatusContainer("Track Removed", description, "🗑️"),
-			],
+			components: [createMusicStatusContainer(description, "🗑️")],
 			flags: MessageFlags.IsComponentsV2,
 		});
 	}

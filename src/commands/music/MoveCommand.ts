@@ -84,7 +84,6 @@ export class MoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Queue Too Short",
 						"At least 2 tracks must be in the queue to reorder them.",
 						"⚠️",
 					),
@@ -100,7 +99,6 @@ export class MoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Invalid Source Position",
 						`Source position **#${from}** is out of bounds. The queue currently has **${queueItems.length}** track(s).`,
 						"⚠️",
 					),
@@ -113,7 +111,6 @@ export class MoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Invalid Target Position",
 						`Target position **#${to}** is out of bounds. The queue currently has **${queueItems.length}** track(s).`,
 						"⚠️",
 					),
@@ -126,7 +123,6 @@ export class MoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Track Not Moved",
 						`Track is already at position **#${from}**.`,
 						"ℹ️",
 					),
@@ -145,7 +141,6 @@ export class MoveCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Move Failed",
 						"Failed to move the track.",
 						"⚠️",
 					),
@@ -157,7 +152,6 @@ export class MoveCommand extends Command {
 		return interaction.reply({
 			components: [
 				createMusicStatusContainer(
-					"Track Reordered",
 					`Moved **[${movedTrack.info.title}](${movedTrack.info.uri})** from position **#${from}** to **#${to}**.`,
 					"🔀",
 				),

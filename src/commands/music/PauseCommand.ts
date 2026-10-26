@@ -61,7 +61,6 @@ export class PauseCommand extends Command {
 			return interaction.reply({
 				components: [
 					createMusicStatusContainer(
-						"Playback",
 						"The player is already paused.\n\n> ⚠️ **Note:** `/pause` is deprecated. Please use `/playback pause` instead.",
 						"⏸️",
 					),
@@ -80,7 +79,7 @@ export class PauseCommand extends Command {
 			: `Paused **${trackTitle}**\n\n> ⚠️ **Note:** \`/pause\` is deprecated. Please use \`/playback pause\` instead.`;
 
 		return interaction.reply({
-			components: [createMusicStatusContainer("Paused", trackDesc, "⏸️")],
+			components: [createMusicStatusContainer(trackDesc, "⏸️")],
 			flags: MessageFlags.IsComponentsV2,
 		});
 	}

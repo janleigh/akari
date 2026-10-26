@@ -95,7 +95,6 @@ export class LoopCommand extends Command {
 		return interaction.reply({
 			components: [
 				createMusicStatusContainer(
-					"Loop Mode",
 					`Loop mode set to **${info.label}**.`,
 					info.emoji,
 				),

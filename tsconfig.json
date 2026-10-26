@@ -3,6 +3,7 @@
 		"outDir": "dist/",
 		"module": "esnext",
 		"target": "esnext",
+		"moduleResolution": "bundler",
 
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,

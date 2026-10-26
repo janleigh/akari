@@ -22,7 +22,6 @@ this readme sucks
 - **Own the queue.** Browse, reorder, remove, and fast-track what plays next.
 - **Keep the music moving.** Pause, resume, skip, stop, and check what is playing.
 - **Set the vibe.** Loop a track, loop the queue, shuffle it, or dial in the volume.
-- **Built for Discord.** Crisp, interactive controls powered by [Components V2](https://docs.discord.com/developers/components/reference).
 
 <!--- SETUP --->
 
@@ -44,6 +43,7 @@ this readme sucks
    ```
 
 2. **Install Bun with mise**
+   (Skip to #3 if bun is already installed)
 
    ```bash
    mise install
@@ -74,39 +74,27 @@ this readme sucks
    Edit `src/config.ts` to customize:
    - `DEV_SERVER_IDS` - Server IDs where developer commands will be registered
    - `DEV_USER_IDS` - User IDs who can use developer commands
-   - Bot presence and activity settings
+   - `PRESENCE_OPTIONS` - Bot presence and activity settings
 
 6. **Run the bot**
 
-   For development (with debug logging):
-
    ```bash
-   bun dev
-   ```
-
-   For production:
-
-   ```bash
-   bun start
+   bun dev    # For development (with debug logging)
+   bun start  # For production (no debug logging)
    ```
 
 ### Required Bot Permissions
 
 When inviting the bot to your server, make sure it has these permissions:
 
-- `Add Reactions` - For reacting to messages
-- `Priority Speaker` - For priority voice audio
-- `View Channel` - To see channels in the server
 - `Send Messages` - For sending command responses
-- `Manage Messages` - For managing bot messages
-- `Embed Links` - For sending rich embeds
-- `Attach Files` - For sending files
-- `Read Message History` - For reading previous messages
-- `Use External Emojis` - For using custom emojis
+- `Embed Links` - For sending command responses
 - `Connect` & `Speak` - For voice channel functionality
+
+Optional permissions are:
+
+- `Read Message History` - For reading previous messages
 - `Move Members` - For moving members between voice channels
-- `Use Voice Activity` - For voice activity detection
-- `Change Nickname` - For changing the bot's nickname
 
 Or just use the [invite link below](#links) and switch the client id to your application as it includes all necessary permissions.
 

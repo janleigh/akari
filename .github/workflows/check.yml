@@ -1,0 +1,38 @@
+name: Check
+
+on:
+    push:
+        branches: [master, main]
+    pull_request:
+        branches: [master, main]
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    check:
+        name: Format, Lint & Typecheck
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Bun
+              uses: oven-sh/setup-bun@v2
+
+            - name: Install dependencies
+              run: bun install --frozen-lockfile
+
+            - name: Check format
+              run: bun run fmt:check
+
+            - name: Lint
+              if: success() || failure()
+              run: bun run lint
+
+            - name: Typecheck
+              if: success() || failure()
+              run: bun run typecheck

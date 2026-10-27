@@ -119,5 +119,11 @@ export function createHelpLinksRow(): ActionRowBuilder<ButtonBuilder> {
 			.setLabel("Source Code")
 			.setStyle(ButtonStyle.Link)
 			.setURL("https://github.com/janleigh/homura"),
+		new ButtonBuilder()
+			.setLabel("Invite Homura")
+			.setStyle(ButtonStyle.Link)
+			.setURL(
+				"https://discord.com/oauth2/authorize?client_id=1543828308373016636&permissions=120974656&integration_type=0&scope=applications.commands+bot",
+			),
 	);
 }

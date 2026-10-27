@@ -116,6 +116,6 @@ export const EMOJI_IDS: Record<string, string> = {
  * @type {Record<string, boolean>}
  */
 export const LAVALINK_EVENTS: Record<string, boolean> = {
-	queueEnd: false,
+	queueEnd: true,
 	trackStart: false,
 };

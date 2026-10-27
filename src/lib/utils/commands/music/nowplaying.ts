@@ -19,8 +19,6 @@ import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ContainerBuilder,
-	MediaGalleryBuilder,
-	MediaGalleryItemBuilder,
 	SeparatorBuilder,
 	TextDisplayBuilder,
 } from "@discordjs/builders";
@@ -184,7 +182,7 @@ export function createTrackStartContainer(
 	const container = new ContainerBuilder()
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
-				`## 🎵  Now Playing\n### [${track.info.title}](${track.info.uri})\nby \`${track.info.author}\``,
+				`### 🎵  Now Playing: [${track.info.title}](${track.info.uri})\nby \`${track.info.author}\``,
 			),
 		)
 		.addSeparatorComponents(new SeparatorBuilder())
@@ -196,15 +194,15 @@ export function createTrackStartContainer(
 			),
 		);
 
-	if (track.info.thumbnail) {
-		container
-			.addSeparatorComponents(new SeparatorBuilder())
-			.addMediaGalleryComponents(
-				new MediaGalleryBuilder().addItems(
-					new MediaGalleryItemBuilder().setURL(track.info.thumbnail),
-				),
-			);
-	}
+	// if (track.info.thumbnail) {
+	// 	container
+	// 		.addSeparatorComponents(new SeparatorBuilder())
+	// 		.addMediaGalleryComponents(
+	// 			new MediaGalleryBuilder().addItems(
+	// 				new MediaGalleryItemBuilder().setURL(track.info.thumbnail),
+	// 			),
+	// 		);
+	// }
 
 	return container;
 }

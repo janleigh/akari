@@ -103,7 +103,7 @@ Or just use the [invite link below](#links) and switch the client id to your app
 ## <samp>LINKS</samp>
 
 - [Invite Homura](https://discord.com/oauth2/authorize?client_id=1543828308373016636&permissions=120974656&integration_type=0&scope=applications.commands+bot)
-- [Support Server](https://discord.gg/fPdqz4f8wf)
+- [Support Server](https://discord.gg/VXXGbUHzKC)
 
 <!--- LICENSE --->
 

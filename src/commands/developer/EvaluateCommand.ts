@@ -76,6 +76,7 @@ export class EvaluateCommand extends Command {
 		const baseFlags = ephemeral
 			? MessageFlags.Ephemeral | MessageFlags.IsComponentsV2
 			: MessageFlags.IsComponentsV2;
+		const startedAt = performance.now();
 
 		let evaled = "";
 		let timeTaken = "";
@@ -83,10 +84,7 @@ export class EvaluateCommand extends Command {
 		try {
 			// oxlint-disable-next-line no-eval
 			const rawResult = eval(input as string);
-			timeTaken = (
-				(Date.now() - interaction.createdTimestamp) /
-				1000
-			).toFixed(3);
+			timeTaken = ((performance.now() - startedAt) / 1000).toFixed(3);
 			evaled = text.clean(rawResult);
 		} catch (err) {
 			this.container.logger.error("[EvalCommand] " + String(err));
